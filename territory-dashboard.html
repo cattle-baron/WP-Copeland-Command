@@ -247,9 +247,9 @@ header::after {
 }
 
 /* ── MAP ─────────────────────────────────────────────────────────── */
-.map-area { flex:1; position:relative; overflow:hidden; background: var(--bg); }
+.map-area { flex:1; position:relative; overflow:hidden; background: var(--bg); contain: strict; }
 
-#map-svg { width:100%; height:100%; display:block; touch-action:none; }
+#map-svg { width:100%; height:100%; display:block; touch-action:none; will-change:transform; }
 
 .country {
   fill: #071222;
@@ -266,7 +266,6 @@ header::after {
   stroke-width: 1.2;
   cursor: pointer;
   vector-effect: non-scaling-stroke;
-  filter: drop-shadow(0 0 3px rgba(0,200,255,0.3));
 }
 
 .country.pending {
@@ -275,7 +274,6 @@ header::after {
   stroke-width: 1.2;
   cursor: pointer;
   vector-effect: non-scaling-stroke;
-  filter: drop-shadow(0 0 3px rgba(255,170,0,0.3));
 }
 
 .country.owned:hover { fill: #1a4a7a; }
@@ -293,12 +291,11 @@ header::after {
   position: absolute;
   bottom: 16px;
   left: 16px;
-  background: rgba(2,8,16,0.95);
+  background: rgba(2,8,16,0.97);
   border: 1px solid var(--border2);
   border-radius: 4px;
   padding: 8px 12px;
   pointer-events: none;
-  backdrop-filter: blur(4px);
 }
 
 .legend::before {
@@ -954,19 +951,12 @@ header .header-left h1::before {
   content: '';
 }
 
-/* Animated border on info panel header */
-@keyframes border-scan {
-  0% { background-position: -200% center; }
-  100% { background-position: 200% center; }
-}
-
+/* Static accent line on panel header */
 .ph::before {
   content:'';
   position:absolute; bottom:0; left:0; right:0; height:1px;
-  background: linear-gradient(90deg, transparent 0%, var(--accent) 50%, transparent 100%);
-  background-size: 200% 100%;
-  animation: border-scan 3s linear infinite;
-  opacity: 0.5;
+  background: linear-gradient(90deg, var(--accent), transparent);
+  opacity: 0.4;
 }
 
 /* Blinking cursor on section headers */
@@ -1003,10 +993,10 @@ header .header-left h1::before {
   opacity: 0.4;
 }
 
-/* Glowing country owned border animation */
+/* Owned country pulse — stroke-opacity only (drop-shadow on SVG paths forces full repaint every frame) */
 @keyframes owned-pulse {
-  0%, 100% { filter: drop-shadow(0 0 2px rgba(0,200,255,0.3)); }
-  50% { filter: drop-shadow(0 0 6px rgba(0,200,255,0.6)); }
+  0%, 100% { stroke-opacity: 0.6; }
+  50% { stroke-opacity: 1; }
 }
 .country.owned { animation: owned-pulse 3s ease-in-out infinite; }
 
@@ -1094,11 +1084,8 @@ header .header-left h1::before {
       <button class="tbtn" onclick="showCountryPanel('nigeria')"><span class="dot do"></span><div><div class="nm">Nigeria</div><div class="tg">West Africa</div></div></button>
       <button class="tbtn" onclick="showCountryPanel('philippines')"><span class="dot do"></span><div><div class="nm">Philippines</div><div class="tg">Southeast Asia</div></div></button>
       <button class="tbtn" onclick="showCountryPanel('jamaica')"><span class="dot do"></span><div><div class="nm">Jamaica</div><div class="tg">Caribbean</div></div></button>
-        <button class="mnbtn" onclick="showCountryPanel('honduras')"><span class="dot-sm" style="background:#3af;box-shadow:0 0 4px #3af;width:6px;height:6px;border-radius:50%;flex-shrink:0"></span>Honduras</button>
       <button class="tbtn" onclick="showCountryPanel('honduras')"><span class="dot do"></span><div><div class="nm">Honduras</div><div class="tg">Central America</div></div></button>
       <button class="tbtn" onclick="showCountryPanel('vatican')"><span class="dot do"></span><div><div class="nm">Vatican City</div><div class="tg">Southern Europe</div></div></button>
-      <button class="tbtn" onclick="showCountryPanel('honduras')"><span class="dot do"></span><div><div class="nm">Honduras</div><div class="tg">Central America</div></div></button>
-      <button class="tbtn" onclick="showCountryPanel('honduras')"><span class="dot do"></span><div><div class="nm">Honduras</div><div class="tg">Central America</div></div></button>
     </div>
     <div class="ss">
       <h3>Pending Trade</h3>
@@ -2103,6 +2090,19 @@ const ID2KEY   = {"156":"china","408":"northkorea","566":"nigeria","608":"philip
 let currentLayer = "overview";
 let projection, pathGen, g, overlayG, svgSel, zoomBehavior;
 let currentZoom = 1;
+let _overlayRafPending = false;
+let _pingRafPending = false;
+
+function scheduleOverlays() {
+  if (_overlayRafPending) return;
+  _overlayRafPending = true;
+  requestAnimationFrame(() => { _overlayRafPending = false; renderOverlays(); });
+}
+function schedulePing() {
+  if (_pingRafPending) return;
+  _pingRafPending = true;
+  requestAnimationFrame(() => { _pingRafPending = false; renderBasePing(); });
+}
 
 // Icon display size in screen pixels (constant regardless of zoom)
 const ICON_SCREEN_R = 9;
@@ -2179,6 +2179,7 @@ function closeLocPanel() {
 // ═══════════════════════════════════════════════════════════════════
 function setLayer(l, btn) {
   currentLayer = l;
+  _layoutCache = null;
   document.querySelectorAll(".lbtn").forEach(b=>b.classList.remove("active"));
   if (btn) btn.classList.add("active");
   ["lgr","lgt","lgm","lgc"].forEach(id=>document.getElementById(id).style.display="none");
@@ -2200,9 +2201,18 @@ function setLayerMobile(l, btn) {
 // Works entirely in map-space coords.
 // Separation threshold = SEPARATION_SCREEN px converted to map-space.
 // ═══════════════════════════════════════════════════════════════════
+// Layout cache — invalidate when layer or zoom changes significantly
+let _layoutCache = null;
+let _layoutCacheLayer = null;
+let _layoutCacheZoom = 0;
+
 function computeLayout(pts) {
-  // minDist in map-space: we want icons separated by SEPARATION_SCREEN screen pixels.
-  // At zoom k, 1 screen pixel = 1/k map-space units.
+  // Only recompute if layer changed or zoom changed by >5%
+  if (_layoutCache && _layoutCacheLayer === currentLayer &&
+      Math.abs(currentZoom - _layoutCacheZoom) / _layoutCacheZoom < 0.05) {
+    return _layoutCache;
+  }
+
   const minDist = SEPARATION_SCREEN / currentZoom;
 
   const nodes = pts.map(pt => {
@@ -2214,7 +2224,7 @@ function computeLayout(pts) {
   }).filter(Boolean);
 
   // Iterative relaxation — push overlapping nodes apart in map space
-  for (let iter = 0; iter < 80; iter++) {
+  for (let iter = 0; iter < 30; iter++) {
     let moved = false;
     for (let i = 0; i < nodes.length; i++) {
       for (let j = i + 1; j < nodes.length; j++) {
@@ -2234,6 +2244,10 @@ function computeLayout(pts) {
     }
     if (!moved) break;
   }
+
+  _layoutCache = nodes;
+  _layoutCacheLayer = currentLayer;
+  _layoutCacheZoom = currentZoom;
   return nodes;
 }
 
@@ -2524,6 +2538,7 @@ function renderBasePing() {
     pointer-events:none;
     z-index:200;
     transform:translate(-50%, -50%);
+    will-change:transform;
   `;
 
   pin.innerHTML = `
@@ -2588,8 +2603,8 @@ async function initMap() {
     .on("zoom", e => {
       g.attr("transform", e.transform);
       currentZoom = e.transform.k;
-      renderOverlays();
-      renderBasePing();
+      scheduleOverlays();
+      schedulePing();
     });
   svg.call(zoom);
   svg.on("click", () => { closeLocPanel(); clearBasePing(); });
