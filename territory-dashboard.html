@@ -1071,7 +1071,7 @@ header .header-left h1::before {
     <div class="subtitle">Kenneth Copeland · US Faction · Global Dominion Dashboard</div>
   </div>
   <div class="status-bar">
-    <div class="status-item"><div class="val" style="color:var(--green);text-shadow:var(--glow-grn)">6</div><div class="lbl">Controlled</div></div>
+    <div class="status-item"><div class="val" style="color:var(--green);text-shadow:var(--glow-grn)">7</div><div class="lbl">Controlled</div></div>
     <div class="status-item"><div class="val" style="color:var(--amber)">2</div><div class="lbl">Pending</div></div>
     <div class="status-item"><div class="val">3.1B</div><div class="lbl">Population</div></div>
     <div class="status-item"><div class="val" style="color:var(--red);text-shadow:var(--glow-red)">HIGH</div><div class="lbl">Threat Level</div></div>
@@ -1094,7 +1094,11 @@ header .header-left h1::before {
       <button class="tbtn" onclick="showCountryPanel('nigeria')"><span class="dot do"></span><div><div class="nm">Nigeria</div><div class="tg">West Africa</div></div></button>
       <button class="tbtn" onclick="showCountryPanel('philippines')"><span class="dot do"></span><div><div class="nm">Philippines</div><div class="tg">Southeast Asia</div></div></button>
       <button class="tbtn" onclick="showCountryPanel('jamaica')"><span class="dot do"></span><div><div class="nm">Jamaica</div><div class="tg">Caribbean</div></div></button>
+        <button class="mnbtn" onclick="showCountryPanel('honduras')"><span class="dot-sm" style="background:#3af;box-shadow:0 0 4px #3af;width:6px;height:6px;border-radius:50%;flex-shrink:0"></span>Honduras</button>
+      <button class="tbtn" onclick="showCountryPanel('honduras')"><span class="dot do"></span><div><div class="nm">Honduras</div><div class="tg">Central America</div></div></button>
       <button class="tbtn" onclick="showCountryPanel('vatican')"><span class="dot do"></span><div><div class="nm">Vatican City</div><div class="tg">Southern Europe</div></div></button>
+      <button class="tbtn" onclick="showCountryPanel('honduras')"><span class="dot do"></span><div><div class="nm">Honduras</div><div class="tg">Central America</div></div></button>
+      <button class="tbtn" onclick="showCountryPanel('honduras')"><span class="dot do"></span><div><div class="nm">Honduras</div><div class="tg">Central America</div></div></button>
     </div>
     <div class="ss">
       <h3>Pending Trade</h3>
@@ -1159,6 +1163,7 @@ header .header-left h1::before {
     <button class="mnbtn" onclick="showCountryPanel('philippines')"><span class="dot-sm" style="background:#3af"></span>Philippines</button>
     <button class="mnbtn" onclick="showCountryPanel('jamaica')"><span class="dot-sm" style="background:#3af"></span>Jamaica</button>
     <button class="mnbtn" onclick="showCountryPanel('vatican')"><span class="dot-sm" style="background:#3af"></span>Vatican</button>
+        <button class="mnbtn" onclick="showCountryPanel('honduras')"><span class="dot-sm" style="background:#3af"></span>Honduras</button>
     <button class="mnbtn" onclick="showCountryPanel('chile')"><span class="dot-sm" style="background:#fa0"></span>Chile ⚠</button>
     <button class="mnbtn" onclick="showCountryPanel('kuwait')"><span class="dot-sm" style="background:#fa0"></span>Kuwait ⚠</button>
   </div>
@@ -1251,6 +1256,25 @@ const BASE_COORDS = {
   "PLA Cyberspace Force HQ":            [116.39, 39.89],
   "Unit 61398 (Shanghai)":              [121.50, 31.23],
   "Hainan SIGINT Station":              [109.73, 18.26],
+
+  "FFAA Joint Command HQ":             [-87.20, 14.10],
+  "1st Infantry Brigade":              [-87.21, 14.09],
+  "2nd Infantry Brigade":              [-88.03, 15.50],
+  "3rd Infantry Brigade":              [-86.87, 15.76],
+  "4th Infantry Brigade":              [-86.58, 14.04],
+  "5th Infantry Brigade":              [-88.77, 14.77],
+  "6th Infantry Brigade":              [-85.98, 14.79],
+  "7th Infantry Brigade":              [-87.20, 13.30],
+  "Hernan Acosta Mejia AB":            [-87.22, 14.08],
+  "Soto Cano Air Base":                [-87.62, 14.38],
+  "La Ceiba Air Base":                 [-86.87, 15.76],
+  "San Pedro Sula Air Base":           [-88.03, 15.50],
+  "Puerto Castilla Naval Base":        [-85.97, 16.01],
+  "Amapala Naval Base":                [-87.65, 13.35],
+  "Puerto Cortés Coast Guard":         [-88.03, 15.78],
+  "Special Forces Command":            [-87.20, 14.11],
+  "Military Academy (EGFFAA)":         [-87.19, 14.09],
+  "Cobras Anti-Narcotics Base":        [-87.20, 14.10],
 
   // ── NORTH KOREA ──────────────────────────────────────────────────────────
   "Supreme Guard Command":              [125.75, 39.02],
@@ -1525,6 +1549,57 @@ const COUNTRIES = {
   {n:"Philippine Coast Guard Headquarters",t:"Coast Guard",l:"Manila — maritime law enforcement, SCS patrols"}
 ],rail:{terminals:[["Manila Tutuban (PNR)","PNR Main Line South terminus. Historic colonial-era station. Services to Naga (~350km south)."],["Calamba Station","Commuter rail southern hub. NSCR extension under construction."],["Clark (NSCR North)","Under construction. NSCR will connect Clark Air Base to Manila and Calamba."],["Naga Station","Operational southern terminus of PNR South Main Line, Camarines Sur."],["Caloocan Depot","PNR main maintenance and operations depot north of Manila."]],crossBorder:[["International Rail","None","The Philippines is an archipelago — no international rail connections exist or are planned. All rail is domestic island-based."]]}},
   jamaica:{name:"Jamaica",status:"Owned · Caribbean",stats:{Population:"3M",GDP:"$16B",Area:"10.9K km²",Military:"Light"},ov:"Caribbean strategic outpost. Kingston Harbour — largest natural harbour in the Western Hemisphere — controls Atlantic-Pacific shipping lanes near the Panama Canal.",res:[{i:"💎",n:"Bauxite & Alumina",d:"7th largest global bauxite reserves."},{i:"🔥",n:"LNG Terminal",d:"New Fortress Energy — gas power transition."},{i:"🌾",n:"Agriculture & Tourism",d:"Blue Mountain Coffee, rum, $4B+ tourism GDP."}],trans:[{i:"⚓",n:"Kingston Container Terminal",d:"Top 5 Caribbean trans-shipment hub — 2M+ TEU"},{i:"⚓",n:"Montego Bay Port",d:"Cruise and cargo — 1,200 ships/yr"},{i:"⚓",n:"Port Esquivel",d:"Alumina export terminal"},{i:"✈",n:"Norman Manley Airport",d:"Kingston international hub"},{i:"✈",n:"Sangster International Airport",d:"Montego Bay — busiest by passengers"}],bases:[{n:"Up Park Camp",t:"Army HQ",l:"Kingston — JDF headquarters"},{n:"HMJS Cagway",t:"Naval",l:"Port Royal"},{n:"JDF Air Wing (NM Airstrip)",t:"Air Wing",l:"Kingston"}],rail:{terminals:[["Kingston Dockyard Terminal","Former passenger terminus, now freight only. Adjacent to Kingston Container Terminal."],["May Pen","Central Jamaica freight stop. Bauxite/alumina transfer point."],["Montego Bay (Barnett Street)","Former passenger terminus. Freight operations serving western parishes."],["Bog Walk","Former rail crossing in St. Catherine. Historic junction over Rio Cobre."]],crossBorder:[["International Rail","None","Jamaica is an island — no international rail connections exist or are possible without cross-sea infrastructure."]]}},
+  honduras:{name:"Republic of Honduras",status:"Owned · Central America",
+  stats:{Population:"10.6M",GDP:"$34B",Area:"112K km²",Military:"Light"},
+  ov:"Central American territory bridging the Caribbean and Pacific coasts. Atlantic coast gives direct Caribbean Sea access for tribute shipments. Borders Guatemala, El Salvador, and Nicaragua. Significant agricultural exports and proximity to Panama Canal shipping lanes.",
+  res:[
+    {i:"🌾",n:"Coffee & Bananas",d:"Top 5 global banana exporter. Coffee exports $500M+/yr. Dole and Chiquita operate here."},
+    {i:"💎",n:"Lead & Zinc Mining",d:"El Mochito mine — largest in Central America."},
+    {i:"🌲",n:"Timber & Palm Oil",d:"Extensive pine forest logging and African palm oil production."},
+    {i:"🏭",n:"Maquiladora Textiles",d:"3rd largest global textile export zone. $4B+/yr apparel to US markets."},
+    {i:"⚡",n:"Hydroelectric Power",d:"Cahaya and El Cajón dams — significant regional power export potential."}
+  ],
+  trans:[
+    {i:"⚓",n:"Puerto Cortés",d:"Largest and busiest port in Central America — 1M+ TEU/yr. Caribbean coast."},
+    {i:"⚓",n:"Puerto Castilla",d:"Caribbean port. Banana and cargo exports. Naval base adjacent."},
+    {i:"⚓",n:"San Lorenzo Port",d:"Pacific coast port. Gulf of Fonseca. Pacific shipping access."},
+    {i:"✈",n:"Toncontín Airport (Tegucigalpa)",d:"Capital city hub — notoriously difficult short-runway approach."},
+    {i:"✈",n:"Ramón Villeda Morales Airport",d:"San Pedro Sula — busiest airport by cargo volume."},
+    {i:"🚂",n:"Limited Rail",d:"Minimal rail network, mostly banana plantation spurs near north coast."}
+  ],
+  bases:[
+    {n:"FFAA Joint Command HQ",t:"Military HQ",l:"Tegucigalpa — Armed Forces joint command centre"},
+    {n:"1st Infantry Brigade",t:"Army",l:"Tegucigalpa — primary capital garrison"},
+    {n:"2nd Infantry Brigade",t:"Army",l:"San Pedro Sula — northern industrial zone garrison"},
+    {n:"3rd Infantry Brigade",t:"Army",l:"La Ceiba — Caribbean coast ground force"},
+    {n:"4th Infantry Brigade",t:"Army",l:"Danlí — eastern border, Nicaragua approach"},
+    {n:"5th Infantry Brigade",t:"Army",l:"Santa Rosa de Copán — western border, Guatemala approach"},
+    {n:"6th Infantry Brigade",t:"Army",l:"Juticalpa — central highlands patrol"},
+    {n:"7th Infantry Brigade",t:"Army",l:"Choluteca — Pacific coast, Gulf of Fonseca"},
+    {n:"Hernan Acosta Mejia AB",t:"Air Force HQ",l:"Tegucigalpa — FAH headquarters, F-5 fighter wing"},
+    {n:"Soto Cano Air Base",t:"Air Base",l:"Comayagua — joint FUSEP and special operations base"},
+    {n:"La Ceiba Air Base",t:"Air Base",l:"La Ceiba — Caribbean coast air patrol"},
+    {n:"San Pedro Sula Air Base",t:"Air Base",l:"San Pedro Sula — north coast air wing"},
+    {n:"Puerto Castilla Naval Base",t:"Naval HQ",l:"Colón — Caribbean fleet headquarters"},
+    {n:"Amapala Naval Base",t:"Naval Base",l:"Gulf of Fonseca — Pacific coast naval station"},
+    {n:"Puerto Cortés Coast Guard",t:"Naval",l:"Puerto Cortés — largest port naval security"},
+    {n:"Special Forces Command",t:"Special Forces",l:"Tegucigalpa — TESON counter-narcotics and special ops"},
+    {n:"Military Academy (EGFFAA)",t:"Training",l:"Tegucigalpa — officer commissioning academy"},
+    {n:"Cobras Anti-Narcotics Base",t:"Counter-Narcotics",l:"Multiple sites — US-trained COBRAS drug interdiction units"}
+  ],
+  rail:{
+    terminals:[
+      ["San Pedro Sula (Tela Railroad)","Banana plantation rail network. Dole/Chiquita freight to Puerto Cortés and Tela port."],
+      ["Puerto Cortés Rail Spur","Port access line. Freight only. Container and banana cargo."]
+    ],
+    crossBorder:[
+      ["Guatemala","None — Active","No direct rail. Road corridor via CA-11 and CA-4."],
+      ["El Salvador","None — Active","No rail connection. Pan-American Highway only."],
+      ["Nicaragua","None — Active","No rail. Caribbean coast sea access more practical."]
+    ]
+  }
+},
+  honduras:{name:"Republic of Honduras",status:"Owned · Central America",stats:{Population:"10.4M",GDP:"$34B",Area:"112K km²",Military:"Light"},ov:"Central American land bridge controlling overland routes between North and South America. Caribbean coast faces the Gulf of Honduras — deep-water access to Atlantic shipping lanes. Proximity to Panama Canal corridor makes it strategically relevant for Pacific-Atlantic cargo routing.",res:[{i:"🌾",n:"Agriculture",d:"Coffee (2nd largest CA exporter), bananas, palm oil, sugar — primary export earners."},{i:"💎",n:"Mining",d:"Silver, gold, lead, zinc. San Andrés mine — significant silver producer."},{i:"🏭",n:"Maquiladora Manufacturing",d:"Textile and apparel assembly for US market. $4B+ in exports annually."},{i:"🌊",n:"Bay Islands",d:"Roatán — Caribbean resort and logistics hub. Deepwater port access."}],trans:[{i:"⚓",n:"Puerto Cortés",d:"Largest port in Central America. Primary Atlantic cargo hub."},{i:"⚓",n:"Puerto de Henecán (San Lorenzo)",d:"Pacific coast port. Gulf of Fonseca access."},{i:"⚓",n:"La Ceiba Port",d:"Caribbean coast. Bay Islands ferry and cargo terminal."},{i:"✈",n:"Toncontín Airport (Tegucigalpa)",d:"Capital airport. Notoriously challenging approach — short runway, mountains."},{i:"✈",n:"Ramón Villeda Morales Airport (San Pedro Sula)",d:"Largest by volume. Industrial north — maquiladora cargo hub."}],bases:[{n:"FFAA Joint Command",t:"Military HQ",l:"Tegucigalpa — Armed Forces of Honduras command"},{n:"Hernán Acosta Mejía Air Base",t:"Air Force HQ",l:"Tegucigalpa — primary FAH base, F5/A-37 wing"},{n:"Enrique Soto Cano AB (Palmerola)",t:"Joint Air Base",l:"Comayagua — strategic central base, C-130 transport hub"},{n:"Puerto Castilla Naval Base",t:"Naval HQ",l:"Colón — Caribbean Fleet, primary FNH base"},{n:"Amapala Naval Base",t:"Naval",l:"Gulf of Fonseca — Pacific Fleet"},{n:"1st Infantry Battalion",t:"Army",l:"Tegucigalpa — capital garrison"},{n:"2nd Infantry Battalion",t:"Army",l:"San Pedro Sula — northern industrial city garrison"},{n:"3rd Infantry Battalion",t:"Army",l:"La Ceiba — Caribbean coast garrison"},{n:"4th Infantry Battalion",t:"Army",l:"Danlí — eastern border, El Salvador/Nicaragua approach"},{n:"5th Infantry Battalion",t:"Army",l:"Santa Rosa de Copán — western highlands, Guatemala border"},{n:"Special Forces Brigade",t:"Special Forces",l:"Tegucigalpa — TESON counter-narco unit"},{n:"COBRA Police-Military Unit",t:"Counter-Narco",l:"National — joint ops against cartel corridors"}],rail:{terminals:[["San Pedro Sula (TFC Terminal)","Former United Fruit Company banana railway hub. Limited freight operations remain on north coast corridor."],["Puerto Cortés Rail Terminal","Port-connected freight spur. Banana and container cargo loading — primary remaining active rail segment."],["El Progreso Junction","Historic Tela Railroad junction. Banana belt freight."],["La Lima Switching Yard","Former UFC operations centre. Reduced freight activity."]],crossBorder:[["International Rail","None — operational","Honduras has no active international rail connections. Historic banana belt lines are domestic only. Pan-American Highway is primary overland corridor."]]}},
   chile:{name:"Republic of Chile",status:"⚠ Pending Trade · South America",stats:{Population:"19M",GDP:"$317B",Area:"756K km²",Military:"Moderate"},ov:"PENDING TRADE. World's largest copper reserves and 44% of global lithium — critical for EV battery supply chains. Punta Arenas controls the Strait of Magellan chokepoint.",res:[{i:"💎",n:"Escondida Copper Mine",d:"World's largest. 27% of global copper supply."},{i:"🔋",n:"Salar de Atacama Lithium",d:"44% of global lithium reserves."},{i:"💎",n:"Chuquicamata Copper",d:"World's largest open-pit mine by volume."},{i:"⚡",n:"Atacama Solar",d:"Highest solar irradiation on Earth."}],trans:[{i:"⚓",n:"San Antonio Port",d:"Chile's largest by volume"},{i:"⚓",n:"Port of Valparaíso",d:"Main container + naval port"},{i:"⚓",n:"Antofagasta Port",d:"Copper mining export hub"},{i:"⚓",n:"Iquique Port",d:"Northern minerals gateway"},{i:"✈",n:"Santiago Airport (AMB)",d:"South America aviation hub"},{i:"🚂",n:"Atacama Mining Rail",d:"Mines to Pacific ports"}],bases:[{n:"Punta Arenas Naval Base",t:"Naval",l:"Strait of Magellan — strategic chokepoint"},{n:"Talcahuano Naval Base",t:"Fleet HQ",l:"Biobío — main fleet"},{n:"El Bosque Air Base",t:"Air Force HQ",l:"Santiago"},{n:"Iquique Air Base",t:"Air Force",l:"Northern Chile"}],rail:{terminals:[["Santiago Estación Central (Alameda)","Primary passenger hub. EFE services south to Chillán and Rancagua. Metro and commuter integration."],["Valparaíso Puerto","Commuter service to Limache (43km). Former major freight gateway."],["Chillán Station","Southernmost regular EFE passenger terminus (~400km from Santiago, ~3.5h)."],["Antofagasta FCAB Terminal","Northern mining hub. FCAB freight line to Bolivia border at Ollagüe (438km)."],["Iquique (Ferronor)","Northern Atacama freight terminal. Mineral exports — nitrates, copper concentrate."],["Calama Station","Atacama gateway. FCAB connects Escondida mine branch to Antofagasta port."],["San Antonio Port Terminal","Freight terminus. Major vehicle and container export gateway."],["Arica Station","Extreme northern terminus. Historic gateway to Peru (Tacna-Arica line, dormant)."]],crossBorder:[["Chile → Bolivia (FCAB / Ollagüe)","Active (freight)","Ferrocarril de Antofagasta a Bolivia. Metre gauge. Carries lithium carbonate, borax, minerals. Bolivia's primary ocean-access rail export route."],["Chile → Bolivia (Arica–Visviri)","Active (limited freight)","Restored 2021. Metre gauge connecting to Bolivian network at Visviri."],["Chile → Argentina (Trans-Andean)","Defunct since 1984","Historic Mendoza–Los Andes line via Cumbre Tunnel (3,176m — highest rail tunnel in Western Hemisphere). Reconstruction periodically proposed but unfunded."],["Chile → Peru (Arica–Tacna)","Dormant since 2012","6km Chilean standard gauge section. Plans to reopen as tourist service remain unresolved."],["Chile → Argentina (Salta–Antofagasta)","Freight only","Via Socompa Pass at 3,876m. Fifth-highest railway in the world. Argentine Tren a las Nubes tourist section."]]}},
   kuwait:{name:"State of Kuwait",status:"⚠ Pending Trade · Middle East",stats:{Population:"4.3M",GDP:"$136B",Area:"17.8K km²",Military:"Small"},ov:"PENDING TRADE. Top of the Persian Gulf. Greater Burgan — 2nd largest oil field on Earth. Hosts the largest US military pre-positioning base in the Gulf.",res:[{i:"🛢",n:"Greater Burgan Oil Field",d:"101.5B barrel reserves — 2nd largest ever discovered."},{i:"🛢",n:"Minagish & Umm Gudair Fields",d:"~100k bpd combined secondary fields."},{i:"💰",n:"Kuwait Investment Authority",d:"$800B+ sovereign wealth fund."}],trans:[{i:"⚓",n:"Mina Al Ahmadi Terminal",d:"Primary crude export — VLCC capable"},{i:"⚓",n:"Shuwaikh Commercial Port",d:"Container imports hub"},{i:"✈",n:"Kuwait International Airport",d:"Gulf hub + USAF logistics node"}],bases:[{n:"Camp Arifjan",t:"US Army",l:"South Kuwait — 13,500 troops"},{n:"Ali Al Salem Air Base",t:"USAF/KAF",l:"NW Kuwait — F-16s + ISR"},{n:"Camp Buehring",t:"US Army",l:"North Kuwait — staging"},{n:"Camp Patriot",t:"US Army/Naval",l:"Port logistics hub"},{n:"Mubarak Air Base",t:"Kuwaiti AF",l:"F/A-18 + Typhoon national defense"}],rail:{terminals:[["Kuwait City (Planned GCC Station)","No operational passenger rail stations in Kuwait. GCC Railway terminus planned for Kuwait City but unbuilt."],["Shuaiba Industrial Zone","Internal freight rail within refinery and petrochemical complex. Not part of any national network."]],crossBorder:[["GCC Railway (Saudi Arabia → Kuwait)","Planned — not built","Gulf Cooperation Council Railway would connect Riyadh to Kuwait City (~540km). Agreements signed, construction not started as of 2025. Would link to Saudi Arabia, UAE, Bahrain, Qatar, Oman."],["Kuwait → Iraq","None","No rail connection exists. Ottoman-era plans to extend Baghdad Railway through Kuwait to the Gulf were never completed."]]}}
 };
@@ -1676,7 +1751,18 @@ const POINTS = [
   ["kw-m4",  48.0, 29.4, "military","#fa4","★","Camp Patriot (Shuaiba)","US Army/Naval","Port logistics base connecting Shuaiba port to inland US military supply chain.",["Role: Port logistics","Units: Transportation","Port: Shuaiba connection"]],
   ["kw-m5",  48.0, 29.2, "military","#888","★","Mubarak Air Base","Kuwaiti Air Force","KAF national air defense. F/A-18 Hornets and Eurofighter Typhoon.",["Aircraft: F/A-18, Typhoon","Role: National air defense","Crew: KAF only"]],
 
+
+  // ── HONDURAS MILITARY ──
+  ["hn-m1", -87.20, 14.10, "military","#f44","★","FFAA Joint Command","Military HQ","Honduras Armed Forces joint command. All service coordination.",["Branch: Joint","Location: Capital"]],
+  ["hn-m2", -87.22, 14.08, "military","#f44","★","Hernan Acosta Mejia AB","Air Force HQ","FAH headquarters. F-5 fighter wing. Primary air defence.",["Aircraft: F-5","Role: Air defence"]],
+  ["hn-m3", -87.62, 14.38, "military","#f44","★","Soto Cano Air Base","Joint Base","Major joint operations base. Special forces staging.",["Use: Joint ops","Special forces"]],
+  ["hn-m4", -86.87, 15.76, "military","#f44","★","Puerto Castilla Naval Base","Naval HQ","Caribbean fleet HQ. Primary naval installation.",["Fleet: Caribbean","Role: Naval HQ"]],
+  ["hn-m5", -87.65, 13.35, "military","#f44","★","Amapala Naval Base","Naval Base","Pacific coast station. Gulf of Fonseca access.",["Coast: Pacific","Gulf of Fonseca"]],
+  ["hn-m6", -88.03, 15.78, "military","#f44","★","Puerto Cortés","Port/Naval","Largest Central American port. Caribbean coast naval security.",["TEU: 1M+/yr","Caribbean coast"]],
+
   // ── CITIES ──────────────────────────────────────────────────────────────
+  ["ci-hn1", -87.21, 14.10, "cities","#44ff88","🏙","Tegucigalpa","Capital","Capital and largest city. FFAA HQ. Political, military and economic centre of Honduras.",["Pop: 1.1M","Capital","FFAA HQ"]],
+  ["ci-hn2", -88.03, 15.51, "cities","#44ff88","🏙","San Pedro Sula","Major City","Industrial capital. Maquiladora manufacturing hub. Puerto Cortés nearby — primary export corridor.",["Pop: 1.0M","Industrial hub","Port proximity"]],
 // ── CITIES LAYER ─────────────────────────────────────────────────────────────
 // China: 5M+ population | NK, Philippines, Nigeria, Jamaica, Vatican: 1M+
 // Format: [id, lon, lat, "cities", color, emoji, name, type, description, [stats]]
@@ -1738,10 +1824,23 @@ const POINTS = [
   ["ci-ng11",  7.55, 6.44, "cities","#ffaa00","🏙","Onitsha","Major City","Largest open market in Africa by volume. Critical trade and logistics hub.",["Pop: 1.1M","Largest market","Trade hub"]],
   ["ci-ng12",  4.54, 7.78, "cities","#ffaa00","🏙","Abeokuta","Major City","Ogun State capital. Industrial hub near Lagos corridor. Guinness brewery.",["Pop: 1.1M","Near Lagos","Industrial"]],
 
+  ["ci-hn1", -87.21, 14.10, "cities","#44ff88","🏙","Tegucigalpa","Capital","Capital and military command centre. FFAA HQ. Hernan Acosta Mejia Air Base adjacent.",["Pop: 1.2M","Capital","FFAA HQ"]],
+  ["ci-hn2", -88.03, 15.47, "cities","#44ff88","🏙","San Pedro Sula","Major City","Industrial capital. Largest cargo airport. Caribbean coast gateway. 2nd Infantry Brigade.",["Pop: 1.1M","Industrial hub","N. Honduras"]],
   // ── JAMAICA (1M+) — only Kingston qualifies ───────────────────────────────
   ["ci-jm1", -76.79, 17.99, "cities","#44ff88","🏙","Kingston","Capital","Capital and primary port. Norman Manley airport. JDF HQ. Only major city.",["Pop: 1.0M","Capital","JDF HQ"]],
 
 
+
+  // ── HONDURAS MILITARY ──
+  ["hn-m1", -87.21, 14.07, "military","#f44","★","Hernán Acosta Mejía AB","Air Force Base","FAH primary air base. Fighter and transport wing. Tegucigalpa capital defence.",["Aircraft: F5, A-37","Role: Capital defence","Runway: 2,740m"]],
+  ["hn-m2", -87.62, 14.37, "military","#f44","★","Enrique Soto Cano AB (Palmerola)","Joint Air Base","Strategic central Honduras base. C-130 transport hub. Counter-narco operations centre.",["C-130 Hercules","Counter-narco","Central Honduras"]],
+  ["hn-m3", -85.90, 15.78, "military","#f44","★","Puerto Castilla Naval Base","Naval HQ","Caribbean Fleet headquarters. Primary FNH base. Gulf of Honduras patrol operations.",["Caribbean Fleet HQ","Gulf of Honduras","Atlantic access"]],
+  ["hn-m4", -87.63, 13.37, "military","#f44","★","Amapala Naval Base","Naval Base","Pacific Fleet. Gulf of Fonseca — shared with El Salvador and Nicaragua. Pacific patrol ops.",["Pacific Fleet","Gulf of Fonseca","Pacific access"]],
+  // ── HONDURAS TRANSPORT ──
+  ["hn-t1", -87.94, 15.83, "transport","#0af","⚓","Puerto Cortés","Major Port","Largest port in Central America. Honduras primary Atlantic cargo hub. Container and bulk.",["Largest in CA","Atlantic hub","Container+bulk"]],
+  ["hn-t2", -87.33, 13.57, "transport","#0af","⚓","Puerto de Henecán","Pacific Port","San Lorenzo — Gulf of Fonseca Pacific access. Handles petroleum and agricultural exports.",["Gulf of Fonseca","Pacific coast","Petroleum exports"]],
+  ["hn-t3", -86.85, 14.06, "transport","#0af","✈","Toncontín Airport","Capital Airport","Tegucigalpa international. Challenging mountain approach. Primary capital air gateway.",["Capital gateway","Mountain approach","International"]],
+  ["hn-t4", -87.92, 15.45, "transport","#0af","✈","Ramón Villeda Morales","Main Airport","San Pedro Sula — largest by cargo volume. Industrial north. Maquiladora logistics hub.",["Largest by volume","Industrial cargo","Maquiladora"]],
 ];
 
 
@@ -1970,6 +2069,24 @@ const HAVANA = {
        detail:"⚠ DO NOT USE. This route is the worst possible geometry in the entire network — it chains together more faction chokepoints than any other route. Cape of Good Hope is mandatory."}
     ]
   }
+
+  ,honduras:{
+    name:"Honduras", status:"owned", gdp:34, pct:35, tribute:11.9, unit:"B/yr",
+    breakdown:[
+      ["Agriculture","$4.2B","Coffee, bananas, palm oil — bulk and reefer cargo"],
+      ["Maquiladora Output","$3.8B","Textiles, apparel — containers from San Pedro Sula"],
+      ["Mining Revenue","$1.9B","Silver, gold, zinc — ore and refined metals"],
+      ["Port Throughput","$1.3B","Puerto Cortes diverted trans-shipment cargo"],
+      ["Remittance Cash","$0.7B","Physical USD — convertible funds"]
+    ],
+    routes:[
+      {mode:"🚢",label:"Puerto Cortes → Caribbean → Windward Passage → Havana",time:"4–6 days",
+       threat:"🟡 → 🟡 → 🟢",
+       threatDetail:"<b>Caribbean crossing (1,800km):</b> 🟡 MODERATE — Caribbean Faction patrols present but no chokepoints. Clean open water run.",
+       countermeasures:"Fast cargo 20+ knots. Stagger 2-3 vessels. Cuban Navy escort final 300nm.",
+       detail:"Honduras is the second-closest territory to Havana after Jamaica. Puerto Cortes — largest port in Central America — gives direct Atlantic access. No canal or strait required."}
+    ]
+  }
 };
 
 const HAVANA_TOTAL = Object.values(HAVANA).reduce((s,c)=>s+c.tribute,0);
@@ -1979,9 +2096,9 @@ const HAVANA_OWNED = Object.values(HAVANA).filter(c=>c.status==="owned").reduce(
 // ═══════════════════════════════════════════════════════════════════
 // MAP GLOBALS
 // ═══════════════════════════════════════════════════════════════════
-const OWNED   = new Set(["156","408","566","608","388","336"]);  // 336 = Vatican City
+const OWNED   = new Set(["156","408","566","608","388","336","340"]);  // 340 = Honduras
 const PENDING  = new Set(["152","414"]);
-const ID2KEY   = {"156":"china","408":"northkorea","566":"nigeria","608":"philippines","388":"jamaica","152":"chile","414":"kuwait","336":"vatican"};
+const ID2KEY   = {"156":"china","408":"northkorea","566":"nigeria","608":"philippines","388":"jamaica","152":"chile","414":"kuwait","336":"vatican","340":"honduras"};
 
 let currentLayer = "overview";
 let projection, pathGen, g, overlayG, svgSel, zoomBehavior;
