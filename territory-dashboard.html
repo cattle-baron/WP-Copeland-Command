@@ -1,0 +1,2536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Territory Command</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Share+Tech+Mono&family=Exo+2:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --bg:       #020810;
+  --bg2:      #04101f;
+  --bg3:      #060d1c;
+  --border:   #0e2444;
+  --border2:  #1a3a5e;
+  --accent:   #00c8ff;
+  --accent2:  #0080cc;
+  --red:      #ff3040;
+  --amber:    #ffaa00;
+  --green:    #00ff88;
+  --text:     #b8cfe8;
+  --text2:    #7a9aba;
+  --muted:    #2a4a6a;
+  --glow:     0 0 8px rgba(0,200,255,0.4);
+  --glow-red: 0 0 8px rgba(255,48,64,0.5);
+  --glow-grn: 0 0 8px rgba(0,255,136,0.4);
+  --font-hd:  'Orbitron', monospace;
+  --font-mono:'Share Tech Mono', monospace;
+  --font-body:'Exo 2', sans-serif;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html, body { height:100%; overflow:hidden; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── SCANLINE OVERLAY ───────────────────────────────────────────── */
+body::before {
+  content:'';
+  position:fixed; inset:0; z-index:9998; pointer-events:none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.08) 2px,
+    rgba(0,0,0,0.08) 4px
+  );
+}
+
+/* ── HEADER ─────────────────────────────────────────────────────── */
+header {
+  background: linear-gradient(90deg, #020c1e 0%, #040f1e 60%, #020a18 100%);
+  border-bottom: 1px solid var(--border2);
+  padding: 0 16px;
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-shrink: 0;
+  z-index: 10;
+  position: relative;
+}
+
+header::after {
+  content:'';
+  position:absolute; bottom:0; left:0; right:0; height:1px;
+  background: linear-gradient(90deg, transparent, var(--accent), var(--accent2), transparent);
+  opacity: 0.6;
+}
+
+.header-left h1 {
+  font-family: var(--font-hd);
+  font-size: 0.85rem;
+  font-weight: 900;
+  color: var(--accent);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  text-shadow: var(--glow);
+  line-height: 1.2;
+}
+
+.header-left .subtitle {
+  font-family: var(--font-mono);
+  font-size: 0.52rem;
+  color: var(--muted);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-top: 1px;
+}
+
+.status-bar { display:flex; gap:16px; flex-shrink:0; }
+
+.status-item {
+  text-align: center;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  background: rgba(0,200,255,0.03);
+  position: relative;
+}
+
+.status-item::before {
+  content:'';
+  position:absolute; top:0; left:0; right:0; height:1px;
+  background: var(--accent);
+  opacity: 0.3;
+}
+
+.status-item .val {
+  font-family: var(--font-hd);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-shadow: var(--glow);
+  display: block;
+}
+
+.status-item .lbl {
+  font-family: var(--font-mono);
+  font-size: 0.46rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  display: block;
+  margin-top: 1px;
+}
+
+/* ── MAIN LAYOUT ─────────────────────────────────────────────────── */
+.main { display:flex; flex:1; overflow:hidden; position:relative; }
+
+/* ── SIDEBAR ─────────────────────────────────────────────────────── */
+.sidebar {
+  width: 200px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  flex-shrink: 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border2) transparent;
+}
+
+.sidebar::-webkit-scrollbar { width: 3px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+.ss { padding: 12px 10px 6px; }
+
+.ss h3 {
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--border);
+}
+
+.tbtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-bottom: 2px;
+  border: 1px solid transparent;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  color: var(--text);
+  transition: all 0.15s;
+  position: relative;
+}
+
+.tbtn::before {
+  content:'';
+  position:absolute; left:0; top:0; bottom:0; width:2px;
+  background: var(--accent);
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.tbtn:hover { background: rgba(0,200,255,0.05); border-color: var(--border); }
+.tbtn:hover::before { opacity: 0.5; }
+.tbtn.active { background: rgba(0,200,255,0.08); border-color: var(--border2); }
+.tbtn.active::before { opacity: 1; }
+
+.dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink:0; }
+.do { background: var(--green); box-shadow: var(--glow-grn); }
+.dp { background: var(--amber); box-shadow: 0 0 6px rgba(255,170,0,0.5); }
+
+.nm { font-family: var(--font-body); font-size: 0.75rem; font-weight: 600; }
+.tg { font-family: var(--font-mono); font-size: 0.52rem; color: var(--text2); }
+
+.maptabs {
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-top: 1px solid var(--border);
+  margin-top: auto;
+}
+
+.maptabs h3 {
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: 2px;
+}
+
+.lbtn {
+  padding: 7px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text2);
+  font-family: var(--font-mono);
+  font-size: 0.63rem;
+  text-align: left;
+  transition: all 0.15s;
+  letter-spacing: 0.5px;
+}
+
+.lbtn:hover { background: rgba(0,200,255,0.05); border-color: var(--border2); color: var(--text); }
+.lbtn.active {
+  background: rgba(0,200,255,0.1);
+  border-color: var(--accent);
+  color: var(--accent);
+  text-shadow: var(--glow);
+}
+
+/* ── MAP ─────────────────────────────────────────────────────────── */
+.map-area { flex:1; position:relative; overflow:hidden; background: var(--bg); }
+
+#map-svg { width:100%; height:100%; display:block; touch-action:none; }
+
+.country {
+  fill: #071222;
+  stroke: #0c1e30;
+  stroke-width: 0.4;
+  cursor: default;
+  transition: fill 0.2s;
+  vector-effect: non-scaling-stroke;
+}
+
+.country.owned {
+  fill: #0d2a4a;
+  stroke: var(--accent);
+  stroke-width: 1.2;
+  cursor: pointer;
+  vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 0 3px rgba(0,200,255,0.3));
+}
+
+.country.pending {
+  fill: #2a1e04;
+  stroke: var(--amber);
+  stroke-width: 1.2;
+  cursor: pointer;
+  vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 0 3px rgba(255,170,0,0.3));
+}
+
+.country.owned:hover { fill: #1a4a7a; }
+.country.pending:hover { fill: #4a3408; }
+
+.graticule { fill:none; stroke:#08121e; stroke-width:0.5; vector-effect:non-scaling-stroke; }
+.sphere { fill: #030810; }
+.border { fill:none; stroke:#152538; stroke-width:0.6; vector-effect:non-scaling-stroke; }
+.leader-line { stroke-opacity:0.35; stroke-dasharray:2,3; pointer-events:none; }
+.true-dot { pointer-events:none; }
+.overlay-marker { cursor:pointer; }
+
+/* ── LEGEND ──────────────────────────────────────────────────────── */
+.legend {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  background: rgba(2,8,16,0.95);
+  border: 1px solid var(--border2);
+  border-radius: 4px;
+  padding: 8px 12px;
+  pointer-events: none;
+  backdrop-filter: blur(4px);
+}
+
+.legend::before {
+  content:'';
+  position:absolute; top:0; left:0; right:0; height:1px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+  opacity: 0.4;
+}
+
+.legend h4 {
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+}
+
+.li { display:flex; align-items:center; gap:6px; font-family:var(--font-mono); font-size:0.58rem; color:var(--text2); margin-bottom:3px; }
+.ld { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+
+/* ── TOOLTIP ─────────────────────────────────────────────────────── */
+#tip {
+  position: fixed;
+  background: rgba(2,8,20,0.97);
+  border: 1px solid var(--accent);
+  border-radius: 3px;
+  padding: 5px 10px;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--accent);
+  pointer-events: none;
+  display: none;
+  z-index: 9999;
+  white-space: nowrap;
+  box-shadow: var(--glow);
+  letter-spacing: 0.5px;
+}
+
+/* ── INFO PANEL (desktop) ───────────────────────────────────────── */
+.ip {
+  width: 360px;
+  background: var(--bg2);
+  border-left: 1px solid var(--border);
+  overflow-y: auto;
+  flex-shrink: 0;
+  display: none;
+  flex-direction: column;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border2) transparent;
+}
+
+.ip.open { display:flex; }
+.ip::-webkit-scrollbar { width:3px; }
+.ip::-webkit-scrollbar-thumb { background:var(--border2); border-radius:2px; }
+
+.ph {
+  padding: 14px 16px;
+  background: linear-gradient(135deg, #030d20, #071828);
+  border-bottom: 1px solid var(--border2);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ph::after {
+  content:'';
+  position:absolute; bottom:0; left:0; right:0; height:1px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+  opacity: 0.4;
+}
+
+.ph-text { flex:1; min-width:0; }
+
+.ph h2 {
+  font-family: var(--font-hd);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-shadow: var(--glow);
+  line-height: 1.2;
+  letter-spacing: 1px;
+}
+
+.ph .pm {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  color: var(--text2);
+  margin-top: 3px;
+  letter-spacing: 0.5px;
+}
+
+.back-btn {
+  flex-shrink: 0;
+  background: rgba(0,200,255,0.08);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  cursor: pointer;
+  border-radius: 3px;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  transition: all 0.15s;
+  letter-spacing: 1px;
+  text-shadow: var(--glow);
+}
+
+.back-btn:hover { background: rgba(0,200,255,0.18); }
+
+/* ── PANEL SECTIONS ──────────────────────────────────────────────── */
+.ps {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.ps h4 {
+  font-family: var(--font-mono);
+  font-size: 0.52rem;
+  color: var(--accent2);
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ps h4::after {
+  content:'';
+  flex:1;
+  height:1px;
+  background: linear-gradient(90deg, var(--border2), transparent);
+}
+
+.ps p {
+  font-size: 0.74rem;
+  line-height: 1.7;
+  color: var(--text2);
+}
+
+/* Stats grid */
+.sg { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+
+.sb {
+  background: rgba(0,200,255,0.03);
+  border-radius: 3px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.sb::before {
+  content:'';
+  position:absolute; top:0; left:0; right:0; height:1px;
+  background: var(--accent);
+  opacity: 0.2;
+}
+
+.sb .sv {
+  font-family: var(--font-hd);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-shadow: var(--glow);
+  display: block;
+}
+
+.sb .sk {
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  display: block;
+  margin-top: 2px;
+}
+
+/* Rail/base/transport items */
+.ri {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 7px 0;
+  border-bottom: 1px solid rgba(14,36,68,0.6);
+}
+.ri:last-child { border-bottom:none; }
+
+.rn {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.rd {
+  font-family: var(--font-body);
+  font-size: 0.63rem;
+  color: var(--text2);
+  line-height: 1.5;
+}
+
+.ti {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  padding: 4px 0;
+  font-size: 0.7rem;
+  color: var(--text2);
+}
+
+/* Base/installation items */
+.bi {
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(14,36,68,0.6);
+}
+.bi:last-child { border-bottom:none; }
+.bn { font-size: 0.72rem; font-weight: 600; color: var(--text); }
+.bt { font-family:var(--font-mono); font-size: 0.52rem; color: var(--amber); text-transform: uppercase; letter-spacing: 1px; }
+.bl { font-size: 0.63rem; color: var(--text2); line-height:1.5; margin-top:2px; }
+
+/* Location popup */
+.loc-panel-wrap { position:absolute; top:12px; right:12px; width:310px; z-index:50; display:none; }
+.loc-panel-wrap.show { display:block; }
+
+.loc-panel {
+  background: rgba(3,10,22,0.98);
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.8), var(--glow);
+  backdrop-filter: blur(8px);
+}
+
+.loc-ph {
+  padding: 12px 14px;
+  background: linear-gradient(135deg, #031020, #071828);
+  border-bottom: 1px solid var(--border2);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.loc-ph h3 {
+  font-family: var(--font-hd);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-shadow: var(--glow);
+  letter-spacing: 1px;
+}
+
+.loc-ph .loc-type {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  color: var(--text2);
+  margin-top: 3px;
+  letter-spacing: 1px;
+}
+
+.loc-close {
+  background: none;
+  border: 1px solid var(--border2);
+  color: var(--text2);
+  font-size: 0.85rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  padding: 2px 6px;
+  border-radius: 2px;
+  transition: all 0.15s;
+  line-height: 1.4;
+}
+.loc-close:hover { border-color:var(--accent); color:var(--accent); }
+
+.loc-body { padding: 10px 14px; }
+.loc-body p { font-size: 0.72rem; line-height: 1.6; color: var(--text2); }
+
+.loc-detail { display:flex; gap:5px; margin-top:8px; flex-wrap:wrap; }
+
+.loc-badge {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  padding: 3px 8px;
+  border-radius: 2px;
+  border: 1px solid;
+  background: rgba(0,0,0,0.4);
+  letter-spacing: 0.5px;
+}
+
+/* ── LOADING ─────────────────────────────────────────────────────── */
+#loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  z-index: 100;
+}
+
+.load-inner { text-align:center; }
+
+.load-inner .load-title {
+  font-family: var(--font-hd);
+  font-size: 0.8rem;
+  color: var(--accent);
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  text-shadow: var(--glow);
+  animation: pulse-glow 1.5s ease-in-out infinite;
+}
+
+.load-inner .load-sub {
+  font-family: var(--font-mono);
+  font-size: 0.52rem;
+  color: var(--muted);
+  letter-spacing: 3px;
+  margin-top: 8px;
+}
+
+@keyframes pulse-glow {
+  0%,100% { opacity:1; text-shadow: 0 0 8px rgba(0,200,255,0.4); }
+  50% { opacity:0.6; text-shadow: 0 0 20px rgba(0,200,255,0.8); }
+}
+
+/* ── HAVANA TRIBUTE PANEL ───────────────────────────────────────── */
+.hvn-bar-bg {
+  height: 6px;
+  background: rgba(14,36,68,0.8);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.hvn-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+}
+
+.hvn-country-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 4px;
+  border-bottom: 1px solid rgba(14,36,68,0.5);
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background 0.15s;
+}
+
+.hvn-country-row:last-child { border-bottom:none; }
+.hvn-country-row:hover { background: rgba(0,200,255,0.04); }
+
+.hvn-flag { font-size: 0.85rem; flex-shrink:0; width:24px; text-align:center; }
+.hvn-cname { font-size: 0.72rem; font-weight: 600; color:var(--text); flex:1; min-width:0; }
+.hvn-pct { font-family:var(--font-mono); font-size: 0.55rem; color:var(--muted); flex-shrink:0; }
+.hvn-val { font-family:var(--font-hd); font-size: 0.68rem; font-weight: 700; color:var(--accent); text-shadow:var(--glow); flex-shrink:0; min-width:55px; text-align:right; }
+.hvn-pending { color: var(--amber) !important; text-shadow: 0 0 6px rgba(255,170,0,0.4) !important; }
+
+.hvn-total-box {
+  background: linear-gradient(135deg, #03101e, #071828);
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  box-shadow: var(--glow);
+  position: relative;
+  overflow: hidden;
+}
+
+.hvn-total-box::before {
+  content:'';
+  position:absolute; top:0; left:0; right:0; height:1px;
+  background: var(--accent);
+  opacity: 0.6;
+}
+
+.hvn-total-box .val {
+  font-family: var(--font-hd);
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: var(--accent);
+  text-shadow: var(--glow);
+  display: block;
+}
+
+.hvn-total-box .sub {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  color: var(--text2);
+  margin-top: 3px;
+  letter-spacing: 1px;
+}
+
+/* Route cards */
+.route-card {
+  background: rgba(3,10,22,0.7);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  cursor: default;
+  transition: border-color 0.15s;
+}
+
+.route-card:hover { border-color: var(--border2); }
+.route-mode { font-size: 1rem; margin-right: 4px; }
+.route-label { font-size: 0.72rem; font-weight: 600; color: var(--text); }
+
+.route-time {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  color: var(--accent);
+  font-weight: 700;
+  margin-left: auto;
+  flex-shrink: 0;
+  text-shadow: var(--glow);
+}
+
+.route-detail { font-size: 0.64rem; color: var(--text2); line-height: 1.6; margin-top: 6px; }
+.route-header { display:flex; align-items:center; gap:4px; margin-bottom:4px; flex-wrap:wrap; }
+
+/* Threat badges */
+.threat-badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 2px;
+  margin: 5px 0 4px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.threat-critical {
+  background: rgba(255,48,64,0.1);
+  border: 1px solid #cc2030;
+  color: #ff4050;
+  text-shadow: 0 0 6px rgba(255,48,64,0.5);
+}
+
+.threat-high {
+  background: rgba(255,140,0,0.1);
+  border: 1px solid #cc6600;
+  color: #ffaa44;
+  text-shadow: 0 0 6px rgba(255,140,0,0.4);
+}
+
+.threat-moderate {
+  background: rgba(220,200,0,0.08);
+  border: 1px solid #aaaa00;
+  color: #dddd44;
+}
+
+.threat-low, .threat-safe {
+  background: rgba(0,255,136,0.06);
+  border: 1px solid #226644;
+  color: #44cc88;
+  text-shadow: 0 0 6px rgba(0,255,136,0.3);
+}
+
+.threat-detail {
+  font-size: 0.62rem;
+  color: var(--text2);
+  line-height: 1.6;
+  margin: 4px 0 6px;
+  padding: 6px 10px;
+  background: rgba(0,0,0,0.3);
+  border-left: 2px solid rgba(255,48,64,0.4);
+  border-radius: 0 3px 3px 0;
+}
+
+.countermeasures {
+  font-size: 0.62rem;
+  color: #8aca8a;
+  line-height: 1.6;
+  margin: 4px 0 6px;
+  padding: 6px 10px;
+  background: rgba(0,20,0,0.3);
+  border-left: 2px solid rgba(0,200,100,0.4);
+  border-radius: 0 3px 3px 0;
+}
+
+.cm-label {
+  font-family: var(--font-mono);
+  font-size: 0.52rem;
+  font-weight: 700;
+  color: var(--green);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 3px;
+  text-shadow: var(--glow-grn);
+}
+
+.td-label {
+  font-family: var(--font-mono);
+  font-size: 0.52rem;
+  font-weight: 700;
+  color: var(--red);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 3px;
+}
+
+/* Tribute breakdown */
+.hvn-breakdown-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(14,36,68,0.5);
+  font-size: 0.67rem;
+}
+.hvn-breakdown-row:last-child { border-bottom:none; }
+.hvn-breakdown-item { color:var(--text); font-weight:600; }
+.hvn-breakdown-amt { font-family:var(--font-hd); color:var(--accent); font-weight:700; flex-shrink:0; margin-left:8px; font-size:0.65rem; text-shadow:var(--glow); }
+.hvn-breakdown-desc { color:var(--muted); font-size:0.58rem; margin-top:2px; }
+.hvn-pending-badge {
+  background: rgba(255,170,0,0.1);
+  border: 1px solid var(--amber);
+  color: var(--amber);
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  padding: 3px 9px;
+  border-radius: 2px;
+  margin-bottom: 10px;
+  display: inline-block;
+  letter-spacing: 0.5px;
+}
+
+/* ── MOBILE SHEET ────────────────────────────────────────────────── */
+.mobile-sheet {
+  display: none;
+  position: fixed;
+  bottom: 0; left:0; right:0;
+  z-index: 300;
+  background: var(--bg2);
+  border-top: 1px solid var(--accent);
+  border-radius: 14px 14px 0 0;
+  max-height: 82vh;
+  overflow-y: auto;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  box-shadow: 0 -12px 60px rgba(0,200,255,0.1);
+}
+
+.mobile-sheet.open { transform: translateY(0); }
+
+.sheet-drag {
+  width: 36px; height: 3px;
+  background: var(--border2);
+  border-radius: 2px;
+  margin: 10px auto 4px;
+}
+
+.sheet-overlay {
+  display: none;
+  position: fixed; inset:0;
+  background: rgba(0,0,0,0.6);
+  z-index: 299;
+}
+.sheet-overlay.show { display:block; }
+
+/* ── MOBILE NAV ──────────────────────────────────────────────────── */
+.mobile-nav {
+  display: none;
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  padding: 6px 4px;
+  flex-shrink: 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.mobile-nav::-webkit-scrollbar { display:none; }
+.mobile-nav-inner { display:flex; gap:4px; padding:0 6px; min-width:max-content; }
+
+.mnbtn {
+  padding: 7px 12px;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text2);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  letter-spacing: 0.5px;
+}
+
+.mnbtn.active, .mnbtn.layer-btn.active {
+  background: rgba(0,200,255,0.1);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.mnbtn:active { background: rgba(0,200,255,0.08); }
+
+.dot-sm { width:5px; height:5px; border-radius:50%; flex-shrink:0; display:inline-block; }
+.nav-div { width:1px; background:var(--border); margin:0 4px; align-self:stretch; flex-shrink:0; }
+.nav-label { font-family:var(--font-mono); font-size:0.48rem; color:var(--muted); padding:0 4px; align-self:center; white-space:nowrap; flex-shrink:0; text-transform:uppercase; letter-spacing:1.5px; }
+
+/* ── RESPONSIVE ──────────────────────────────────────────────────── */
+@media(max-width:700px) {
+  .sidebar { display:none; }
+  .ip { display:none !important; }
+  .mobile-sheet { display:flex; flex-direction:column; }
+  .mobile-nav { display:flex; }
+  .legend { bottom:10px; left:8px; padding:6px 9px; }
+  .legend h4 { display:none; }
+  header { padding:8px 12px; height:48px; }
+  .header-left h1 { font-size:0.72rem; letter-spacing:2px; }
+  .status-bar { gap:6px; }
+  .status-item { padding:3px 7px; }
+  .status-item .val { font-size:0.75rem; }
+  .loc-panel-wrap { top:auto; bottom:0; right:0; left:0; width:100%; }
+  .loc-panel { border-radius:12px 12px 0 0; }
+}
+
+@media(min-width:701px) {
+  .mobile-sheet, .mobile-nav, .sheet-overlay { display:none !important; }
+}
+
+/* Pulsing owned territory dot */
+@keyframes dot-pulse {
+  0%, 100% { box-shadow: 0 0 4px rgba(0,255,136,0.6), 0 0 1px rgba(0,255,136,1); }
+  50% { box-shadow: 0 0 10px rgba(0,255,136,0.9), 0 0 3px rgba(0,255,136,1); }
+}
+.do { animation: dot-pulse 2s ease-in-out infinite; }
+
+@keyframes amber-pulse {
+  0%, 100% { box-shadow: 0 0 4px rgba(255,170,0,0.5); }
+  50% { box-shadow: 0 0 10px rgba(255,170,0,0.8); }
+}
+.dp { animation: amber-pulse 2.5s ease-in-out infinite; }
+
+/* Corner decorations on the header */
+header .header-left h1::before {
+  content: '';
+}
+
+/* Animated border on info panel header */
+@keyframes border-scan {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.ph::before {
+  content:'';
+  position:absolute; bottom:0; left:0; right:0; height:1px;
+  background: linear-gradient(90deg, transparent 0%, var(--accent) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: border-scan 3s linear infinite;
+  opacity: 0.5;
+}
+
+/* Blinking cursor on section headers */
+.ps h4::before {
+  content: '▶';
+  font-size: 0.45rem;
+  color: var(--accent);
+  margin-right: 4px;
+  opacity: 0.7;
+}
+
+/* Hex grid background on map */
+.map-area::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(circle at 20% 80%, rgba(0,100,200,0.04) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(0,60,120,0.04) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+#map-svg { position: relative; z-index: 2; }
+
+/* Corner bracket decoration on loc-panel */
+.loc-panel::before {
+  content: '◆';
+  position: absolute;
+  top: 8px;
+  right: 14px;
+  font-size: 0.5rem;
+  color: var(--accent);
+  opacity: 0.4;
+}
+
+/* Glowing country owned border animation */
+@keyframes owned-pulse {
+  0%, 100% { filter: drop-shadow(0 0 2px rgba(0,200,255,0.3)); }
+  50% { filter: drop-shadow(0 0 6px rgba(0,200,255,0.6)); }
+}
+.country.owned { animation: owned-pulse 3s ease-in-out infinite; }
+
+/* Red threat glow on high-threat badge */
+.threat-critical { animation: threat-blink 2s ease-in-out infinite; }
+@keyframes threat-blink {
+  0%, 100% { box-shadow: 0 0 4px rgba(255,48,64,0.3); }
+  50% { box-shadow: 0 0 10px rgba(255,48,64,0.6); }
+}
+
+/* Panel slide-in animation */
+.ip.open {
+  animation: panel-in 0.25s cubic-bezier(0.4,0,0.2,1);
+}
+@keyframes panel-in {
+  from { opacity:0; transform:translateX(20px); }
+  to { opacity:1; transform:translateX(0); }
+}
+
+/* Havana bar fill pulse */
+.hvn-bar-fill[style*="background:#44aaff"] {
+  background: linear-gradient(90deg, var(--accent2), var(--accent)) !important;
+}
+
+/* Route card left accent border based on threat */
+.route-card[style*="border-color:#cc2222"] {
+  box-shadow: inset 3px 0 0 rgba(255,48,64,0.3) !important;
+}
+
+.expand-btn{margin-top:6px;width:100%;padding:7px;background:rgba(0,200,255,0.05);border:1px solid var(--border2);color:var(--accent);font-family:var(--font-mono);font-size:0.56rem;border-radius:3px;cursor:pointer;letter-spacing:1.5px;transition:all 0.15s;}
+.expand-btn:hover{background:rgba(0,200,255,0.12);border-color:var(--accent);}
+
+.bi-clickable {
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.bi-clickable:hover {
+  background: rgba(0, 200, 255, 0.07);
+  border-radius: 3px;
+  margin: 0 -4px;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+.bi-clickable:hover .bn {
+  color: var(--accent);
+}
+.bi-pin {
+  font-size: 0.6rem;
+  margin-left: 5px;
+  opacity: 0.6;
+  vertical-align: middle;
+}
+.bi-clickable:hover .bi-pin {
+  opacity: 1;
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-left">
+    <h1>⬡ TERRITORY COMMAND</h1>
+    <div class="subtitle">Kenneth Copeland · US Faction · Global Dominion Dashboard</div>
+  </div>
+  <div class="status-bar">
+    <div class="status-item"><div class="val" style="color:var(--green);text-shadow:var(--glow-grn)">6</div><div class="lbl">Controlled</div></div>
+    <div class="status-item"><div class="val" style="color:var(--amber)">2</div><div class="lbl">Pending</div></div>
+    <div class="status-item"><div class="val">3.1B</div><div class="lbl">Population</div></div>
+    <div class="status-item"><div class="val" style="color:var(--red);text-shadow:var(--glow-red)">HIGH</div><div class="lbl">Threat Level</div></div>
+  </div>
+</header>
+<div class="main">
+  <div class="sidebar">
+    <div class="ss">
+      <h3>Map Layer</h3>
+      <button class="lbtn active" onclick="setLayer('overview',this)">🌐 Overview</button>
+      <button class="lbtn" onclick="setLayer('resources',this)">⛏ Resources</button>
+      <button class="lbtn" onclick="setLayer('transport',this)">✈ Transport</button>
+      <button class="lbtn" onclick="setLayer('military',this)">🎖 Military</button>
+      <button class="lbtn" onclick="setLayer('cities',this)">🏙 Cities</button>
+    </div>
+    <div class="ss">
+      <h3>Owned Territories</h3>
+      <button class="tbtn" onclick="showCountryPanel('china')"><span class="dot do"></span><div><div class="nm">China</div><div class="tg">Asia-Pacific</div></div></button>
+      <button class="tbtn" onclick="showCountryPanel('northkorea')"><span class="dot do"></span><div><div class="nm">North Korea</div><div class="tg">Asia-Pacific</div></div></button>
+      <button class="tbtn" onclick="showCountryPanel('nigeria')"><span class="dot do"></span><div><div class="nm">Nigeria</div><div class="tg">West Africa</div></div></button>
+      <button class="tbtn" onclick="showCountryPanel('philippines')"><span class="dot do"></span><div><div class="nm">Philippines</div><div class="tg">Southeast Asia</div></div></button>
+      <button class="tbtn" onclick="showCountryPanel('jamaica')"><span class="dot do"></span><div><div class="nm">Jamaica</div><div class="tg">Caribbean</div></div></button>
+      <button class="tbtn" onclick="showCountryPanel('vatican')"><span class="dot do"></span><div><div class="nm">Vatican City</div><div class="tg">Southern Europe</div></div></button>
+    </div>
+    <div class="ss">
+      <h3>Pending Trade</h3>
+      <button class="tbtn" onclick="showCountryPanel('chile')"><span class="dot dp"></span><div><div class="nm">Chile</div><div class="tg">South America</div></div></button>
+      <button class="tbtn" onclick="showCountryPanel('kuwait')"><span class="dot dp"></span><div><div class="nm">Kuwait</div><div class="tg">Middle East</div></div></button>
+    </div>
+    <div class="ss" style="border-top:1px solid var(--border);margin-top:4px;">
+      <h3>Tribute System</h3>
+      <button class="tbtn" onclick="showHavanaPanel()" style="border:1px solid rgba(255,170,0,0.4);background:rgba(255,170,0,0.05);">
+        <span style="font-size:1rem">🇨🇺</span>
+        <div><div class="nm" style="color:var(--amber);text-shadow:0 0 6px rgba(255,170,0,0.4)">HAVANA TRIBUTE</div><div class="tg">35% Output Ledger</div></div>
+      </button>
+    </div>
+  </div>
+
+  <div class="map-area" id="mapArea">
+    <div id="loading"><div class="load-inner"><div class="load-title">TERRITORY COMMAND</div><div class="load-sub">LOADING STRATEGIC ASSETS...</div></div></div>
+    <div id="tip"></div>
+    <svg id="map-svg"></svg>
+    <div class="loc-panel-wrap" id="locPanelWrap">
+      <div class="loc-panel">
+        <div class="loc-ph">
+          <div><h3 id="locTitle"></h3><div class="loc-type" id="locType"></div></div>
+          <button class="loc-close" onclick="closeLocPanel()">✕</button>
+        </div>
+        <div class="loc-body"><p id="locDesc"></p><div class="loc-detail" id="locDetail"></div></div>
+      </div>
+    </div>
+    <div class="legend">
+      <h4>Legend</h4>
+      <div class="li"><div class="ld" style="background:#3af"></div>Owned</div>
+      <div class="li"><div class="ld" style="background:#fa0"></div>Pending</div>
+      <div class="li" id="lgr" style="display:none"><div class="ld" style="background:#f90"></div>Resource</div>
+      <div class="li" id="lgt" style="display:none"><div class="ld" style="background:#0af"></div>Port/Airport</div>
+      <div class="li" id="lgm" style="display:none"><div class="ld" style="background:#f44"></div>Military Base</div>
+      <div class="li" id="lgc" style="display:none"><div class="ld" style="background:#00c8ff"></div>City (pop. threshold)</div>
+    </div>
+  </div>
+
+  <div class="ip" id="ip">
+    <div class="ph">
+      <button class="back-btn" onclick="closePanel()">← Back to Map</button>
+      <div class="ph-text"><h2 id="pt"></h2><div class="pm" id="pm"></div></div>
+    </div>
+    <div id="pb"></div>
+  </div>
+</div>
+
+<div class="mobile-nav">
+  <div class="mobile-nav-inner">
+    <span class="nav-label">Layers</span>
+    <button class="mnbtn layer-btn active" onclick="setLayerMobile('overview',this)">🌐 Overview</button>
+    <button class="mnbtn layer-btn" onclick="setLayerMobile('resources',this)">⛏ Resources</button>
+    <button class="mnbtn layer-btn" onclick="setLayerMobile('transport',this)">✈ Transport</button>
+    <button class="mnbtn layer-btn" onclick="setLayerMobile('military',this)">🎖 Military</button>
+    <button class="mnbtn" onclick="showHavanaPanel()" style="border-color:var(--amber);color:var(--amber);">🇨🇺 HAVANA</button>
+    <div class="nav-div"></div>
+    <span class="nav-label">Territories</span>
+    <button class="mnbtn" onclick="showCountryPanel('china')"><span class="dot-sm" style="background:#3af"></span>China</button>
+    <button class="mnbtn" onclick="showCountryPanel('northkorea')"><span class="dot-sm" style="background:#3af"></span>N. Korea</button>
+    <button class="mnbtn" onclick="showCountryPanel('nigeria')"><span class="dot-sm" style="background:#3af"></span>Nigeria</button>
+    <button class="mnbtn" onclick="showCountryPanel('philippines')"><span class="dot-sm" style="background:#3af"></span>Philippines</button>
+    <button class="mnbtn" onclick="showCountryPanel('jamaica')"><span class="dot-sm" style="background:#3af"></span>Jamaica</button>
+    <button class="mnbtn" onclick="showCountryPanel('vatican')"><span class="dot-sm" style="background:#3af"></span>Vatican</button>
+    <button class="mnbtn" onclick="showCountryPanel('chile')"><span class="dot-sm" style="background:#fa0"></span>Chile ⚠</button>
+    <button class="mnbtn" onclick="showCountryPanel('kuwait')"><span class="dot-sm" style="background:#fa0"></span>Kuwait ⚠</button>
+  </div>
+</div>
+<div class="sheet-overlay" id="sheetOverlay" onclick="closePanel()"></div>
+<div class="mobile-sheet" id="mobileSheet">
+  <div class="sheet-drag"></div>
+  <div class="ph" style="position:sticky;top:0;z-index:10;">
+    <button class="back-btn" onclick="closePanel()">← Back to Map</button>
+    <div class="ph-text"><h2 id="spt"></h2><div class="pm" id="spm"></div></div>
+  </div>
+  <div id="spb"></div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+// COUNTRY DATA
+// ═══════════════════════════════════════════════════════════════════
+// Base coordinates [lon, lat] for flyToBase()
+// Added before the COUNTRIES block
+const BASE_COORDS = {
+  // ── CHINA ─────────────────────────────────────────────────────────────────
+  "CMC Joint Operations Command":       [116.39, 39.91],
+  "PLA Army HQ":                        [116.38, 39.90],
+  "PLAN Navy HQ":                       [116.40, 39.92],
+  "PLAAF Air Force HQ":                 [116.41, 39.90],
+  "PLA Rocket Forces HQ":               [116.37, 39.91],
+  "Western Theatre Command":            [104.07, 30.67],
+  "Eastern Theatre Command":            [118.79, 32.07],
+  "Southern Theatre Command":           [113.26, 23.13],
+  "Northern Theatre Command":           [123.43, 41.80],
+  "Central Theatre Command":            [116.42, 39.93],
+  "Sanya/Yulin Naval Base":             [109.60, 18.22],
+  "Zhoushan Naval Base":                [122.10, 30.00],
+  "Qingdao Naval Base":                 [120.33, 36.07],
+  "Guangzhou/Huangpu Naval Base":       [113.46, 23.18],
+  "Beihai Naval Base":                  [109.12, 21.48],
+  "Zhanjiang Naval Base":               [110.35, 21.20],
+  "Lushun/Port Arthur Naval Base":      [121.25, 38.86],
+  "Djibouti Support Base":              [43.15, 11.59],
+  "Ream Naval Base (Cambodia)":         [103.65, 10.53],
+  "Fiery Cross Reef":                   [113.85, 9.55],
+  "Mischief Reef":                      [115.53, 9.90],
+  "Subi Reef":                          [114.08, 10.93],
+  "Johnson South Reef":                 [114.36, 9.71],
+  "Cuarteron Reef":                     [112.85, 8.87],
+  "Gaven Reef":                         [114.22, 10.18],
+  "Hughes Reef":                        [114.47, 9.91],
+  "Paracel Islands Garrison":           [112.34, 16.83],
+  "Lanzhou Air Base":                   [103.62, 36.05],
+  "Hotan Air Base":                     [79.86, 37.03],
+  "Kashgar Air Base":                   [76.02, 39.54],
+  "Wulumuqi Air Base":                  [87.47, 43.91],
+  "Lhasa Gonggar Air Base":             [90.91, 29.30],
+  "Shigatse Air Base":                  [89.31, 29.35],
+  "Linzhi Air Base":                    [94.34, 29.61],
+  "Mengzi Air Base":                    [103.38, 23.37],
+  "Guilin Air Base":                    [110.30, 25.22],
+  "Nanning Air Base":                   [108.37, 22.82],
+  "Chengdu Air Base":                   [103.95, 30.58],
+  "Leshan Air Base":                    [103.75, 29.59],
+  "Wuhan Air Base":                     [114.35, 30.58],
+  "Nanchang Air Base":                  [115.90, 28.68],
+  "Fuzhou Air Base":                    [119.29, 26.08],
+  "Longtian Air Base":                  [119.48, 25.98],
+  "Huian Air Base":                     [118.79, 25.12],
+  "Suixi/Zhanjiang Air Base":           [110.25, 21.38],
+  "Lingshui Air Base":                  [110.03, 18.50],
+  "Wuxi Air Base":                      [120.30, 31.55],
+  "Anqing Air Base":                    [116.98, 30.52],
+  "Bengbu Air Base":                    [117.36, 32.92],
+  "Jinan Air Base":                     [116.99, 36.68],
+  "Weifang Air Base":                   [119.10, 36.71],
+  "Dalian Air Base":                    [121.54, 38.90],
+  "Shenyang Air Base":                  [123.43, 41.77],
+  "Anshan Air Base":                    [122.99, 41.10],
+  "Dandong Air Base":                   [124.38, 40.03],
+  "Harbin Air Base":                    [126.69, 45.75],
+  "Mudanjiang Air Base":                [129.60, 44.55],
+  "Zhurihe Training Base":              [111.86, 42.85],
+  "Queshan Training Base":              [114.04, 32.80],
+  "Kashi Garrison":                     [75.99, 39.47],
+  "Ili Garrison":                       [81.32, 43.91],
+  "Shigatse Army Garrison":             [88.88, 29.27],
+  "Nyingchi Army Garrison":             [94.36, 29.65],
+  "Jiuquan Space Launch Center":        [100.29, 41.12],
+  "Xichang Satellite Launch Center":    [102.03, 28.25],
+  "Taiyuan Satellite Launch Center":    [111.61, 38.85],
+  "Wenchang Space Launch Center":       [110.95, 19.61],
+  "PLA Cyberspace Force HQ":            [116.39, 39.89],
+  "Unit 61398 (Shanghai)":              [121.50, 31.23],
+  "Hainan SIGINT Station":              [109.73, 18.26],
+
+  // ── NORTH KOREA ──────────────────────────────────────────────────────────
+  "Supreme Guard Command":              [125.75, 39.02],
+  "KPA General Staff Dept":             [125.76, 39.01],
+  "Korean People's Air Force HQ":       [125.44, 38.65],
+  "Korean People's Navy HQ":            [125.74, 39.03],
+  "KPA Strategic Force HQ":             [125.75, 39.02],
+  "Nampo Naval Base (West Fleet HQ)":   [125.38, 38.74],
+  "Pipagot Naval Base":                 [125.35, 38.72],
+  "Sagon-ri Naval Base":                [125.21, 38.37],
+  "Toejo-dong Naval Base (East Fleet HQ)":[129.73, 39.65],
+  "Najin Naval Base":                   [130.29, 42.26],
+  "Wonsan Naval Base":                  [127.44, 39.16],
+  "Chaho Naval Base":                   [129.55, 41.28],
+  "Cha-ho Submarine Base":              [129.56, 41.30],
+  "Mayang-do Island Base":              [129.68, 39.78],
+  "Pipa-got Naval Facility":            [125.34, 38.71],
+  "Sunan Air Base":                     [125.67, 39.22],
+  "Panghyon Air Base":                  [125.19, 39.93],
+  "Uiju Air Base":                      [124.59, 40.20],
+  "Kaechon Air Base":                   [125.93, 39.73],
+  "Hwangju Air Base":                   [125.79, 38.62],
+  "Onchon Air Base":                    [125.23, 38.93],
+  "Koksan Air Base":                    [126.59, 38.47],
+  "Sondok Air Base":                    [127.48, 39.74],
+  "Wonsan Air Base":                    [127.49, 39.18],
+  "Hamhung Air Base":                   [127.56, 39.88],
+  "Pukchang Air Base":                  [125.88, 39.40],
+  "Toksan Air Base":                    [126.04, 39.46],
+  "Orang Air Base":                     [129.65, 41.43],
+  "Chongjin Air Base":                  [129.78, 41.78],
+  "Kwail Air Base":                     [125.06, 38.29],
+  "Sohae Launch Station":               [124.71, 39.66],
+  "Tonghae Launch Station":             [129.66, 40.85],
+  "Yongbyon Research Complex":          [125.79, 39.79],
+  "Kanggye Munitions Complex":          [126.60, 40.97],
+  "Huichon Arms Factory":               [126.26, 40.17],
+  "Ryongsong Resistance Base":          [125.72, 39.10],
+  "Pyongyang Air Defence System":       [125.74, 39.02],
+  "Kaesong Industrial Garrison":        [126.56, 37.97],
+  "DMZ Forward Position (Kaesong)":     [126.58, 37.96],
+  "Sinuiju Garrison":                   [124.40, 40.10],
+  "Haeju Naval Facility":               [125.71, 38.04],
+  "Mayang Ballistic Submarine Complex": [129.69, 39.80],
+  "Chongju Air Base":                   [125.21, 39.69],
+  "Taechon Army Garrison":              [125.86, 39.94],
+  "Hyangsan Tunnel Complex":            [127.00, 40.18],
+  "Kumchang-ri Underground Facility":   [124.92, 39.82],
+  "Sangwon Armour Depot":               [125.99, 38.77],
+  "Kijong-dong (Propaganda Village)":   [126.67, 37.95],
+  "Tokchon Munitions Plant":            [126.30, 39.74],
+  "Pyongyang Air Base (Mirim)":         [127.18, 39.02],
+
+  // ── PHILIPPINES ─────────────────────────────────────────────────────────
+  "Camp Aguinaldo":                     [121.06, 14.61],
+  "Camp Emilio Aguinaldo (BartInt)":    [121.07, 14.61],
+  "Fort Andres Bonifacio":              [121.05, 14.52],
+  "Camp Lapu-Lapu":                     [123.91, 10.30],
+  "Naval Station Cavite (BNS)":         [120.90, 14.48],
+  "Clark Air Base (Basa AFB)":          [120.56, 15.19],
+  "Mactan-Benito Ebuen Air Base":       [123.97, 10.31],
+  "Edwin Andrews Air Base":             [122.07, 6.92],
+  "Lumbia Airport (Col. Edwin Andrews AFB)": [124.61, 8.42],
+  "Lal-lo Airport":                     [121.82, 18.20],
+  "Cesar Basa Air Base":                [120.57, 15.20],
+  "Subic Bay Naval Base":               [120.27, 14.80],
+  "Naval Station Jose Andrada":         [120.97, 14.58],
+  "Naval Station Heracleo Alano":       [122.05, 6.91],
+  "Naval Station San Vicente":          [119.28, 10.53],
+  "Naval Base Camilo Osias":            [121.85, 18.33],
+  "Carlito Cunanan Naval Air Station":  [120.08, 14.96],
+  "Fort Ramon Magsaysay":               [121.13, 15.46],
+  "Camp Melchor F. Dela Cruz":          [121.82, 16.91],
+  "Camp Sergio Osmeña":                 [123.91, 10.31],
+  "Camp Navarro":                       [125.42, 7.07],
+  "Camp General William Doria Pen":     [124.29, 7.22],
+  "Camp Eduardo Año":                   [121.05, 14.63],
+  "Fort Pilar":                         [122.07, 6.92],
+  "Camp Catitipan":                     [125.58, 7.08],
+  "Antonio Bautista Air Base":          [118.74, 9.74],
+  "Balabac Island Naval Facility":      [117.06, 7.97],
+  "Pag-asa Island (Thitu)":             [114.29, 11.05],
+  "Lawak Island (Nanshan)":             [115.80, 10.72],
+  "Patag Island":                       [115.96, 10.88],
+  "Camp Peralta":                       [122.48, 11.45],
+  "Camp Lukban":                        [124.88, 11.78],
+  "Camp Evangelista":                   [124.57, 8.46],
+  "Camp Siongco":                       [124.22, 7.18],
+  "Camp Panacan":                       [125.64, 7.13],
+  "Camp Elias Angeles":                 [125.12, 10.22],
+  "Lipa Air Base":                      [121.12, 13.95],
+  "Danilo Atienza Air Base":            [120.91, 14.49],
+  "Ramos Air Base":                     [125.10, 6.11],
+  "Cagayan de Oro Air Base (Lumbia)":   [124.61, 8.42],
+  "Cotabato Air Base":                  [124.21, 7.17],
+  "Philippine Military Academy":        [120.55, 16.41],
+  "AFP Joint Special Operations Command": [121.13, 15.47],
+  "Philippine Coast Guard Headquarters": [120.97, 14.58],
+};
+
+const COUNTRIES = {
+  china:{name:"People's Republic of China",status:"Owned · Asia-Pacific",stats:{Population:"1.41B",GDP:"$17.7T",Area:"9.6M km²",Military:"Weapons Research"},ov:"China is the cornerstone of your portfolio — the world's largest manufacturer and second-largest economy. Control grants dominance over global supply chains, rare earth minerals, and Pacific military projection.",res:[{i:"⛏",n:"Rare Earth Minerals",d:"Inner Mongolia & Jiangxi — 60%+ of global REE supply."},{i:"🏭",n:"Shenzhen Manufacturing",d:"World's largest electronics zone. $800B+ annual exports."},{i:"🏭",n:"Yangtze Industrial Corridor",d:"Steel, chemicals, auto from Shanghai to Chongqing."},{i:"⚡",n:"Three Gorges Dam",d:"22.5 GW — world's largest hydropower dam."},{i:"💎",n:"Shanxi Coal Basin",d:"13% of global coal. Fuels domestic energy and steel."},{i:"🛢",n:"Tarim Basin Oil & Gas",d:"Xinjiang — largest domestic oil and gas basin."}],trans:[{i:"⚓",n:"Port of Shanghai (Yangshan)",d:"World's busiest container port — 47M TEU/yr"},{i:"⚓",n:"Port of Shenzhen",d:"4th busiest globally"},{i:"⚓",n:"Port of Guangzhou (Nansha)",d:"Pearl River Delta megaport — 25M TEU/yr"},{i:"⚓",n:"Port of Tianjin",d:"North China gateway — serves Beijing"},{i:"✈",n:"Beijing Capital + Daxing",d:"100M+ combined passengers/yr"},{i:"✈",n:"Shanghai Pudong Airport",d:"China's #1 cargo airport"},{i:"🚂",n:"HSR Network",d:"45,000 km — world's largest high-speed rail"}],bases:[
+  {n:"CMC Joint Operations Command",t:"Strategic HQ",l:"Beijing — Central Military Commission command centre"},
+  {n:"PLA Army HQ",t:"Army HQ",l:"Beijing — Ground force command"},
+  {n:"PLAN Navy HQ",t:"Naval HQ",l:"Beijing — Fleet command"},
+  {n:"PLAAF Air Force HQ",t:"Air Force HQ",l:"Beijing — Air command"},
+  {n:"PLA Rocket Force HQ",t:"Rocket Forces",l:"Beijing — Conventional missile and hypersonic command"},
+  {n:"Western Theatre Command",t:"Theatre HQ",l:"Chengdu — Tibet, Xinjiang, India border"},
+  {n:"Eastern Theatre Command",t:"Theatre HQ",l:"Nanjing — Taiwan Strait, East China Sea"},
+  {n:"Southern Theatre Command",t:"Theatre HQ",l:"Guangzhou — South China Sea, Vietnam border"},
+  {n:"Northern Theatre Command",t:"Theatre HQ",l:"Shenyang — Korean Peninsula, Russia border"},
+  {n:"Central Theatre Command",t:"Theatre HQ",l:"Beijing — Capital defence, strategic reserve"},
+  {n:"Sanya/Yulin Naval Base",t:"Naval Base",l:"Hainan — South Sea Fleet flagship base, attack submarine pens"},
+  {n:"Zhoushan Naval Base",t:"Naval Base",l:"Zhejiang — East Sea Fleet HQ"},
+  {n:"Qingdao Naval Base",t:"Naval Base",l:"Shandong — North Sea Fleet HQ, major surface combatant port"},
+  {n:"Guangzhou/Huangpu Naval Base",t:"Naval Base",l:"Guangdong — South Sea Fleet secondary base"},
+  {n:"Beihai Naval Base",t:"Naval Base",l:"Guangxi — South Sea Fleet western anchor"},
+  {n:"Zhanjiang Naval Base",t:"Naval Base",l:"Guangdong — South Sea Fleet main base"},
+  {n:"Lushun/Port Arthur Naval Base",t:"Naval Base",l:"Dalian — North Sea Fleet, ice-free port"},
+  {n:"Djibouti Support Base",t:"Overseas Naval Base",l:"Horn of Africa — China's only acknowledged overseas base"},
+  {n:"Ream Naval Base (Cambodia)",t:"Overseas Naval Facility",l:"Gulf of Thailand — informal PLA access, deep-water port"},
+  {n:"Fiery Cross Reef",t:"Naval/Air Outpost",l:"Spratly Islands — 3km runway, missile systems, port"},
+  {n:"Mischief Reef",t:"Naval/Air Outpost",l:"Spratly Islands — largest artificial island, hardened facilities"},
+  {n:"Subi Reef",t:"Naval/Air Outpost",l:"Spratly Islands — airstrip, hangars, radar arrays"},
+  {n:"Johnson South Reef",t:"Outpost",l:"Spratly Islands — garrison, defensive weapons"},
+  {n:"Cuarteron Reef",t:"Outpost",l:"Spratly Islands — radar, sensor arrays"},
+  {n:"Gaven Reef",t:"Outpost",l:"Spratly Islands — fortified platform"},
+  {n:"Hughes Reef",t:"Outpost",l:"Spratly Islands — garrison outpost"},
+  {n:"Paracel Islands Garrison",t:"Air/Naval Base",l:"Woody Island — PLAAF J-10/J-11, HQ-9 SAM, destroyer port"},
+  {n:"Lanzhou Air Base",t:"Air Base",l:"Gansu — Western Theatre bomber/fighter hub"},
+  {n:"Hotan Air Base",t:"Air Base",l:"Xinjiang — western perimeter air defence"},
+  {n:"Kashgar Air Base",t:"Air Base",l:"Xinjiang — Pakistan border, J-11 fighters"},
+  {n:"Wulumuqi Air Base",t:"Air Base",l:"Xinjiang — J-10, transport, regional command"},
+  {n:"Lhasa Gonggar Air Base",t:"Air Base",l:"Tibet — 3,600m altitude, J-10 and J-11 fighters"},
+  {n:"Shigatse Air Base",t:"Air Base",l:"Tibet — India-facing forward air base"},
+  {n:"Linzhi Air Base",t:"Air Base",l:"Tibet — Arunachal border, combat aircraft"},
+  {n:"Mengzi Air Base",t:"Air Base",l:"Yunnan — Vietnam-facing forward base"},
+  {n:"Guilin Air Base",t:"Air Base",l:"Guangxi — South Theatre fighter wing"},
+  {n:"Nanning Air Base",t:"Air Base",l:"Guangxi — South border multi-role fighters"},
+  {n:"Chengdu Air Base",t:"Air Base",l:"Sichuan — J-20 stealth fighter development/operations base"},
+  {n:"Leshan Air Base",t:"Air Base",l:"Sichuan — J-16 fighter regiment"},
+  {n:"Wuhan Air Base",t:"Air Base",l:"Hubei — Central Theatre air command"},
+  {n:"Nanchang Air Base",t:"Air Base",l:"Jiangxi — H-6 bomber regiment, East Theatre"},
+  {n:"Fuzhou Air Base",t:"Air Base",l:"Fujian — Taiwan Strait forward base, J-16"},
+  {n:"Longtian Air Base",t:"Air Base",l:"Fujian — Taiwan-facing fighter base"},
+  {n:"Huian Air Base",t:"Air Base",l:"Fujian — Taiwan Strait, Su-30 regiment"},
+  {n:"Suixi/Zhanjiang Air Base",t:"Air Base",l:"Guangdong — South Sea Fleet naval air arm"},
+  {n:"Lingshui Air Base",t:"Air Base",l:"Hainan — South Sea Fleet maritime patrol, SIGINT"},
+  {n:"Wuxi Air Base",t:"Air Base",l:"Jiangsu — East Theatre, Nanjing area air defence"},
+  {n:"Anqing Air Base",t:"Air Base",l:"Anhui — East Theatre mixed wing"},
+  {n:"Bengbu Air Base",t:"Air Base",l:"Anhui — East Theatre transport and fighters"},
+  {n:"Jinan Air Base",t:"Air Base",l:"Shandong — North Theatre, J-10 wing"},
+  {n:"Weifang Air Base",t:"Air Base",l:"Shandong — North Theatre, J-11 regiment"},
+  {n:"Dalian Air Base",t:"Air Base",l:"Liaoning — North Sea Fleet naval aviation"},
+  {n:"Shenyang Air Base",t:"Air Base",l:"Liaoning — J-16 regiment, North Theatre flagship"},
+  {n:"Anshan Air Base",t:"Air Base",l:"Liaoning — J-11 wing, Korean border approach"},
+  {n:"Dandong Air Base",t:"Air Base",l:"Liaoning — NK border forward air base"},
+  {n:"Harbin Air Base",t:"Air Base",l:"Heilongjiang — Russia border, mixed wing"},
+  {n:"Mudanjiang Air Base",t:"Air Base",l:"Heilongjiang — Russia/Korea area coverage"},
+  {n:"Zhurihe Training Base",t:"Army Training",l:"Inner Mongolia — largest combined-arms exercise base"},
+  {n:"Queshan Training Base",t:"Army Training",l:"Henan — airborne division training"},
+  {n:"Kashi Garrison",t:"Army Garrison",l:"Xinjiang — ground force, India/Pakistan/Central Asia border"},
+  {n:"Ili Garrison",t:"Army Garrison",l:"Xinjiang — Kazakhstan border region"},
+  {n:"Shigatse Army Garrison",t:"Army Garrison",l:"Tibet — India-facing ground force"},
+  {n:"Nyingchi Army Garrison",t:"Army Garrison",l:"Tibet — Arunachal Pradesh border ground force"},
+  {n:"Jiuquan Space Launch Center",t:"Space/Rocket Force",l:"Gobi — satellite launches, long-range rocket tests"},
+  {n:"Xichang Satellite Launch Center",t:"Space Launch",l:"Sichuan — GEO satellite launches, space command"},
+  {n:"Taiyuan Satellite Launch Center",t:"Space Launch",l:"Shanxi — polar orbit, military reconnaissance satellites"},
+  {n:"Wenchang Space Launch Center",t:"Space Launch",l:"Hainan — heavy lift, new generation Long March"},
+  {n:"PLA Cyberspace Force HQ",t:"Cyber Command",l:"Beijing — offensive/defensive cyber operations"},
+  {n:"Unit 61398 (Shanghai)",t:"Signals Intelligence",l:"Shanghai — signals intelligence, cyber operations"},
+  {n:"Hainan SIGINT Station",t:"SIGINT",l:"Hainan — South China Sea and Pacific signals collection"}
+],rail:{terminals:[["Beijing Railway Station / Beijing West","Main intercontinental hub. Departs for Pyongyang, Moscow via Trans-Siberian/Trans-Mongolian. HSR to Shanghai (4.5h), Guangzhou (8h)."],["Shanghai Hongqiao","East China HSR hub. Connects to Beijing, Nanjing, Hangzhou, Kunming."],["Guangzhou South","South China HSR gateway. Connects to Hong Kong, Beijing, Wuhan."],["Chengdu East / Chengdu International Railway Port","Western Belt & Road hub. 40+ weekly freight trains to Europe (Chengdu-Europe Express)."],["Ürümqi North (Xinjiang)","Western terminus of Silk Road rail. Gateway to Kazakhstan and Central Asia."],["Lhasa (Tibet)","World's highest railway station at 3,642m. Terminus of Qinghai-Tibet Railway."],["Dandong","Primary rail crossing into North Korea via Sino-Korean Friendship Bridge over Yalu River."],["Manzhouli (Inner Mongolia)","Trans-Siberian connection to Russia. Largest land port between China and Russia."],["Erenhot","Trans-Mongolian Railway crossing to Mongolia and onward to Moscow."]],crossBorder:[["China → North Korea","Active","Daily freight; 4x/week Beijing–Pyongyang passenger (K27/K28). Via Dandong–Sinuiju Friendship Bridge over the Yalu River. ~23h journey."],["China → Russia (Trans-Siberian)","Active","Via Manzhouli–Zabaykalsk. Freight dominant. Beijing–Moscow takes ~6 days via Trans-Manchurian route."],["China → Mongolia (Trans-Mongolian)","Active","Via Erenhot–Zamyn-Üüd. Beijing–Ulaanbaatar passenger service 2x/week. Requires bogie change at border."],["China → Kazakhstan (Silk Road/BRI)","Active","Via Alashankou and Khorgas. Key Belt & Road freight corridor to Europe. 10,000 km+ to major EU cities."],["China → Vietnam","Active (freight)","Via Pingxiang–Đồng Đăng (Friendship Pass). Dual-gauge freight. Limited passenger service."],["China → Hong Kong","Active","Guangzhou–Hong Kong Intercity Express. Guangzhou to Hong Kong West Kowloon in ~1h via HSR (since 2018)."]]}},
+  northkorea:{name:"DPRK — North Korea",status:"Owned · Asia-Pacific",stats:{Population:"26M",GDP:"~$28B",Area:"120K km²",Military:"Weapons Research"},ov:"Weapons Research deterrence and strategic peninsula buffer. Control includes uranium reserves, covert arms manufacturing, and long-range artillery infrastructure.",res:[{i:"⛏",n:"Pyongsan Uranium Mine",d:"Primary uranium ore source for strategic program."},{i:"💎",n:"Musan Iron Ore Mine",d:"One of Asia's largest iron ore deposits."},{i:"💎",n:"Anthracite Coal",d:"Key hard currency earner via China exports."},{i:"🏭",n:"Chagang Arms Complex",d:"Underground munitions manufacturing — rocket motors, artillery."}],trans:[{i:"⚓",n:"Nampo Port",d:"Main western import hub"},{i:"⚓",n:"Chongjin Port",d:"Northern port — Russian rail link"},{i:"⚓",n:"Wonsan Port",d:"East coast — dual military/commercial"},{i:"✈",n:"Pyongyang Sunan Airport",d:"Only international airport"}],bases:[
+  {n:"Supreme Guard Command",t:"Strategic HQ",l:"Pyongyang — KPA General Staff, Kim Jong Un command bunker"},
+  {n:"KPA General Staff Dept",t:"Army HQ",l:"Pyongyang — ground force operational command"},
+  {n:"Korean People's Air Force HQ",t:"Air Force HQ",l:"Chunghwa — air & air defence command"},
+  {n:"Korean People's Navy HQ",t:"Naval HQ",l:"Pyongyang — dual-fleet command centre"},
+  {n:"KPA Strategic Force HQ",t:"Strategic Forces HQ",l:"Pyongyang — conventional missile and artillery operations command"},
+  {n:"Nampo Naval Base (West Fleet HQ)",t:"Naval Base",l:"South Pyongan — West Sea Fleet flagship, submarine pens"},
+  {n:"Pipagot Naval Base",t:"Naval Base",l:"South Pyongan — West Fleet major surface base"},
+  {n:"Sagon-ri Naval Base",t:"Naval Base",l:"South Pyongan — West Fleet midget submarine base"},
+  {n:"Toejo-dong Naval Base (East Fleet HQ)",t:"Naval Base",l:"South Hamgyong — East Sea Fleet HQ, Mayang Island complex"},
+  {n:"Najin Naval Base",t:"Naval Base",l:"North Hamgyong — East Fleet northern anchor, submarine base"},
+  {n:"Wonsan Naval Base",t:"Naval Base",l:"Kangwon — East Fleet, amphibious landing craft hub"},
+  {n:"Chaho Naval Base",t:"Naval Base",l:"North Hamgyong — submarine base, coastal defence"},
+  {n:"Cha-ho Submarine Base",t:"Naval Base",l:"North Hamgyong — Romeo-class and midget submarine pens (underground)"},
+  {n:"Mayang-do Island Base",t:"Naval Base",l:"East Coast — submarine and naval special operations facility"},
+  {n:"Pipa-got Naval Facility",t:"Naval Base",l:"West Coast — submarine maintenance and deployment"},
+  {n:"Sunan Air Base",t:"Air Base",l:"Pyongyang — primary air force base, MiG-29 and transport regiment"},
+  {n:"Panghyon Air Base",t:"Air Base",l:"North Pyongan — fighter regiment, hardened shelters"},
+  {n:"Uiju Air Base",t:"Air Base",l:"North Pyongan — China border forward base, MiG-19/21"},
+  {n:"Kaechon Air Base",t:"Air Base",l:"South Pyongan — central air defence regiment"},
+  {n:"Hwangju Air Base",t:"Air Base",l:"North Hwanghae — southern approach air defence"},
+  {n:"Onchon Air Base",t:"Air Base",l:"South Pyongan — fighter regiment, underground hangars"},
+  {n:"Koksan Air Base",t:"Air Base",l:"North Hwanghae — forward base near DMZ, MiG-21"},
+  {n:"Sondok Air Base",t:"Air Base",l:"South Hamgyong — East Coast fighter regiment"},
+  {n:"Wonsan Air Base",t:"Air Base",l:"Kangwon — East Coast air wing, naval aviation arm"},
+  {n:"Hamhung Air Base",t:"Air Base",l:"South Hamgyong — major eastern air force hub"},
+  {n:"Pukchang Air Base",t:"Air Base",l:"South Pyongan — fighter/interceptor regiment"},
+  {n:"Toksan Air Base",t:"Air Base",l:"South Pyongan — reserve air base, highway strip"},
+  {n:"Orang Air Base",t:"Air Base",l:"North Hamgyong — 8th Air Division HQ, north-east region"},
+  {n:"Chongjin Air Base",t:"Air Base",l:"North Hamgyong — northernmost major air base, MiG-23"},
+  {n:"Kwail Air Base",t:"Air Base",l:"South Hwanghae — southern fighter regiment, West coast"},
+  {n:"Sohae Launch Station",t:"Space/Rocket Forces",l:"Tongchang-ri — satellite launch, long-range conventional rocket tests"},
+  {n:"Tonghae Satellite Launch Station",t:"Space/Rocket Forces",l:"Musudan-ri — East Coast launch facility"},
+  {n:"Chiha-ri Missile Base",t:"Rocket Forces",l:"Hwangju — operational ballistic missile base, 'tactical belt'"},
+  {n:"Sakkanmol Missile Base",t:"Rocket Forces",l:"Hwangju — intermediate range missile deployment"},
+  {n:"Sino-ri Missile Base",t:"Rocket Forces",l:"South Pyongan — medium range ballistic missile base"},
+  {n:"Anbyon Missile Base",t:"Rocket Forces",l:"Kangwon — forward missile base, operational belt"},
+  {n:"Yongnim Missile Base",t:"Rocket Forces",l:"Chagang — strategic belt missile base, mountain tunnels"},
+  {n:"Hoejung-ni Missile Base",t:"Rocket Forces",l:"North Hamgyong — strategic belt northern complex"},
+  {n:"Kanggye Munitions Complex",t:"Arms Production",l:"Chagang — underground weapons factories, artillery shells, rockets"},
+  {n:"Kusong Arms Factory",t:"Arms Production",l:"North Pyongan — tank and armoured vehicle production"},
+  {n:"Hamhung Chemical Complex",t:"Industrial/Military",l:"South Hamgyong — chemical industrial base"},
+  {n:"2nd Army Corps",t:"Army Corps",l:"Hamhung — northeast ground force"},
+  {n:"5th Army Corps",t:"Army Corps",l:"Wonsan — east-central ground force, DMZ second echelon"},
+  {n:"4th Army Corps",t:"Army Corps",l:"Nampho — west coast ground force"},
+  {n:"806th Artillery Corps",t:"Artillery",l:"Kaesong — DMZ-facing long-range artillery, Seoul in range"},
+  {n:"108th Mechanized Corps",t:"Armour",l:"Sariwon — primary tank/mechanized force, DMZ approach"},
+  {n:"425th Mechanized Corps",t:"Armour",l:"Pyongyang — capital defence armoured division"},
+  {n:"Special Operations Force Command",t:"Special Forces",l:"Pyongyang — 200,000+ special ops, light infantry, reconnaissance"},
+  {n:"Reconnaissance General Bureau",t:"Intelligence",l:"Pyongyang — foreign intelligence, cyber, covert ops"},
+  {n:"Camp 14 / Kaechon",t:"Political Prison Camp",l:"South Pyongan — large detention complex"},
+  {n:"Phyongchon Defence Industry",t:"Defence Industry",l:"Pyongyang — weapons R&D and production directorate"}
+],rail:{terminals:[["Pyongyang Station","National rail HQ. Departs for Beijing (K27, 23h), Moscow (fortnightly). Domestic lines to Sinuiju, Wonsan, Rajin."],["Sinuiju Chongnyon","Northwest border station. Primary crossing to Dandong, China via Sino-Korean Friendship Bridge."],["Tumangang (Rason)","Northeast border station. Connects to Russian Railways at Khasan via Korean-Russian Friendship Bridge over Tumen River."],["Chongjin","Northeast hub. Junction of Pyongra and Hambuk Lines. Secondary Chinese border access via Namyang–Tumen crossing."],["Namyang","Border crossing to Tumen, China. Secondary China–DPRK rail link."],["Wonsan","East coast junction. Kangwon Line terminus. Naval and freight dual-use."],["Kaesong","Southern terminus near DMZ. Former freight link to South Korea's Kaesong Industrial Complex (suspended 2016; track destroyed 2024)."]],crossBorder:[["North Korea → China","Active","Primary via Sinuiju–Dandong (Friendship Bridge). Secondary crossings at Manpo–Ji'an and Namyang–Tumen. Freight dominant; limited passenger."],["North Korea → Russia","Active (limited)","Via Tumangang–Khasan bridge over Tumen River. Fortnightly Pyongyang–Moscow sleeper car. Dual-gauge track rebuilt 2013 for Russian broad gauge access to Rajin port."],["North Korea → South Korea","SUSPENDED","Kaesong–Munsan western line suspended since 2016. DPRK destroyed sections of track in October 2024, rendering the route unusable."]]}},
+  nigeria:{name:"Federal Republic of Nigeria",status:"Owned · West Africa",stats:{Population:"220M",GDP:"$477B",Area:"924K km²",Military:"Active"},ov:"Africa's largest economy. Vast oil reserves, booming consumer market, and critical West African geopolitical hub.",res:[{i:"🛢",n:"Niger Delta Oil Fields",d:"37B barrel reserves. ~2M bpd output."},{i:"🛢",n:"Agbami Deepwater Field",d:"250k bpd offshore — Chevron operated."},{i:"🔥",n:"Bonny Island LNG",d:"22M tonnes/yr export capacity."},{i:"🏭",n:"Lagos Industrial Zone",d:"Fastest-growing manufacturing hub in sub-Saharan Africa."},{i:"💎",n:"Jos Plateau Minerals",d:"Tin, columbite, tantalite mining."}],trans:[{i:"⚓",n:"Port of Lagos (Apapa)",d:"West Africa's busiest — 80% of Nigeria's seaborne trade"},{i:"⚓",n:"Port Harcourt Terminal",d:"Primary crude oil export"},{i:"⚓",n:"Onne Oil & Gas Port",d:"Offshore support hub"},{i:"✈",n:"Murtala Muhammed Airport",d:"West Africa's busiest airport"},{i:"✈",n:"Nnamdi Azikiwe Airport",d:"Abuja — capital hub"},{i:"🚂",n:"Lagos-Kano Rail",d:"Chinese-built standard gauge"}],bases:[{n:"Abuja Military Command",t:"Army HQ",l:"FCT"},{n:"Bonny Naval Base",t:"Naval",l:"Rivers State"},{n:"Makurdi Air Base",t:"Air Force",l:"Benue State"},{n:"Maiduguri FOB",t:"Counter-Terror",l:"Borno — vs Boko Haram"},{n:"Ikeja Air Force Base",t:"Air Force HQ",l:"Lagos"},{n:"NNS Beecroft",t:"Naval HQ",l:"Lagos"}],rail:{terminals:[["Lagos Apapa / Iddo Terminal","Western Line terminus. Connects to Ibadan, Kano. Primary Lagos freight hub."],["Lagos Ebute-Meta","NRC operational HQ and workshop. Major freight classification yard."],["Ibadan Station","New standard gauge terminus (Lagos–Ibadan SGR, 2021). 157km from Lagos."],["Abuja (Idu) Station","Standard gauge terminus. Abuja–Kaduna line (2016). 187km to Kaduna in 2h."],["Kaduna Junction","Major northern hub connecting Western Line with Eastern Line via Linking Line."],["Kano Terminal","Northern terminus of Western Line (Lagos–Kano, 1,126km)."],["Port Harcourt Terminal","Eastern Line southern terminus. Freight connection to Niger Delta ports."],["Maiduguri Terminal","Northeastern terminus of Eastern Line. Near Chad border."],["Warri Terminal","Southern terminus of Warri–Itakpe standard gauge line (inaugurated 2020)."],["Itakpe / Ajaokuta","Central terminus. Connects Ajaokuta Steel Complex to Warri port."]],crossBorder:[["Nigeria → Niger (Kano–Maradi)","Under Construction","284km standard gauge from Kano to Maradi, Niger. Construction began 2021. Will be Nigeria's first operational cross-border rail link."],["Regional (ECOWAS)","Planned","Long-term ECOWAS vision linking Nigeria to Benin, Ghana, Côte d'Ivoire, and Senegal. No active cross-border rail currently exists."]]}},
+  philippines:{name:"Republic of the Philippines",status:"Owned · Southeast Asia",stats:{Population:"115M",GDP:"$402B",Area:"300K km²",Military:"Active"},ov:"7,641 islands dominating South China Sea and Pacific access routes. Former US base infrastructure and growing electronics manufacturing.",res:[{i:"💎",n:"Palawan Nickel",d:"Top 5 global nickel reserves. EV battery supply chain."},{i:"💎",n:"Surigao Chromite",d:"World-class chromite belt — Mindanao."},{i:"🛢",n:"Malampaya Gas Field",d:"Offshore Palawan — 40% of Luzon's power."},{i:"💎",n:"Cordillera Gold-Copper",d:"Luzon highlands porphyry deposits."}],trans:[{i:"⚓",n:"Port of Manila",d:"Primary container gateway — 60%+ of national trade"},{i:"⚓",n:"Subic Bay",d:"Former US naval station — strategic deep harbor"},{i:"⚓",n:"Cebu Port",d:"Central Philippines inter-island hub"},{i:"⚓",n:"Davao Port",d:"Mindanao agricultural export gateway"},{i:"✈",n:"Ninoy Aquino Airport",d:"Manila — 4th busiest in SE Asia"},{i:"✈",n:"Clark International Airport",d:"Former US base — expanding cargo hub"}],bases:[
+  {n:"Camp Aguinaldo",t:"AFP General HQ",l:"Quezon City — AFP General Headquarters, Joint Staff, DND"},
+  {n:"Camp Emilio Aguinaldo (BartInt)",t:"AFP Joint HQ",l:"Quezon City — co-located AFP HQ complex"},
+  {n:"Fort Andres Bonifacio",t:"Army HQ",l:"Taguig — Philippine Army Headquarters, NCR command"},
+  {n:"Camp Lapu-Lapu",t:"Air Force HQ",l:"Cebu — Philippine Air Force Headquarters"},
+  {n:"Naval Station Cavite (BNS)",t:"Naval HQ",l:"Cavite — Philippine Navy Headquarters"},
+  {n:"Clark Air Base (Basa AFB)",t:"Air Base",l:"Pampanga — PAF primary air base, F/A-50 fighters, EDCA site"},
+  {n:"Mactan-Benito Ebuen Air Base",t:"Air Base",l:"Cebu — central Visayas air hub, maritime patrol, EDCA site"},
+  {n:"Edwin Andrews Air Base",t:"Air Base",l:"Zamboanga — southern air command, Mindanao operations"},
+  {n:"Lumbia Airport (Col. Edwin Andrews AFB)",t:"Air Base",l:"Cagayan de Oro — northern Mindanao air base, EDCA site"},
+  {n:"Lal-lo Airport",t:"Air Base",l:"Cagayan — northern Luzon air base, EDCA site, north approach"},
+  {n:"Cesar Basa Air Base",t:"Air Base",l:"Pampanga — primary PAF fighter base"},
+  {n:"Subic Bay Naval Base",t:"Naval Base",l:"Zambales — primary PN base, deep-water port, former US Navy hub"},
+  {n:"Naval Station Jose Andrada",t:"Naval Base",l:"Manila — PN Manila headquarters, command vessels"},
+  {n:"Naval Station Heracleo Alano",t:"Naval Base",l:"Zamboanga — southern fleet command, Sulu Sea operations"},
+  {n:"Naval Station San Vicente",t:"Naval Base",l:"Palawan — South China Sea patrol base"},
+  {n:"Naval Base Camilo Osias",t:"Naval Base",l:"Cagayan — northern Luzon naval anchor, EDCA site"},
+  {n:"Carlito Cunanan Naval Air Station",t:"Naval Air",l:"San Antonio — naval aviation, maritime patrol aircraft"},
+  {n:"Fort Ramon Magsaysay",t:"Army Base",l:"Nueva Ecija — largest AFP training base, infantry/armour training, EDCA site"},
+  {n:"Camp Melchor F. Dela Cruz",t:"Army Base",l:"Isabela — northern Luzon Army command, EDCA site"},
+  {n:"Camp Sergio Osmeña",t:"Army Base",l:"Cebu — Visayas Command HQ"},
+  {n:"Camp Navarro",t:"Army Base",l:"Davao — Western Mindanao Command, SouthCom secondary"},
+  {n:"Camp General William Doria Pen",t:"Army Base",l:"Maguindanao — Mindanao ground force operations"},
+  {n:"Camp Eduardo Año",t:"Army Base",l:"Camp Crame, Quezon City — Philippine National Police HQ (joint AFP)"},
+  {n:"Fort Pilar",t:"Army Base",l:"Zamboanga — historic fortress, Western Mindanao garrison"},
+  {n:"Camp Catitipan",t:"Army Base",l:"Davao — Southern Command HQ, Mindanao ops"},
+  {n:"Antonio Bautista Air Base",t:"Air/Surveillance",l:"Puerto Princesa, Palawan — SCS surveillance, EDCA site, OV-10 patrol"},
+  {n:"Balabac Island Naval Facility",t:"Naval Outpost",l:"Palawan — southernmost naval post, Malaysia Strait approach, EDCA site"},
+  {n:"Pag-asa Island (Thitu)",t:"Military Outpost",l:"Spratly Islands — Philippine-held island, runway, garrison"},
+  {n:"Lawak Island (Nanshan)",t:"Military Outpost",l:"Spratlys — garrisoned Philippine-held island"},
+  {n:"Patag Island",t:"Military Outpost",l:"Spratlys — garrisoned outpost, South China Sea"},
+  {n:"Camp Peralta",t:"Army Base",l:"Jamindan, Capiz — 3rd Infantry Division, Visayas"},
+  {n:"Camp Lukban",t:"Army Base",l:"Catbalogan, Samar — 8th Infantry Division, Eastern Visayas"},
+  {n:"Camp Evangelista",t:"Army Base",l:"Cagayan de Oro — 4th Infantry Division, northern Mindanao"},
+  {n:"Camp Siongco",t:"Army Base",l:"Maguindanao — 6th Infantry Division, central Mindanao"},
+  {n:"Camp Panacan",t:"Army Base",l:"Davao — 10th Infantry Division, southern Mindanao"},
+  {n:"Camp Elias Angeles",t:"Army Base",l:"Maasin, Southern Leyte — reserve command"},
+  {n:"Lipa Air Base",t:"Air Base",l:"Batangas — training air base, southern Luzon"},
+  {n:"Danilo Atienza Air Base",t:"Air Base",l:"Cavite — naval aviation, C-130 transport, SAR"},
+  {n:"Ramos Air Base",t:"Air Base",l:"General Santos — southern Mindanao air operations"},
+  {n:"Cagayan de Oro Air Base (Lumbia)",t:"Air Base",l:"Misamis Oriental — northern Mindanao, EDCA access"},
+  {n:"Cotabato Air Base",t:"Air Base",l:"Mindanao — central Mindanao air support"},
+  {n:"Philippine Military Academy",t:"Training",l:"Baguio — officer commissioning, all branches"},
+  {n:"AFP Joint Special Operations Command",t:"Special Forces",l:"Fort Magsaysay — JSOC, Scout Rangers, Special Forces Regt"},
+  {n:"Philippine Coast Guard Headquarters",t:"Coast Guard",l:"Manila — maritime law enforcement, SCS patrols"}
+],rail:{terminals:[["Manila Tutuban (PNR)","PNR Main Line South terminus. Historic colonial-era station. Services to Naga (~350km south)."],["Calamba Station","Commuter rail southern hub. NSCR extension under construction."],["Clark (NSCR North)","Under construction. NSCR will connect Clark Air Base to Manila and Calamba."],["Naga Station","Operational southern terminus of PNR South Main Line, Camarines Sur."],["Caloocan Depot","PNR main maintenance and operations depot north of Manila."]],crossBorder:[["International Rail","None","The Philippines is an archipelago — no international rail connections exist or are planned. All rail is domestic island-based."]]}},
+  jamaica:{name:"Jamaica",status:"Owned · Caribbean",stats:{Population:"3M",GDP:"$16B",Area:"10.9K km²",Military:"Light"},ov:"Caribbean strategic outpost. Kingston Harbour — largest natural harbour in the Western Hemisphere — controls Atlantic-Pacific shipping lanes near the Panama Canal.",res:[{i:"💎",n:"Bauxite & Alumina",d:"7th largest global bauxite reserves."},{i:"🔥",n:"LNG Terminal",d:"New Fortress Energy — gas power transition."},{i:"🌾",n:"Agriculture & Tourism",d:"Blue Mountain Coffee, rum, $4B+ tourism GDP."}],trans:[{i:"⚓",n:"Kingston Container Terminal",d:"Top 5 Caribbean trans-shipment hub — 2M+ TEU"},{i:"⚓",n:"Montego Bay Port",d:"Cruise and cargo — 1,200 ships/yr"},{i:"⚓",n:"Port Esquivel",d:"Alumina export terminal"},{i:"✈",n:"Norman Manley Airport",d:"Kingston international hub"},{i:"✈",n:"Sangster International Airport",d:"Montego Bay — busiest by passengers"}],bases:[{n:"Up Park Camp",t:"Army HQ",l:"Kingston — JDF headquarters"},{n:"HMJS Cagway",t:"Naval",l:"Port Royal"},{n:"JDF Air Wing (NM Airstrip)",t:"Air Wing",l:"Kingston"}],rail:{terminals:[["Kingston Dockyard Terminal","Former passenger terminus, now freight only. Adjacent to Kingston Container Terminal."],["May Pen","Central Jamaica freight stop. Bauxite/alumina transfer point."],["Montego Bay (Barnett Street)","Former passenger terminus. Freight operations serving western parishes."],["Bog Walk","Former rail crossing in St. Catherine. Historic junction over Rio Cobre."]],crossBorder:[["International Rail","None","Jamaica is an island — no international rail connections exist or are possible without cross-sea infrastructure."]]}},
+  chile:{name:"Republic of Chile",status:"⚠ Pending Trade · South America",stats:{Population:"19M",GDP:"$317B",Area:"756K km²",Military:"Moderate"},ov:"PENDING TRADE. World's largest copper reserves and 44% of global lithium — critical for EV battery supply chains. Punta Arenas controls the Strait of Magellan chokepoint.",res:[{i:"💎",n:"Escondida Copper Mine",d:"World's largest. 27% of global copper supply."},{i:"🔋",n:"Salar de Atacama Lithium",d:"44% of global lithium reserves."},{i:"💎",n:"Chuquicamata Copper",d:"World's largest open-pit mine by volume."},{i:"⚡",n:"Atacama Solar",d:"Highest solar irradiation on Earth."}],trans:[{i:"⚓",n:"San Antonio Port",d:"Chile's largest by volume"},{i:"⚓",n:"Port of Valparaíso",d:"Main container + naval port"},{i:"⚓",n:"Antofagasta Port",d:"Copper mining export hub"},{i:"⚓",n:"Iquique Port",d:"Northern minerals gateway"},{i:"✈",n:"Santiago Airport (AMB)",d:"South America aviation hub"},{i:"🚂",n:"Atacama Mining Rail",d:"Mines to Pacific ports"}],bases:[{n:"Punta Arenas Naval Base",t:"Naval",l:"Strait of Magellan — strategic chokepoint"},{n:"Talcahuano Naval Base",t:"Fleet HQ",l:"Biobío — main fleet"},{n:"El Bosque Air Base",t:"Air Force HQ",l:"Santiago"},{n:"Iquique Air Base",t:"Air Force",l:"Northern Chile"}],rail:{terminals:[["Santiago Estación Central (Alameda)","Primary passenger hub. EFE services south to Chillán and Rancagua. Metro and commuter integration."],["Valparaíso Puerto","Commuter service to Limache (43km). Former major freight gateway."],["Chillán Station","Southernmost regular EFE passenger terminus (~400km from Santiago, ~3.5h)."],["Antofagasta FCAB Terminal","Northern mining hub. FCAB freight line to Bolivia border at Ollagüe (438km)."],["Iquique (Ferronor)","Northern Atacama freight terminal. Mineral exports — nitrates, copper concentrate."],["Calama Station","Atacama gateway. FCAB connects Escondida mine branch to Antofagasta port."],["San Antonio Port Terminal","Freight terminus. Major vehicle and container export gateway."],["Arica Station","Extreme northern terminus. Historic gateway to Peru (Tacna-Arica line, dormant)."]],crossBorder:[["Chile → Bolivia (FCAB / Ollagüe)","Active (freight)","Ferrocarril de Antofagasta a Bolivia. Metre gauge. Carries lithium carbonate, borax, minerals. Bolivia's primary ocean-access rail export route."],["Chile → Bolivia (Arica–Visviri)","Active (limited freight)","Restored 2021. Metre gauge connecting to Bolivian network at Visviri."],["Chile → Argentina (Trans-Andean)","Defunct since 1984","Historic Mendoza–Los Andes line via Cumbre Tunnel (3,176m — highest rail tunnel in Western Hemisphere). Reconstruction periodically proposed but unfunded."],["Chile → Peru (Arica–Tacna)","Dormant since 2012","6km Chilean standard gauge section. Plans to reopen as tourist service remain unresolved."],["Chile → Argentina (Salta–Antofagasta)","Freight only","Via Socompa Pass at 3,876m. Fifth-highest railway in the world. Argentine Tren a las Nubes tourist section."]]}},
+  kuwait:{name:"State of Kuwait",status:"⚠ Pending Trade · Middle East",stats:{Population:"4.3M",GDP:"$136B",Area:"17.8K km²",Military:"Small"},ov:"PENDING TRADE. Top of the Persian Gulf. Greater Burgan — 2nd largest oil field on Earth. Hosts the largest US military pre-positioning base in the Gulf.",res:[{i:"🛢",n:"Greater Burgan Oil Field",d:"101.5B barrel reserves — 2nd largest ever discovered."},{i:"🛢",n:"Minagish & Umm Gudair Fields",d:"~100k bpd combined secondary fields."},{i:"💰",n:"Kuwait Investment Authority",d:"$800B+ sovereign wealth fund."}],trans:[{i:"⚓",n:"Mina Al Ahmadi Terminal",d:"Primary crude export — VLCC capable"},{i:"⚓",n:"Shuwaikh Commercial Port",d:"Container imports hub"},{i:"✈",n:"Kuwait International Airport",d:"Gulf hub + USAF logistics node"}],bases:[{n:"Camp Arifjan",t:"US Army",l:"South Kuwait — 13,500 troops"},{n:"Ali Al Salem Air Base",t:"USAF/KAF",l:"NW Kuwait — F-16s + ISR"},{n:"Camp Buehring",t:"US Army",l:"North Kuwait — staging"},{n:"Camp Patriot",t:"US Army/Naval",l:"Port logistics hub"},{n:"Mubarak Air Base",t:"Kuwaiti AF",l:"F/A-18 + Typhoon national defense"}],rail:{terminals:[["Kuwait City (Planned GCC Station)","No operational passenger rail stations in Kuwait. GCC Railway terminus planned for Kuwait City but unbuilt."],["Shuaiba Industrial Zone","Internal freight rail within refinery and petrochemical complex. Not part of any national network."]],crossBorder:[["GCC Railway (Saudi Arabia → Kuwait)","Planned — not built","Gulf Cooperation Council Railway would connect Riyadh to Kuwait City (~540km). Agreements signed, construction not started as of 2025. Would link to Saudi Arabia, UAE, Bahrain, Qatar, Oman."],["Kuwait → Iraq","None","No rail connection exists. Ottoman-era plans to extend Baghdad Railway through Kuwait to the Gulf were never completed."]]}}
+};
+
+COUNTRIES.vatican = {name:"Vatican City",status:"Owned · Southern Europe",stats:{Population:"800",GDP:"N/A",Area:"0.44 km²",Military:"Swiss Guard"},ov:"The world's smallest sovereign state and spiritual capital of the Catholic Church. Nestled within Rome, Vatican City commands immense soft power over 1.3 billion Catholics globally, controls vast financial assets through the Holy See, and maintains its own railway connecting to the Italian national network.",res:[{i:"🏛",n:"Vatican Museums & Archives",d:"Incalculable art and historical document holdings. 7M visitors/year generating €100M+."},{i:"📡",n:"Vatican Radio & Media",d:"Global broadcast reach across 20+ languages. Strategic soft-power instrument."},{i:"💰",n:"Holy See Financial Assets",d:"IOR (Vatican Bank) manages €5B+ in assets. Real estate holdings globally."}],trans:[{i:"🚂",n:"Vatican Railway (0.68 km)",d:"World's shortest railway. Connects to Italian network at Roma San Pietro. Freight + occasional VIP use."},{i:"🚁",n:"Vatican Heliport",d:"Western corner — used for papal and official visitor movements."},{i:"🛣",n:"Via della Conciliazione",d:"Primary road axis connecting St Peter's Square to central Rome."}],bases:[{n:"Pontifical Swiss Guard",t:"Military / Security",l:"Vatican City — Papal protection since 1506"},{n:"Gendarmerie Corps",t:"Police",l:"Vatican City — internal law enforcement and security"},{n:"Vatican Intelligence Service",t:"SOVRN",l:"Operates via nunciatures globally — diplomatic intelligence network"}],rail:{terminals:[["Stazione Città del Vaticano","World's shortest national railway station. 0.68km from Italian network. Opened 1934 per Lateran Treaty. One platform, weekly tourist train to Castel Gandolfo on Saturdays. Freight still occasional."],["Roma San Pietro (Italian Network)","Nearest Italian mainline station, ~624m from Vatican station. Served by FL5 regional line connecting to Roma Termini and Civitavecchia."],["Roma Termini (Italian Network)","10 min by Metro Line A to Vatican. Italy's largest station — high-speed trains to Milan (3h10m), Naples (1h10m), Florence (1h30m)."]],crossBorder:[["Vatican → Italy (Vatican Railway)","Active (limited)","The Vatican Railway is the world's shortest national railway (0.68km, 1 track, 1 platform). Connects via Roma San Pietro to the entire Italian and European rail network. Weekly tourist service Saturdays to Pontifical Villas at Castel Gandolfo. Occasional freight. First pope to use it: John XXIII, 1962."],["Italy → Europe (via Vatican network)","Active","Through Italian HSR network: Rome–Milan (3h10m), Rome–Naples (1h10m), Rome–Florence (1h30m). International routes via Brenner Pass to Austria/Germany, via Ventimiglia to France, and via Trieste to Slovenia/Croatia."]]}};
+
+// ═══════════════════════════════════════════════════════════════════
+// LOCATION POINTS — carefully verified coordinates
+// [id, lon, lat, layer, color, emoji, title, type, desc, badges]
+// ═══════════════════════════════════════════════════════════════════
+const POINTS = [
+  // ── CHINA RESOURCES ──
+  ["cn-r1", 114.1, 22.5, "resources","#f90","🏭","Shenzhen Manufacturing Hub","Industrial Zone","World's largest electronics production zone. Exports $800B+/yr. Home to Foxconn, Huawei, BYD.",["$800B+/yr","15M+ workers","SEZ since 1980"]],
+  ["cn-r2", 109.9, 41.7, "resources","#4f4","💎","Bayan Obo REE Mine (Inner Mongolia)","Rare Earth Mining","World's largest rare earth deposit. Produces ~60% of global REE supply used in electronics, magnets, and missile guidance.",["60% global REE","44M tonne reserve","Strategic: Critical"]],
+  ["cn-r3", 83.7,  40.5, "resources","#4af","🛢","Tarim Basin Oil Fields (Xinjiang)","Oil & Gas","China's largest domestic oil and gas basin. Reduces dependence on Middle East imports. Linked to coast by 4,000 km pipeline.",["8.2B barrel reserve","300k bpd","4,000 km pipeline"]],
+  ["cn-r4", 106.6, 29.6, "resources","#f90","🏭","Chengdu-Chongqing Tech Cluster","Manufacturing","Inland aerospace, defense electronics, and EV manufacturing hub. COMAC aircraft and PLA supplier facilities.",["Defense + aerospace","500+ companies","Area: 125,000 km²"]],
+  ["cn-r5", 112.6, 37.9, "resources","#888","💎","Shanxi Coal Basin","Coal Mining","China's coal heartland — 30% of national output. Powers northern Chinese steel and electricity.",["1.2B tonnes/yr","267B tonne reserve","30% national output"]],
+  ["cn-r6", 116.1, 27.1, "resources","#4f4","💎","Jiangxi REE (Ganzhou)","Rare Earth Mining","Medium-heavy REE deposits critical for military magnets and guidance systems. Strictly state-controlled.",["Type: Medium-heavy REE","Product: Nd, Dy","Export: Controlled"]],
+
+  // ── CHINA TRANSPORT ──
+  ["cn-t1", 122.0, 30.6, "transport","#0af","⚓","Port of Shanghai (Yangshan)","Container Port","World's busiest container port since 2010. Yangshan deep-water automated terminal.",["47M TEU/yr","Rank: #1 Global","Draft: 17m"]],
+  ["cn-t2", 114.0, 22.5, "transport","#0af","⚓","Port of Shenzhen (Yantian)","Container Port","4th busiest globally. South China Sea export gateway for Pearl River Delta.",["30M TEU/yr","Rank: #4 Global","5 terminals"]],
+  ["cn-t3", 113.6, 22.8, "transport","#0af","⚓","Port of Guangzhou (Nansha)","Container Port","Pearl River Delta megaport — containers, bulk, and RoRo.",["25M TEU/yr","770 km² area","100+ global routes"]],
+  ["cn-t4", 117.7, 38.9, "transport","#0af","⚓","Port of Tianjin","Container Port","North China maritime gateway serving Beijing and inland manufacturing belt.",["22M TEU/yr","800M hinterland pop.","6 terminals"]],
+  ["cn-t5", 116.4, 40.1, "transport","#8af","✈","Beijing Capital Airport","International Airport","One of two capital mega-airports. 96M passengers/yr pre-Daxing.",["96M pax/yr","Hub: Air China","3 terminals"]],
+  ["cn-t6", 116.4, 39.5, "transport","#8af","✈","Beijing Daxing Airport","International Airport","World's largest single-terminal airport (2019). Designed for 100M pax/yr.",["World's largest terminal","100M pax capacity","Opened: 2019"]],
+  ["cn-t7", 121.8, 31.1, "transport","#8af","✈","Shanghai Pudong Airport","International Airport","China's #1 cargo airport and 2nd largest passenger hub.",["4M tonne cargo/yr","76M pax/yr","300+ routes"]],
+  ["cn-t8", 104.1, 30.6, "transport","#8af","🚂","Chengdu International Railway Port","Rail Hub","Western China's Belt & Road rail hub. Operates 40+ weekly freight trains to Europe.",["40+ trains/week to EU","Distance: 10,000 km to Europe","Cargo: Growing 40%/yr"]],
+
+  // ── CHINA MILITARY ──
+  ["cn-m1", 109.5, 18.2, "military","#f44","★","Yulin/Sanya Naval Base","Naval Base","South China Sea naval HQ. Underground submarine pens for Jin-class attack submarines.",["Jin-class submarines","Underground pens","Range: submarine cruise missile range"]],
+  ["cn-m2", 100.3, 40.9, "military","#f44","★","Jiuquan Missile & Space Center","long-range ballistic missile / Space Launch","China's primary ballistic missile test and space launch site. DF-series long-range ballistic missile testing. Long March rocket launches.",["Founded: 1958","long-range ballistic missile: DF-41, DF-5B","100+ rocket launches"]],
+  ["cn-m3", 116.9, 42.0, "military","#f44","★","Zhurihe Combined Arms Training Base","Army Training","Largest PLA training complex. Full-scale mock foreign base replicas. Live-fire combined arms exercises.",["Area: 1,066 km²","Mock: Foreign military bases","Units: Division-level"]],
+  ["cn-m4", 109.8, 18.0, "military","#f44","★","Yulin Underground Submarine Base","Submarine Base","Dedicated ballistic missile submarine base with underwater tunnel entrance through mountain. First-strike strategic platform.",["Type: Underground tunnel","Subs: Jin-class (Type 094)","Missiles: JL-2 submarine-launched missile"]],
+  ["cn-m5",  91.1, 29.6, "military","#f44","★","Lhasa Military Garrison","Strategic Garrison","Controls Tibet. Rapid-response capability toward India border. High-altitude air base.",["Altitude: 3,600m","Threat: India/LAC border","Strategic: Tibet control"]],
+  ["cn-m6", 117.2, 32.9, "military","#f44","★","Huangshan PLARF Base","Rocket Force Base","PLA Rocket Force DF-21D anti-ship ballistic missile base. Primary carrier-killer threat.",["System: DF-21D ASBM","Range: 1,500km","Target: US carrier groups"]],
+
+  // ── NORTH KOREA RESOURCES ──
+  ["nk-r1", 126.4, 38.9, "resources","#d0f","☢","Pyongsan Uranium Mine & Mill","Weapons Research Resource","DPRK's primary uranium ore processing facility. Feeds industrial fuel processing.",["Output: ~300t ore/yr","Product: Uranium concentrate","Monitored: Satellite daily"]],
+  ["nk-r2", 129.3, 42.6, "resources","#888","💎","Musan Iron Ore Mine","Iron Ore Mining","One of Asia's largest iron ore deposits. Critical for steel and military production.",["Reserve: 3B tonnes","Iron content: ~30%","Status: Active"]],
+  ["nk-r3", 125.6, 39.3, "resources","#4f4","💎","Kaechon Anthracite Coal","Coal Mining","Major anthracite producer — hard currency via China coal exports and domestic steel.",["Type: Anthracite","Export partner: China","Value: ~$100M/yr"]],
+
+  // ── NORTH KOREA TRANSPORT ──
+  ["nk-t1", 125.4, 38.7, "transport","#0af","⚓","Nampo Port","Container/Military Port","Main western port. Primary import hub for food, fuel, and sanctioned goods.",["Trade: China-primary","Type: Dual-use","Sanctions: Under monitoring"]],
+  ["nk-t2", 129.7, 41.8, "transport","#0af","⚓","Chongjin Port","Industrial/Military Port","Northeast port with Trans-Siberian rail link to Russia. Coal export and military supply.",["Rail: Trans-Siberian","Partner: Russia","Use: Military supply"]],
+  ["nk-t3", 127.5, 39.1, "transport","#0af","⚓","Wonsan Port","Dual-Use Port","East coast port — submarines, tourism, and arms shipments.",["Feature: Sub access","Route: Japan Sea","Use: Naval + trade"]],
+  ["nk-t4", 125.7, 39.0, "transport","#8af","✈","Pyongyang Sunan Airport","International Airport","Only operational international airport. Military airlift primary role.",["Routes: Air China, Air Koryo","Military: Primary airlift","Passengers: Highly restricted"]],
+
+  // ── NORTH KOREA MILITARY ──
+  ["nk-m1", 125.7, 39.0, "military","#f44","★","Pyongyang KPA Supreme Command","Strategic HQ","Korea People's Army command center. Deep underground bunkers. Controls all DPRK military forces.",["Bunker depth: 100m+","Staff: 2,000+","Hardened: EMP protected"]],
+  ["nk-m2", 125.8, 39.8, "military","#f44","★","Yongbyon Weapons Research Complex","Weapons Research Facility","5MW research reactor, uranium processing plant. Monitored facility.",["Reactors: 2 active","Products: Fuel elements","Status: Operational"]],
+  ["nk-m3", 124.7, 39.7, "military","#f44","★","Sohae Missile Launch Site","Long-Range Missile Facility","Primary long-range ballistic missile test launch facility. Hwasong-15 and Hwasong-17 tested here — range covers continental US.",["Missiles: Hwasong-15/17","Range: 13,000km","Tests: 20+ launches"]],
+  ["nk-m4", 128.2, 40.1, "military","#f44","★","Sinpo Submarine Base","submarine-launched missile Naval Base","Tests submarine-launched ballistic missiles. Sinpo-class submarines operate from here.",["submarine-launched missiles: Pukguksong-3","Class: Sinpo-C","Tests: Active submarine-launched missile program"]],
+  ["nk-m5", 126.6, 40.0, "military","#f44","★","Kanggye Arms Complex","Underground Munitions","Underground city-scale munitions factory. Produces rocket motors, artillery shells, small arms.",["Products: Rockets, artillery","Underground: Yes","Output: Classified"]],
+  ["nk-m6", 124.9, 40.1, "military","#f44","★","Panghyon Airbase","Air Force Base","Primary DPRK combat aircraft base. MiG-29 fighters and electronic warfare aircraft.",["Aircraft: MiG-29, MiG-23","Role: Air superiority","Alert: Permanent high"]],
+
+  // ── NIGERIA RESOURCES ──
+  ["ng-r1",  5.6,  5.1, "resources","#4af","🛢","Niger Delta Oil Fields","Oil Production","Spread across Rivers, Delta, and Bayelsa states. Multiple onshore and offshore fields.",["Reserves: 37B barrels","Output: ~2M bpd","Africa: #1 producer"]],
+  ["ng-r2",  3.3,  5.0, "resources","#4af","🛢","Agbami Deepwater Field","Offshore Oil","Deepwater Chevron field 110km offshore. Ultra-deep wells at 1,500m.",["Output: 250k bpd","Depth: 1,500m","Operator: Chevron"]],
+  ["ng-r3",  3.4,  6.5, "resources","#f90","🏭","Lagos Industrial Zone","Manufacturing","Nigeria's primary manufacturing corridor — food, cement, pharma, and light manufacturing.",["GDP contrib: 25%","Workforce: 2M+","Growth: 8%/yr"]],
+  ["ng-r4",  8.9,  9.9, "resources","#4f4","💎","Jos Plateau Mining","Mineral Mining","Tin, columbite, and tantalite deposits — historically one of Africa's richest mining districts.",["Minerals: Sn, Nb, Ta","History: Active since 1900s","Status: Active"]],
+  ["ng-r5",  7.1,  4.4, "resources","#faf","🔥","Bonny Island LNG Plant","LNG Export","Nigeria LNG's six-train Bonny Island plant. 22M tonnes/yr export capacity.",["Capacity: 22M t/yr","Trains: 6","Customers: Europe, Asia"]],
+
+  // ── NIGERIA TRANSPORT ──
+  ["ng-t1",  3.36, 6.43, "transport","#0af","⚓","Port of Lagos (Apapa)","Container Port","West Africa's busiest — 80% of Nigeria's seaborne trade.",["TEU: 1.5M/yr","Market: 80% Nigeria","Bottleneck: High congestion"]],
+  ["ng-t2",  7.05, 4.72, "transport","#0af","⚓","Port Harcourt Terminal","Oil Export Port","Primary crude oil export terminal in the Niger Delta.",["Type: Oil terminal","Output: ~1M bpd export","Operator: Shell/IOCs"]],
+  ["ng-t3",  7.13, 4.77, "transport","#0af","⚓","Onne Oil & Gas Port","Specialized Port","Dedicated offshore oil supply base — 200+ operator companies.",["Operators: 200+","Vessels: 1,500/yr","Draft: 10m"]],
+  ["ng-t4",  3.28, 6.58, "transport","#8af","✈","Murtala Muhammed Airport","International Airport","West Africa's busiest airport. Lagos — hub for regional and intercontinental routes.",["Passengers: 10M/yr","Routes: Africa, Europe, Americas","Cargo: 75k tonnes/yr"]],
+  ["ng-t5",  7.26, 9.01, "transport","#8af","✈","Nnamdi Azikiwe Airport (Abuja)","International Airport","Federal capital gateway — government, diplomatic, commercial hub.",["Passengers: 3M/yr","Status: Federal capital","Routes: Regional + intercontinental"]],
+  ["ng-t6",  7.0,  8.9,  "transport","#8af","🚂","Abuja-Kaduna Railway","Rail Hub","Nigeria's first modern standard gauge railway (2016). Key north-south freight corridor.",["Length: 187 km","Speed: 150 km/h","Built by: CCECC (China)"]],
+
+  // ── NIGERIA MILITARY ──
+  ["ng-m1",  7.40,  9.10, "military","#f44","★","Abuja Military Command HQ","Army HQ","Nigerian Army General Headquarters — all land forces strategic command.",["Branches: All services","Staff: 3,000+","Role: National command"]],
+  ["ng-m2",  7.10,  4.80, "military","#f44","★","Bonny Naval Base","Naval Base","Primary Niger Delta anti-piracy and anti-bunkering patrol base.",["Fleet: Fast patrol boats","Role: Gulf of Guinea","Ops: Anti-piracy"]],
+  ["ng-m3",  8.60,  7.70, "military","#f44","★","Makurdi Air Base","Air Force Base","Primary NAF strike base. Alpha Jet and Mi-35 gunship operations.",["Aircraft: Alpha Jet, Mi-35","Role: Close air support","Front: Boko Haram ops"]],
+  ["ng-m4", 13.10, 11.80, "military","#f44","★","Maiduguri Forward Operating Base","Counter-Terror FOB","Northeast operational HQ against Boko Haram and ISWAP.",["Role: CT operations","Joint: Army, Air Force","Threat: ISWAP/Boko Haram"]],
+  ["ng-m5",  3.34,  6.59, "military","#f44","★","Ikeja Air Force Base (Lagos)","Air Force HQ","Nigerian Air Force national headquarters and primary air defense hub.",["Role: National air defense HQ","Aircraft: F-7Ni, Alpha Jet","Location: Lagos suburb"]],
+
+  // ── PHILIPPINES RESOURCES ──
+  ["ph-r1", 118.5,  9.5, "resources","#4f4","💎","Palawan Nickel Mines","Nickel Mining","Massive laterite nickel deposits across Palawan and offshore islands.",["Reserve: 1.1B tonnes","Output: 300k t/yr","Use: EV batteries"]],
+  ["ph-r2", 125.8,  9.0, "resources","#4f4","💎","Surigao Chromite Belt","Chromite Mining","Mindanao chromite — world top-5 producer. Essential for stainless steel.",["Reserve: 100M tonnes","Output: 200k t/yr","Use: Stainless steel"]],
+  ["ph-r3", 120.5, 16.9, "resources","#4f4","💎","Cordillera Gold-Copper Corridor","Mining","Benguet and Mankayan porphyry copper-gold deposits in Luzon highlands.",["Product: Gold, Copper","Reserve: Significant","Operators: OceanaGold, others"]],
+  ["ph-r4", 119.1, 10.8, "resources","#4af","🛢","Malampaya Gas Field","Offshore Gas","Offshore Palawan natural gas field — supplies ~40% of Luzon power grid.",["Reserve: 2.7 Tcf","Output: 400 MMscfd","Power: 40% of Luzon"]],
+
+  // ── PHILIPPINES TRANSPORT ──
+  ["ph-t1", 120.9, 14.5, "transport","#0af","⚓","Port of Manila (South Harbor)","Container Port","Primary container gateway — 60%+ of all national containerized trade.",["TEU: 5M/yr","Share: 60% national","Expansion: Manila Bay"]],
+  ["ph-t2", 120.3, 14.8, "transport","#0af","⚓","Subic Bay Port","Strategic Naval/Commercial Port","Deep natural harbor — former US Naval Station. Retained military access potential.",["Depth: 18m","Area: 262 km² SBFZ","Military: Access maintained"]],
+  ["ph-t3", 123.9, 10.3, "transport","#0af","⚓","Cebu Port Complex","Inter-Island Hub","Central Philippines cargo hub — 30%+ domestic trade.",["Domestic: 30%+ cargo","RoRo: Major hub","Connections: 20 ports"]],
+  ["ph-t4", 125.6,  7.1, "transport","#0af","⚓","Davao Port","Agricultural Export Port","Mindanao gateway for banana, pineapple, and agricultural exports.",["Products: Agri exports","Handling: 5M tonnes/yr","Zone: DPFZA"]],
+  ["ph-t5", 121.0, 14.5, "transport","#8af","✈","Ninoy Aquino Intl Airport (NAIA)","International Airport","Manila hub — 4th busiest in SE Asia.",["Passengers: 47M/yr","Routes: 80+ global","Cargo: 600k t/yr"]],
+  ["ph-t6", 120.6, 15.2, "transport","#8af","✈","Clark International Airport","Airport / Former US Airbase","North of Manila — former US Air Force base with major runway infrastructure.",["Runway: 3,200m","Capacity: 8M pax","Military: Dual-use"]],
+
+  // ── PHILIPPINES MILITARY ──
+  ["ph-m1", 120.5, 15.2, "military","#f44","★","Clark Air Base (CDCFZ)","Joint Air Force Base","US-Philippine joint use. F-16, ISR drones. Key for South China Sea monitoring.",["Aircraft: F-16, ISR","Use: US-PH joint","Role: SCS surveillance"]],
+  ["ph-m2", 120.3, 14.8, "military","#f44","★","Subic Bay Naval Station","Naval Base","Deep-water US Navy rotational access. Commands South China Sea approaches.",["Depth: 18m","Access: US Navy rotational","Role: Forward naval presence"]],
+  ["ph-m3", 121.0, 15.5, "military","#f44","★","Fort Magsaysay","Army Base","Largest military installation in Philippines.",["Area: 100,000+ ha","Units: Infantry, Artillery","Role: National training center"]],
+  ["ph-m4", 118.7, 10.5, "military","#f44","★","Antonio Bautista Air Base (Palawan)","ISR / Air Force","Westernmost PAF base — 105km from Spratlys. Critical for SCS surveillance.",["Role: SCS surveillance","Distance to Spratlys: 105 km","Aircraft: OV-10, light ISR"]],
+  ["ph-m5", 123.9, 10.3, "military","#f44","★","Mactan Air Base","Air Force Base","Central air command. Joint civil-military. Houses FA-50 light combat aircraft.",["Aircraft: FA-50","Role: Central air defense","Joint: Mactan-Cebu Airport"]],
+
+  // ── JAMAICA RESOURCES ──
+  ["jm-r1", -77.3, 18.2, "resources","#4f4","💎","Manchester/Clarendon Bauxite Belt","Bauxite Mining","Central Jamaica bauxite and alumina — 7th largest global reserve.",["Reserve: 2B tonnes","Refineries: 2 active","Export: Global aluminum industry"]],
+  ["jm-r2", -77.1, 17.9, "resources","#faf","🔥","Old Harbour LNG Terminal","LNG Infrastructure","New Fortress Energy import terminal. Gas-to-power conversion for Jamaica grid.",["Capacity: 1.8M t/yr","Use: Power generation","Partner: New Fortress Energy"]],
+
+  // ── JAMAICA TRANSPORT ──
+  ["jm-t1", -76.8, 17.9, "transport","#0af","⚓","Kingston Container Terminal","Trans-shipment Hub","Top-5 Caribbean trans-shipment hub. Deep water handles post-Panamax vessels.",["TEU: 2M+/yr","Depth: 17m","Rank: Top 5 Caribbean"]],
+  ["jm-t2", -77.9, 18.5, "transport","#0af","⚓","Montego Bay Port","Cruise & Cargo Port","Major cruise homeport — 1,200 ships/yr. Also handles cargo.",["Cruise: 1,200 ships/yr","Cargo: 250k t/yr","Expansion: 2024"]],
+  ["jm-t3", -77.1, 17.8, "transport","#0af","⚓","Port Esquivel","Alumina Export Port","Industrial alumina export terminal — conveyor linked to Jamalco refinery.",["Product: Alumina","Output: 1.4M t/yr","Operator: Jamalco"]],
+  ["jm-t4", -76.8, 17.9, "transport","#8af","✈","Norman Manley Airport","International Airport","Kingston hub for international and cargo flights.",["Passengers: 2M/yr","Cargo hub: Jamaica","Runway: 2,680m"]],
+  ["jm-t5", -77.9, 18.5, "transport","#8af","✈","Sangster International Airport","International Airport","Montego Bay — highest passenger volume in Jamaica.",["Passengers: 4.5M/yr","Routes: NA, UK, LatAm","Terminal: Modern"]],
+
+  // ── JAMAICA MILITARY ──
+  ["jm-m1", -76.8, 18.0, "military","#f44","★","Up Park Camp","Army HQ","Jamaica Defence Force main garrison — engineers, logistics, and JDF HQ.",["Units: JDF HQ, Engineers","Role: National defense","Founded: 1962"]],
+  ["jm-m2", -76.8, 17.9, "military","#f44","★","HMJS Cagway (Port Royal)","Naval Base","JDF Coast Guard base. Maritime interdiction and SAR in the Caribbean.",["Vessels: Patrol boats","Role: Coast Guard, SAR","History: Former pirate capital"]],
+
+  // ── CHILE RESOURCES ──
+  ["cl-r1", -69.1,-24.3, "resources","#f90","💎","Escondida Copper Mine","Copper Mining","World's largest copper mine. BHP-operated open pit in the Atacama.",["Output: 1.2M t/yr","Owner: BHP 60%","27% global copper supply"]],
+  ["cl-r2", -68.3,-23.4, "resources","#4af","🔋","Salar de Atacama (Lithium)","Lithium Brine","Highest-grade lithium brine on Earth. SQM and Albemarle operate here.",["Reserve: 9.2M tonnes Li","Output: 180k t/yr","Customers: Tesla, CATL, LG"]],
+  ["cl-r3", -68.9,-22.3, "resources","#f90","💎","Chuquicamata Copper Mine","Copper Mining","World's largest open-pit mine by volume. CODELCO-operated for 100+ years.",["Output: 450k t/yr","Pit depth: 850m","CODELCO since 1915"]],
+  ["cl-r4", -69.3,-24.0, "resources","#ff0","⚡","Atacama Solar Fields","Solar Energy","Highest solar irradiation on Earth enables massive solar farm development.",["Irradiation: World's highest","Installed: 4GW+","Potential: 1,800 GW"]],
+
+  // ── CHILE TRANSPORT ──
+  ["cl-t1", -71.6,-33.0, "transport","#0af","⚓","Port of Valparaíso","Container Port","Chile's main container port and historic naval base.",["TEU: 1.1M/yr","Naval: Co-located","Gateway: Santiago"]],
+  ["cl-t2", -71.6,-33.6, "transport","#0af","⚓","San Antonio Port","Container Port","Chile's largest port by volume — 100km south of Santiago.",["TEU: 1.6M/yr","Rank: Chile #1","Hinterland: Santiago"]],
+  ["cl-t3", -70.1,-20.5, "transport","#0af","⚓","Iquique Port","Mining Export Port","Northern gateway for Atacama minerals. Hosts Zofri free trade zone.",["Cargo: Mining products","Growth: 15%/yr","FTZ: Zofri"]],
+  ["cl-t4", -70.4,-23.6, "transport","#0af","⚓","Antofagasta Port","Copper Export Port","Primary export outlet for world's most productive copper mining region.",["Copper: 2M t/yr export","Expansion: $1.5B project","Rail: To Bolivian border"]],
+  ["cl-t5", -70.8,-33.4, "transport","#8af","✈","Santiago Intl Airport (AMB)","International Airport","Chile's primary hub and South American transit gateway.",["Passengers: 24M/yr","Routes: Global","Cargo: 250k t/yr"]],
+  ["cl-t6", -69.0,-22.5, "transport","#8af","🚂","Atacama Mining Railway","Mining Rail","Links Atacama copper and lithium mines to Pacific port terminals.",["Length: 900 km","Cargo: Mining only","Owner: CODELCO + private"]],
+
+  // ── CHILE MILITARY ──
+  ["cl-m1", -70.9,-53.2, "military","#f44","★","Punta Arenas Naval Base","Naval Base","Controls Strait of Magellan — one of three global maritime chokepoints.",["Chokepoint: Strait of Magellan","Fleet: Frigates, submarines","Strategic: Extreme"]],
+  ["cl-m2", -70.7,-33.5, "military","#f44","★","El Bosque Air Base","Air Force HQ","Chilean Air Force HQ. Primary F-16 Block 52 fighter wing.",["Aircraft: F-16 Block 52","Role: National air defense","Founded: 1936"]],
+  ["cl-m3", -73.1,-36.6, "military","#f44","★","Talcahuano Naval Base","Main Fleet Base","Chilean Navy's main fleet base — submarines and frigates.",["Fleet: 2 subs, 4 frigates","Subs: Scorpène-class","Role: Pacific fleet HQ"]],
+  ["cl-m4", -70.1,-20.3, "military","#f44","★","Iquique Air Base","Air Force","Northern air defense. Guards copper region and Bolivia border air approaches.",["Aircraft: A-37, T-36","Role: Northern air defense","Threat: Border security"]],
+
+  // ── KUWAIT RESOURCES ──
+  ["kw-r1",  47.8, 28.7, "resources","#4af","🛢","Greater Burgan Oil Field","Oil Field","2nd largest oil field ever discovered. 101.5B barrel proven reserve.",["Reserve: 101.5B barrels","Output: 1.7M bpd","Discovery: 1938"]],
+  ["kw-r2",  47.1, 29.1, "resources","#4af","🛢","Minagish Oil Field","Oil Field","Western Kuwait supplementary field — ~100k bpd light crude.",["Output: 100k bpd","Type: Light crude","Operator: KPC"]],
+  ["kw-r3",  48.0, 29.1, "resources","#faf","🔥","Shuaiba Petrochemical Complex","Petrochemical","Kuwait's refining and petrochemical hub — plastics, fertilizers, refined products.",["Capacity: 2 refineries","Products: Plastics, fertilizer","Export: Asia primary"]],
+
+  // ── KUWAIT TRANSPORT ──
+  ["kw-t1",  48.1, 28.8, "transport","#0af","⚓","Mina Al Ahmadi Terminal","Oil Export Terminal","Kuwait's primary crude export terminal. VLCC-capable. Direct Burgan pipeline.",["VLCC: Yes","Export: 1.5M bpd","Pipeline: Burgan direct"]],
+  ["kw-t2",  48.0, 29.4, "transport","#0af","⚓","Shuwaikh Commercial Port","Container Port","Kuwait City import port for consumer and commercial cargo.",["TEU: 600k/yr","Use: Consumer imports","Depth: 11m"]],
+  ["kw-t3",  47.97,29.23,"transport","#8af","✈","Kuwait International Airport","International Airport","Gulf hub and critical USAF logistics node. Expanded Terminal 2.",["Passengers: 11M/yr","Military: USAF access","T2 expansion: Complete"]],
+
+  // ── KUWAIT MILITARY ──
+  ["kw-m1",  47.9, 29.1, "military","#fa4","★","Camp Arifjan","US Army Base","Largest US pre-positioning base in Gulf. Full heavy brigade can be equipped in 24 hours.",["US troops: 13,500+","Equipment: 1 heavy brigade set","Founded: 2003"]],
+  ["kw-m2",  47.7, 29.5, "military","#fa4","★","Ali Al Salem Air Base","USAF/KAF Joint Base","Primary USAF base in Kuwait. F-16s, tankers, ISR. Critical for Iraq and Syria operations.",["Aircraft: F-16, KC-135","Role: Gulf air ops","Sorties: 1,000+/month"]],
+  ["kw-m3",  47.8, 29.4, "military","#fa4","★","Camp Buehring","US Army FOB","Northern Kuwait staging and training. Force build-up prior to Iraq deployments.",["Use: Training + staging","Capacity: Brigade+","Terrain: Desert warfare"]],
+  ["kw-m4",  48.0, 29.4, "military","#fa4","★","Camp Patriot (Shuaiba)","US Army/Naval","Port logistics base connecting Shuaiba port to inland US military supply chain.",["Role: Port logistics","Units: Transportation","Port: Shuaiba connection"]],
+  ["kw-m5",  48.0, 29.2, "military","#888","★","Mubarak Air Base","Kuwaiti Air Force","KAF national air defense. F/A-18 Hornets and Eurofighter Typhoon.",["Aircraft: F/A-18, Typhoon","Role: National air defense","Crew: KAF only"]],
+
+  // ── CITIES ──────────────────────────────────────────────────────────────
+// ── CITIES LAYER ─────────────────────────────────────────────────────────────
+// China: 5M+ population | NK, Philippines, Nigeria, Jamaica, Vatican: 1M+
+// Format: [id, lon, lat, "cities", color, emoji, name, type, description, [stats]]
+
+  // ── CHINA (5M+) ──────────────────────────────────────────────────────────
+  ["ci-cn1",  121.47, 31.23, "cities","#00c8ff","🏙","Shanghai","Megacity","China's financial capital and largest city. Global port, manufacturing hub, and commercial centre.",["Pop: 28.5M","GDP: $700B+","Port: #1 world"]],
+  ["ci-cn2",  116.40, 39.90, "cities","#00c8ff","🏙","Beijing","Capital","Political capital of China and CMC headquarters. Seat of all military and government command.",["Pop: 22.8M","Capital city","Military HQ"]],
+  ["ci-cn3",  113.26, 23.13, "cities","#00c8ff","🏙","Guangzhou","Megacity","Southern manufacturing and trade hub. Gateway to Pearl River Delta export corridor.",["Pop: 18.7M","Export hub","Pearl River Delta"]],
+  ["ci-cn4",  114.06, 22.54, "cities","#00c8ff","🏙","Shenzhen","Megacity","Tech manufacturing capital. Largest electronics export zone globally. SEZ since 1980.",["Pop: 17.6M","Electronics hub","SEZ"]],
+  ["ci-cn5",  120.15, 30.28, "cities","#00c8ff","🏙","Hangzhou","Major City","E-commerce and tech centre. HQ of Alibaba. Advanced manufacturing and logistics hub.",["Pop: 12.9M","Alibaba HQ","Tech hub"]],
+  ["ci-cn6",  121.47, 31.40, "cities","#00c8ff","🏙","Suzhou","Major City","Manufacturing and industrial park hub adjacent to Shanghai. High-tech industry corridor.",["Pop: 12.7M","Industrial parks","Near Shanghai"]],
+  ["ci-cn7",  117.27, 31.86, "cities","#00c8ff","🏙","Hefei","Major City","Rising tech and automotive manufacturing hub. USTC research base. EV production centre.",["Pop: 10.7M","EV/tech hub","USTC research"]],
+  ["ci-cn8",  108.95, 34.27, "cities","#00c8ff","🏙","Xi'an","Major City","Historic capital and Western Theatre Command hub. Aerospace and defence manufacturing.",["Pop: 13.1M","Western HQ","Aerospace"]],
+  ["ci-cn9",  106.55, 29.56, "cities","#00c8ff","🏙","Chongqing","Megacity","Largest municipality by area. Automotive, chemical and heavy industry in Yangtze corridor.",["Pop: 32.9M","Municipality","Heavy industry"]],
+  ["ci-cn10", 104.07, 30.67, "cities","#00c8ff","🏙","Chengdu","Megacity","Western manufacturing and military hub. J-20 fighter production. Largest city in Sichuan.",["Pop: 21.2M","J-20 production","Western HQ"]],
+  ["ci-cn11", 114.31, 30.52, "cities","#00c8ff","🏙","Wuhan","Megacity","Central China industrial and logistics hub. Steel, automotive, and optics manufacturing.",["Pop: 13.9M","Central hub","Steel/auto"]],
+  ["ci-cn12", 112.97, 28.20, "cities","#00c8ff","🏙","Changsha","Major City","Central South hub. Construction equipment (SANY, Zoomlion) and media manufacturing.",["Pop: 10.5M","Construction equip","Central South"]],
+  ["ci-cn13", 113.65, 34.76, "cities","#00c8ff","🏙","Zhengzhou","Major City","Central China logistics crossroads. Foxconn iPhone assembly hub.",["Pop: 12.8M","iPhone assembly","Rail hub"]],
+  ["ci-cn14", 117.19, 39.13, "cities","#00c8ff","🏙","Tianjin","Major City","Major northern port and industrial city. Steel, petrochemical, automotive.",["Pop: 13.9M","Northern port","Heavy industry"]],
+  ["ci-cn15", 118.79, 32.07, "cities","#00c8ff","🏙","Nanjing","Major City","Eastern Theatre Command base. Historical capital. Advanced manufacturing and electronics.",["Pop: 9.4M","Eastern HQ","Electronics"]],
+  ["ci-cn16", 126.53, 45.80, "cities","#00c8ff","🏙","Harbin","Major City","Northernmost major city. Military-industrial complex. Russia border gateway.",["Pop: 9.9M","Russia border","Defence industry"]],
+  ["ci-cn17", 125.32, 43.89, "cities","#00c8ff","🏙","Changchun","Major City","Automotive capital of China. FAW Group HQ. Northern manufacturing centre.",["Pop: 9.1M","Auto capital","FAW HQ"]],
+  ["ci-cn18", 123.43, 41.80, "cities","#00c8ff","🏙","Shenyang","Major City","Northern Theatre Command. Heavy industry and aerospace. Korea/Russia approach.",["Pop: 9.1M","Northern HQ","Heavy industry"]],
+  ["ci-cn19", 110.35, 20.02, "cities","#00c8ff","🏙","Haikou","Major City","Capital of Hainan — base island for South Sea Fleet. Free trade port.",["Pop: 2.9M","Hainan capital","Naval proximity"]],
+  ["ci-cn20", 109.60, 18.25, "cities","#00c8ff","🏙","Sanya","Major City","Southern tip of Hainan. Yulin Naval Base proximity. Tourism and military dual use.",["Pop: 1.1M","Naval base city","South China Sea"]],
+  ["ci-cn21", 106.71, 26.57, "cities","#00c8ff","🏙","Guiyang","Major City","Big data and cloud computing hub. Data centre infrastructure. Southwest hub.",["Pop: 6.0M","Big data hub","Southwest"]],
+  ["ci-cn22", 102.71, 25.05, "cities","#00c8ff","🏙","Kunming","Major City","Gateway to Southeast Asia. Myanmar and Vietnam trade corridor. Southern logistics.",["Pop: 8.5M","SE Asia gateway","Yunnan hub"]],
+  ["ci-cn23", 91.13, 29.65, "cities","#00c8ff","🏙","Lhasa","Major City","Tibet capital. Gonggar air base adjacent. Strategic plateau garrison city.",["Pop: 1.2M","Tibet capital","Altitude: 3,650m"]],
+  ["ci-cn24", 87.62, 43.82, "cities","#00c8ff","🏙","Ürümqi","Major City","Xinjiang capital. Central Asia trade and surveillance hub. Western garrison city.",["Pop: 4.1M","Xinjiang capital","Central Asia hub"]],
+
+  // ── NORTH KOREA (1M+) ────────────────────────────────────────────────────
+  ["ci-nk1", 125.75, 39.02, "cities","#ff6644","🏙","Pyongyang","Capital","Capital and KPA command centre. Supreme Guard Command, all military HQs, Kim complex.",["Pop: 3.1M","Military capital","KPA HQ"]],
+  ["ci-nk2", 129.78, 41.78, "cities","#ff6644","🏙","Chongjin","Major City","Third largest city. Heavy industry and steel production. East coast port.",["Pop: 1.3M","Steel/industry","East coast port"]],
+  ["ci-nk3", 127.44, 39.16, "cities","#ff6644","🏙","Wonsan","Major City","East coast port and naval base. Kim Jong Un resort compound. Tourism SEZ.",["Pop: 1.1M","Naval base","East coast"]],
+  ["ci-nk4", 125.38, 38.74, "cities","#ff6644","🏙","Nampo","Major City","West Fleet HQ port city. Primary cargo port. Steel and shipbuilding.",["Pop: 1.1M","West Fleet HQ","Primary port"]],
+  ["ci-nk5", 127.56, 39.88, "cities","#ff6644","🏙","Hamhung","Major City","Second largest city. Chemical industry and weapons manufacturing complex.",["Pop: 1.4M","Chemical/arms","2nd largest"]],
+
+  // ── PHILIPPINES (1M+) ────────────────────────────────────────────────────
+  ["ci-ph1", 120.98, 14.60, "cities","#44ff88","🏙","Manila","Capital","National capital, AFP HQ at nearby Fort Bonifacio. Primary port and commercial hub.",["Pop: 13.9M (metro)","AFP HQ nearby","Primary port"]],
+  ["ci-ph2", 125.62,  7.19, "cities","#44ff88","🏙","Davao City","Major City","Largest city in Mindanao. Southern Command hub. Largest city by land area.",["Pop: 1.8M","Southern Command","Mindanao hub"]],
+  ["ci-ph3", 123.90, 10.32, "cities","#44ff88","🏙","Cebu City","Major City","Second largest metro. Air Force HQ. Central Visayas command and key port.",["Pop: 3.3M (metro)","PAF HQ","Central hub"]],
+  ["ci-ph4", 124.85, 11.80, "cities","#44ff88","🏙","Tacloban","Major City","Eastern Visayas hub. Regional command. Key logistics point for central Philippines.",["Pop: 1.3M","E. Visayas hub","Regional command"]],
+  ["ci-ph5", 122.07,  6.92, "cities","#44ff88","🏙","Zamboanga City","Major City","Southwest hub. Naval station. Close to Sulu Sea and Malaysian maritime approach.",["Pop: 1.0M","Naval station","Sulu Sea"]],
+  ["ci-ph6", 124.59,  8.48, "cities","#44ff88","🏙","Cagayan de Oro","Major City","Northern Mindanao hub. Camp Evangelista (4th Infantry Div). Growing trade port.",["Pop: 1.1M","4th Inf. Div.","North Mindanao"]],
+  ["ci-ph7", 120.53, 15.15, "cities","#44ff88","🏙","Angeles / Clark","Major City","Clark Air Base city. EDCA access point. Growing industrial and logistics hub.",["Pop: 1.0M","Clark AFB adjacent","EDCA site"]],
+  ["ci-ph8", 121.07, 14.68, "cities","#44ff88","🏙","Quezon City","Major City","Largest city in NCR. AFP General HQ at Camp Aguinaldo. Government nerve centre.",["Pop: 3.0M","AFP GHQ","Largest NCR city"]],
+
+  // ── NIGERIA (1M+) ────────────────────────────────────────────────────────
+  ["ci-ng1",   3.38, 6.45, "cities","#ffaa00","🏙","Lagos","Megacity","Economic capital and primary port. Largest city in Africa. Apapa port hub.",["Pop: 15.4M","Largest in Africa","Primary port"]],
+  ["ci-ng2",   7.49, 9.07, "cities","#ffaa00","🏙","Abuja","Capital","Federal capital. Military command HQ. Seat of government and defence ministry.",["Pop: 3.6M","Federal capital","Military HQ"]],
+  ["ci-ng3",   8.53, 12.00, "cities","#ffaa00","🏙","Kano","Major City","Second largest city. Northern commercial hub. Groundnut, leather, textile trade.",["Pop: 4.1M","Northern hub","Commercial centre"]],
+  ["ci-ng4",   3.87, 7.38, "cities","#ffaa00","🏙","Ibadan","Major City","Third largest. Agricultural hub and university city in southwest.",["Pop: 3.6M","SW hub","Agri/education"]],
+  ["ci-ng5",   5.61, 5.96, "cities","#ffaa00","🏙","Benin City","Major City","Edo State capital. Oil service hub for Niger Delta. Rubber and timber.",["Pop: 1.8M","Delta proximity","Oil services"]],
+  ["ci-ng6",   7.07, 4.79, "cities","#ffaa00","🏙","Port Harcourt","Major City","Rivers State capital. Bonny Island crude oil terminal adjacent. Oil capital.",["Pop: 1.9M","Oil capital","Bonny adjacent"]],
+  ["ci-ng7",   7.72, 8.52, "cities","#ffaa00","🏙","Makurdi","Major City","Benue State capital. Makurdi Air Base. Agricultural belt and Middle Belt hub.",["Pop: 1.1M","Makurdi AFB","Middle Belt"]],
+  ["ci-ng8",   6.44, 7.49, "cities","#ffaa00","🏙","Enugu","Major City","Coal City. Southeast commercial hub. Industrial and trade centre.",["Pop: 1.3M","Coal city","SE hub"]],
+  ["ci-ng9",   7.42, 11.09, "cities","#ffaa00","🏙","Kaduna","Major City","Northern military and industrial hub. Kaduna Polytechnic. Defence manufacturing.",["Pop: 2.1M","Northern defence","Military industry"]],
+  ["ci-ng10",  5.32, 6.23, "cities","#ffaa00","🏙","Warri","Major City","Niger Delta oil hub. Refinery and petrochemical complex. Escravos terminal nearby.",["Pop: 1.2M","Delta oil hub","Refinery"]],
+  ["ci-ng11",  7.55, 6.44, "cities","#ffaa00","🏙","Onitsha","Major City","Largest open market in Africa by volume. Critical trade and logistics hub.",["Pop: 1.1M","Largest market","Trade hub"]],
+  ["ci-ng12",  4.54, 7.78, "cities","#ffaa00","🏙","Abeokuta","Major City","Ogun State capital. Industrial hub near Lagos corridor. Guinness brewery.",["Pop: 1.1M","Near Lagos","Industrial"]],
+
+  // ── JAMAICA (1M+) — only Kingston qualifies ───────────────────────────────
+  ["ci-jm1", -76.79, 17.99, "cities","#44ff88","🏙","Kingston","Capital","Capital and primary port. Norman Manley airport. JDF HQ. Only major city.",["Pop: 1.0M","Capital","JDF HQ"]],
+
+
+];
+
+
+
+
+// ═══════════════════════════════════════════════════════════════════
+// HAVANA TRIBUTE SYSTEM — PHYSICAL DELIVERY ONLY
+// The USA controls the entire world. No nations, no international law,
+// no diplomatic immunity, no treaties. Every faction is a rival arm
+// of the US government controlling its geographic territory by force.
+// The only protection is your own navy, speed, and deception.
+// ═══════════════════════════════════════════════════════════════════
+
+// THREAT FRAMEWORK — pure naval power, no legal cover
+// 🔴 CRITICAL — faction-controlled chokepoint or heavily garrisoned zone;
+//               rival naval assets permanently stationed; physical seizure likely
+// 🟠 HIGH     — rival patrol routes pass through here; interception probable
+//               if departure is known; requires force or significant deception
+// 🟡 MODERATE — wide water, patrol coverage finite; interception possible
+//               but rivals need advance intelligence and prepositioned assets
+// 🟢 SAFE     — within your own territorial waters; your navy controls this space
+
+// CHOKEPOINT CONTROL (faction-held, all hostile)
+// Panama Canal     — Canal Faction garrison; physical locks immobilise vessels 8–12h
+// Suez Canal       — Mediterranean/Gulf Faction; same lock problem, 193km corridor
+// Gibraltar Rock   — European Faction; 14km passage, fortress position on north shore
+// Strait of Malacca— Southeast Asia Faction; 2.5km at narrowest, easy to blockade
+// Strait of Hormuz — Gulf Faction; 34km, permanently garrisoned by rival navy
+// Bab-el-Mandeb    — Gulf/African Faction; 29km, links Red Sea to Indian Ocean
+// Florida Strait   — Caribbean Faction; 145km, US coastline 145km away, home waters
+// Yucatan Channel  — 200km wide; PARTIALLY YOUR WATERS on Cuban (east) side —
+//                    rival must commit to blocking the full width; hardest to garrison
+// Windward Passage — 90km, Haiti coast on west; manageable if Cuba escorts east side
+// Drake Passage    — 800km wide sub-Antarctic; no faction garrisons this, weather deters
+
+// YOUR TERRITORIAL WATERS (your navy controls, safe for transit)
+// China coast, Yellow Sea inshore, Bohai Sea
+// North Korean coast (east and west)
+// Nigerian coast, Niger Delta, Bight of Benin inshore
+// Philippine archipelagic internal seas (all internal waters between islands)
+// Jamaican territorial sea
+// Cuban territorial sea (Havana destination — Cuban navy escorts here)
+// Chilean Pacific coast (pending — partial control)
+// Kuwaiti coastal waters (pending — partial control)
+// Vatican: NONE — zero coastline, zero navy, surrounded by European Faction territory
+
+const HAVANA = {
+  china: {
+    name:"China", status:"owned", gdp:17700, pct:35, tribute:6195, unit:"B/yr",
+    breakdown:[
+      ["Manufacturing Surplus","$2,800B","Electronics, machinery, vehicles — bulk container cargo"],
+      ["Rare Earth Exports","$1,200B","REE concentrate and processed ingots — high-value dense cargo"],
+      ["Energy Revenue","$640B","Coal, crude oil, refined products — bulk and tanker cargo"],
+      ["Agricultural Output","$455B","Grain, soy, pork — bulk carrier loads"],
+      ["Industrial Metals","$1,100B","Steel, aluminium, copper products — heavy bulk cargo"]
+    ],
+    routes:[
+      {mode:"🚢",label:"Shanghai → Philippine Sea → open Pacific → Yucatan Channel → Havana ⭐ PRIMARY",time:"32–38 days",
+       threat:"🟠 HIGH → 🟡 → 🟡 → 🔴",
+       threatDetail:"<b>Departure zone (Chinese coast, 0–800nm):</b> 🟠 HIGH — the Pacific Faction controls sea lanes east of Japan and the Marianas. Your departure will be noted within hours. Your Chinese Navy covers the first 12nm; beyond that, Pacific Faction patrols begin. The first 800nm is the highest-risk leg as rival assets have time to vector in from Guam-equivalent positions.<br><b>Mid-Pacific (800–10,000nm):</b> 🟡 MODERATE — the Pacific is 14,000km wide. No faction has the naval strength to maintain continuous patrol lines across it. A vessel running at 20 knots through the mid-Pacific creates a search problem rivals cannot solve with finite ships. Their intelligence gap is your window.<br><b>Yucatan Channel approach:</b> 🟡 MODERATE — 200km wide. The Caribbean Faction controls the western (Mexican) side, but the eastern side is Cuban — YOUR territorial water begins 100km into the channel. A rival must commit substantial naval force to blockade the full 200km width. This is significantly harder to garrison than any canal or strait.<br><b>Caribbean final approach:</b> 🔴 CRITICAL — Caribbean Faction home waters. Cuban Navy escort is essential from 300nm out.",
+       countermeasures:"<b>Force multiplication:</b> never send a single vessel. Minimum convoy of 4 ships — rival faction must split force to intercept multiple targets simultaneously or let most through. Rotate which vessel actually carries the tribute vs decoy ballast loads.<br><b>Departure timing:</b> stagger departures 24–48 hours apart, varying headings for the first 500nm before converging on course. Pattern analysis becomes impossible.<br><b>Philippine staging:</b> route via Philippine internal seas (your sovereign water) — use Subic Bay as a mid-route safe harbour for convoy assembly. Adds 3 days, eliminates the exposure of a Chinese coast departure being the obvious start point.<br><b>Cuban Navy handoff:</b> coordinate escort 300nm east of Yucatan. Rivals know you're coming through — the question is whether they commit to a naval engagement with Cuban forces to stop you.",
+       detail:"China's primary route. ~12,800nm, 32–38 days. No mandatory hostile chokepoints — entire journey is open ocean or friendly waters. The Yucatan Channel is the only narrow point and it's partially your territory. Running Pacific Faction's open-ocean patrol gauntlet is preferable to any canal, which is a physical trap with no exit."},
+      {mode:"🚢",label:"Guangzhou → south → Philippine internal seas → Pacific convoy departure",time:"34–42 days",
+       threat:"🟢 → 🟡 → 🟡 → 🔴",
+       threatDetail:"<b>South China Sea / Philippines approach:</b> 🟡 MODERATE — contested waters, Pacific/Southeast Asia Faction presence. However, once inside Philippine archipelagic waters, you are in YOUR sovereign territory. The Southeast Asia Faction cannot enter without committing an act of war against you.<br><b>Philippine internal seas (staging):</b> 🟢 SAFE — sovereign. Anchor, consolidate, coordinate.<br><b>Pacific departure east of Philippines:</b> 🟡 MODERATE — open Pacific, same calculus as primary route.<br><b>Caribbean approach:</b> 🔴 CRITICAL.",
+       countermeasures:"Consolidate ALL Asia-Pacific tribute here — China cargo, North Korea cargo, and Philippines tribute depart as one convoy. A 6+ vessel convoy with your Chinese Navy surface escort for the first 1,000nm is a substantial military commitment for any rival to interdict. The Philippines turns from a tribute source into a strategic force-multiplier.",
+       detail:"Use this route when Pacific Faction surveillance of Shanghai departures is particularly active. South routing through Philippine waters is slower but begins in your sovereign territory, giving convoy assembly time before committing to the open Pacific."}
+    ]
+  },
+  northkorea: {
+    name:"North Korea", status:"owned", gdp:28, pct:35, tribute:9.8, unit:"B/yr",
+    breakdown:[
+      ["Arms & Munitions","$3.2B","Physical weapons stockpile — shells, rockets, small arms"],
+      ["Mineral Exports","$2.1B","Coal, iron ore, magnesite — bulk cargo"],
+      ["Rare Earth & Minerals","$1.8B","Processed mineral concentrate — dense, compact cargo, high rival interception value"],
+      ["Rare Earth Concentrate","$1.4B","NK mountain REE deposits — physical ore and concentrate"],
+      ["Manufactured Goods","$1.3B","Textiles, industrial components"]
+    ],
+    routes:[
+      {mode:"🚢",label:"Nampo → Bohai Sea → merge with Chinese fleet → Pacific → Havana ⭐ PRIMARY",time:"38–46 days",
+       threat:"🟢 → 🟠 → 🟡 → 🔴",
+       threatDetail:"<b>Korean coast / Bohai Sea (NK + Chinese waters):</b> 🟢 SAFE — you own both Korea and China. NK cargo transits through Chinese territorial waters and joins the Chinese naval convoy. There is no re-flagging fiction needed — these are your ships in your waters.<br><b>Yellow Sea / Pacific Faction detection zone:</b> 🟠 HIGH — Pacific Faction patrols the sea lanes beyond Chinese territorial waters. A large convoy of Chinese Navy-escorted vessels is a different calculation than a lone ship — rivals must commit to a naval engagement, not just a boarding action.<br><b>Open Pacific:</b> 🟡 MODERATE — same calculus as China's route.<br><b>Caribbean:</b> 🔴 CRITICAL.",
+       countermeasures:"NK has no independent viable route — the East Sea (Sea of Japan) exit requires passing through Pacific Faction-controlled waters with a single-vessel NK ship that rivals will immediately target. The solution is simple: NK cargo goes to a Chinese port by land or coastal vessel, joins the Chinese convoy, and sails as part of your combined fleet. Your navy covers this. No deception needed — it's all your territory until the Pacific.",
+       detail:"North Korea's only viable route is integration with China's convoy. NK's small tribute ($9.8B vs China's $6,195B) makes standalone routing disproportionately risky. Land-transport NK goods to Chinese coastal ports via the Dandong rail link, load onto Chinese vessels, and depart as part of the main Pacific convoy. The uranium ore requires dedicated secure storage on a designated vessel — keep it separated from general cargo."},
+      {mode:"🚢",label:"Chongjin → East Sea → Pacific exit → Havana (standalone)",time:"40–50 days",
+       threat:"🔴 CRITICAL",
+       threatDetail:"<b>East Sea / Sea of Japan:</b> 🔴 CRITICAL — Pacific Faction has permanent naval presence here. An NK-originating vessel in the East Sea without Chinese Navy escort is an isolated target. Pacific Faction can intercept without committing major force — a single destroyer against a bulk carrier. The Korean Strait and Tsugaru exits are both monitored and easily controlled with small garrison forces given their narrow widths.<br><b>Even if Pacific exit achieved:</b> the vessel is already identified and tracked by the Pacific Faction. It cannot outrun a warship and cannot be escorted from your territory.",
+       countermeasures:"None sufficient for a standalone NK vessel in the East Sea. Pacific Faction can deploy one ship to take it. Use the Chinese convoy route.",
+       detail:"⚠ DO NOT USE for primary tribute. Standalone NK routing is viable only for urgent, small-volume, high-value cargo that can be moved quickly before the Pacific Faction responds. Uranium samples, specialist munitions specifications, and similar compact high-value physical items — run fast, unpredictably, one vessel, maximum speed."}
+    ]
+  },
+  nigeria: {
+    name:"Nigeria", status:"owned", gdp:477, pct:35, tribute:167, unit:"B/yr",
+    breakdown:[
+      ["Crude Oil","$98B","Physical tanker cargo — Niger Delta crude, Bonny Light and Forcados grades"],
+      ["LNG","$28B","Physical LNG cargoes — Bonny Island terminal, cryogenic tankers"],
+      ["Agricultural Bulk","$18B","Cocoa, sesame, palm oil — bulk and reefer vessel cargo"],
+      ["Mined Ore","$12B","Tin, columbite, tantalite — bulk carrier loads"],
+      ["Manufactured Goods","$11B","Physical goods in container vessels"]
+    ],
+    routes:[
+      {mode:"🚢",label:"Bonny Island / Lagos → open Atlantic → Windward Passage → Havana ⭐ PRIMARY",time:"14–18 days",
+       threat:"🟠 HIGH → 🟡 → 🟡 → 🔴",
+       threatDetail:"<b>West African coastal zone (0–600nm):</b> 🟠 HIGH — the West African Faction controls these waters. Your Nigerian Navy covers 12nm; beyond that, rival patrol vessels operate. This is a concentrated threat zone where Atlantic Faction forward elements and West African Faction assets overlap. Your departure will be observed.<br><b>Open Atlantic (600–7,500nm):</b> 🟡 MODERATE — the Atlantic is 7,600km wide at the Nigeria–Cuba latitude. The Atlantic Faction cannot maintain continuous patrol lines across it. Your window opens once you clear the West African coastal zone. Speed and route variation matter here.<br><b>Windward Passage (Haiti–Cuba, 90km):</b> 🟡 MODERATE — Caribbean Faction controls Haitian side, but Cuba controls the eastern half of the passage. Run the Cuban side. At 90km width, a rival needs multiple vessels to fully blockade — coordinate Cuban Navy to hold the eastern approach.<br><b>Final approach to Havana:</b> 🔴 CRITICAL — Caribbean Faction home waters. Cuban escort mandatory.",
+       countermeasures:"<b>Nigerian Navy escort to 600nm:</b> beyond that point rivals must commit to an open-ocean interception — expensive, visible, and diplomatically (within the US internal power structure) aggressive. Your naval escort signals the cost of interdiction.<br><b>Route variation:</b> alternate between Windward Passage and Mona Passage (Dominican Republic–Puerto Rico gap, 130km) — rivals cannot garrison both simultaneously. Never use the same approach twice in sequence.<br><b>Crude tanker strategy:</b> split $98B crude across multiple tankers rather than one VLCC — rivals can take one ship, not all. A fleet of 6–8 Suezmax tankers is harder to interdict than 2 VLCCs and the loss of any single vessel is a smaller fraction of total tribute.<br><b>Critical advantage:</b> Nigeria is the only territory with a direct open-ocean crossing to Cuba requiring no canal, no strait, and no narrow passage until the 90km Windward Passage. This is the cleanest geometry in the network after Jamaica.",
+       detail:"Nigeria's primary route is the most strategically clean of all long-haul territories. ~8,700nm, 14–18 days, no mandatory hostile chokepoints. The Atlantic crossing has no canal trap, no narrow strait, no lock system. Pure open water — the only question is naval force. Your Nigerian Navy covers the dangerous coastal departure zone; the Atlantic is a patrol problem rivals cannot fully solve."},
+      {mode:"🚢",label:"Lagos → south → Cape of Good Hope → Indian Ocean → ... (WRONG DIRECTION)",time:"60–75 days",
+       threat:"—",
+       threatDetail:"Included only to illustrate that Nigeria's Atlantic position is a strategic asset. Going the wrong way adds 50+ days and accomplishes nothing.",
+       countermeasures:"Never use. Nigeria's west-facing Atlantic coast is a gift — exploit it.",
+       detail:"⚠ DO NOT USE. Nigeria faces the Atlantic. Havana is across the Atlantic. The direct route is correct."}
+    ]
+  },
+  philippines: {
+    name:"Philippines", status:"owned", gdp:402, pct:35, tribute:140.7, unit:"B/yr",
+    breakdown:[
+      ["Electronics & Semiconductors","$55B","Physical components from Clark-Subic SEZ — dense, high-value containers"],
+      ["Nickel Ore & Concentrate","$42B","Bulk carrier loads from Palawan and Surigao deposits"],
+      ["Agricultural Goods","$14B","Banana, coconut, pineapple — reefer container cargo"],
+      ["Industrial Goods","$18B","Copper wire, manufactured goods, assembled components"],
+      ["Other Exports","$11.7B","Industrial equipment, processed goods"]
+    ],
+    routes:[
+      {mode:"🚢",label:"Subic Bay → Philippine Sea → open Pacific → Yucatan Channel → Havana ⭐ PRIMARY",time:"28–34 days",
+       threat:"🟢 → 🟡 → 🟡 → 🔴",
+       threatDetail:"<b>Philippine internal and territorial seas:</b> 🟢 SAFE — the Philippine archipelago's internal waters (Sibuyan Sea, Visayan Sea, Philippine Sea inshore) are your sovereign territory. Your Philippine Navy controls here. No rival can enter without committing to a naval engagement against you.<br><b>Philippine Sea (beyond 12nm, first 1,000nm):</b> 🟡 MODERATE — Pacific Faction patrols are thinner here than near Japan or the Marianas. The Philippine Sea is your backyard — you own the coast. Rivals operating here are operating near your naval bases.<br><b>Mid-Pacific:</b> 🟡 MODERATE — same open-ocean calculus as China's route. Vast, sparse coverage.<br><b>Yucatan Channel:</b> 🟡 MODERATE — 200km wide, Cuban eastern shore is your territory. Hard to fully blockade.<br><b>Caribbean final approach:</b> 🔴 CRITICAL — Caribbean Faction home waters.",
+       countermeasures:"<b>Subic Bay as network hub:</b> this is the most important strategic function the Philippines serves. Consolidate Chinese convoy, North Korean cargo, and Philippines tribute all into one coordinated convoy departure from Subic Bay. A 6+ vessel convoy with Philippine and Chinese Navy surface escort for the first 1,500nm is a military operation, not a merchant shipping run. Rivals must deploy equivalent force to stop it — a calculation most factions will fail.<br><b>Electronics cargo specifically:</b> high value, compact weight. A single container ship can carry $20B+ of semiconductors. Consider fast container vessels (25+ knots) for the electronics stream — outrunning rival patrol vessels is viable at that speed.<br><b>Eastward departure only:</b> never route westward. Any westward route from the Philippines requires either Malacca (Southeast Asia Faction chokepoint) or going around Australia — both add weeks and chokepoints.",
+       detail:"Philippines' eastern Pacific-facing position is the network's Pacific launch pad. Subic Bay's deep-water facilities, combined with the protected Philippine internal seas, give you a staging area that rivals cannot enter. The Philippines consolidates all Asia-Pacific tribute into a single hardened convoy — China, NK, and Philippines cargo depart together under combined naval escort. This force-multiplication makes the Pacific crossing dramatically more survivable."},
+      {mode:"🚢",label:"Manila → westward (Malacca → Indian Ocean → ...) → Havana",time:"55–70 days",
+       threat:"🔴 CRITICAL throughout",
+       threatDetail:"<b>Malacca Strait:</b> 🔴 CRITICAL — Southeast Asia Faction garrison. 2.5km at narrowest. A single frigate can physically block transit. Your vessel entering Malacca is entering a hostile military zone with no exit except forward.<br><b>Indian Ocean westward:</b> 🟠 HIGH — Gulf Faction forward patrols.<br><b>Bab-el-Mandeb:</b> 🔴 CRITICAL — 29km, Gulf Faction controlled.<br><b>Suez Canal:</b> 🔴 CRITICAL — physical lock trap, 193km, completely immobilised during transit.<br><b>Mediterranean:</b> 🔴 CRITICAL — European Faction home waters.<br><b>Gibraltar:</b> 🔴 CRITICAL — 14km, European Faction fortress on the rock.<br>Five consecutive faction-controlled chokepoints. Any one stops your cargo.",
+       countermeasures:"Do not use. Five chokepoints, five guaranteed interception opportunities. The Pacific route east has zero mandatory chokepoints.",
+       detail:"⚠ DO NOT USE. Listed only so rivals cannot claim you are ignorant of westward routing. The Pacific route is shorter, faster, and has no chokepoints."}
+    ]
+  },
+  jamaica: {
+    name:"Jamaica", status:"owned", gdp:16, pct:35, tribute:5.6, unit:"B/yr",
+    breakdown:[
+      ["Bauxite/Alumina","$2.1B","Bulk cargo — alumina powder and bauxite ore from Clarendon"],
+      ["Tourism Revenue (Physical Cash)","$1.4B","Physical currency from hotel, resort, casino operations — USD/EUR notes"],
+      ["Port Trans-shipment Cargo","$1.2B","Physical cargo diverted from Kingston Container Terminal throughput"],
+      ["Agricultural Products","$0.5B","Blue Mountain Coffee, rum barrels, raw sugar — container cargo"],
+      ["LNG","$0.4B","Physical LNG from Old Harbour Bay terminal"]
+    ],
+    routes:[
+      {mode:"🚢",label:"Kingston → Caribbean Sea → Havana ⭐ BEST ROUTE IN THE ENTIRE NETWORK",time:"18–22 hours",
+       threat:"🟢 → 🟡 → 🟢",
+       threatDetail:"<b>Kingston Harbour (0–12nm):</b> 🟢 SAFE — Jamaican territorial waters, your naval presence.<br><b>Caribbean crossing (12nm–880nm):</b> 🟡 MODERATE — the Caribbean Faction controls these waters and maintains patrol presence. However, 880km at 18–20 knots is a 22-hour crossing. For a rival to intercept, they need a vessel ALREADY POSITIONED in the Jamaica–Cuba corridor. Repositioning a warship from elsewhere in the Caribbean takes longer than the crossing itself. This is the network's decisive advantage: the physics of time vs distance work in your favour.<br><b>Cuban territorial waters (final 100nm):</b> 🟢 SAFE — Cuban Navy.",
+       countermeasures:"<b>Speed is the countermeasure:</b> a fast RoRo or cargo vessel at 20 knots completes the crossing in under 22 hours. The Caribbean Faction cannot vector a warship from outside the corridor in time. The only threat is a prepositioned vessel — which you can neutralise by varying departure times unpredictably.<br><b>Multiple simultaneous vessels:</b> 3 fast vessels departing Kingston 2 hours apart on slightly different headings. Caribbean Faction can intercept one. The other two arrive in Havana.<br><b>Cash delivery:</b> the $1.4B physical currency tribute can go on a small, fast vessel with no cargo markings — indistinguishable from a commercial fishing vessel or coastal freighter at night. Carry in sealed, unmarked containers.<br><b>The fundamental reality:</b> Jamaica is 880km from Havana. The Caribbean Faction would need to permanently station a naval vessel in a 880km patrol lane specifically to interdict Jamaica–Cuba traffic. That is a significant resource commitment they must sustain indefinitely — or accept that Jamaica tribute flows freely.",
+       detail:"Jamaica is the network's irreplaceable asset. 880km, no chokepoints, your own sovereign departure port, and a transit window so short that interception requires a prepositioned rival vessel. No other territory in the network achieves tribute delivery in under 24 hours. The physics of this crossing — time, distance, speed — make Jamaica structurally resistant to interdiction in ways that no other territory can replicate."},
+      {mode:"🚗",label:"Kingston → chartered fast aircraft → Havana (physical cash only)",time:"90 minutes",
+       threat:"🟠 HIGH",
+       threatDetail:"<b>Norman Manley / Sangster Airports:</b> 🟠 HIGH — airports are infrastructure that can be controlled by whoever holds the physical territory. The Caribbean Faction may have influence over Jamaican airport operations, ground handling, and departure clearance. There is no diplomatic immunity, no aviation law. A rival faction that physically controls airport security can inspect any cargo, on any aircraft, at any time.<br><b>Cuban airspace / Jose Marti Airport:</b> 🟢 SAFE once inside Cuban controlled territory.",
+       countermeasures:"Use Jamaican military airfields, not civilian airports — harder for rival factions to infiltrate ground operations. Keep loads small (under 200kg per flight) and rotate between airfields including small regional strips (Ken Jones, Tinson Pen) that rival factions cannot realistically stake out. The 90-minute crossing means ground exposure is the only vulnerability — minimise time on the ground.",
+       detail:"Air viable only for the physical cash portion of Jamaica's tribute. Bulk goods (alumina, LNG) must go by sea. Small, fast aircraft from varied airfields carrying concealed cash containers — the 90-minute flight to Havana is shorter than most rival response times."}
+    ]
+  },
+  vatican: {
+    name:"Vatican City", status:"owned", gdp:0.03, pct:35, tribute:0.0105, unit:"B/yr",
+    breakdown:[
+      ["Museum Revenue (Physical Cash)","$35M","Physical euro and USD cash from Vatican Museums operations"],
+      ["Physical Gold & Valuables","$4.2M","Gold bars, rare coins, physical bearer instruments from Vatican Treasury"],
+      ["Philatelic & Numismatic","$0.8M","Vatican stamps, coins, medallions — compact, high-value"],
+      ["Physical Royalties","$1.5M","Cash payments, physical licensing cheques from Vatican Media"]
+    ],
+    routes:[
+      {mode:"🚛",label:"Vatican → overland through European Faction territory → port → sea → Havana",time:"25–40 days",
+       threat:"🔴 CRITICAL throughout",
+       threatDetail:"<b>Vatican City itself:</b> you nominally own this territory but it is a 0.44km² enclave with no military capability and no coastline, completely surrounded by European Faction-controlled Rome and Italy. You cannot physically defend it or move cargo from it without European Faction cooperation or covert action.<br><b>Overland through Italy / Europe:</b> 🔴 CRITICAL — every road, rail line, and border crossing in Europe is European Faction territory. A convoy of cargo leaving Vatican City heading for a coast is immediately visible and can be stopped at any checkpoint.<br><b>Any European port (Civitavecchia, Genoa, Marseille):</b> 🔴 CRITICAL — European Faction-controlled. Cargo can be seized on the dock before it boards.<br><b>Mediterranean:</b> 🔴 CRITICAL — European Faction home sea. Even if cargo reaches a vessel, the Mediterranean is a controlled environment.<br><b>Gibraltar:</b> 🔴 CRITICAL — 14km choke with European Faction garrison on the rock.",
+       countermeasures:"There is no clean route from Vatican by land or by sea through the Mediterranean. The European Faction controls every exit. Covert smuggling in small quantities (individual couriers, no manifests, concealed in commercial goods) is the only viable method — and even then, the risk is interception at any of multiple European Faction checkpoints. Consider whether the $10.5M annual Vatican tribute justifies the exposure risk of attempting extraction.",
+       detail:"Vatican is the network's most strategically compromised territory. Its $10.5M tribute is the smallest in the network by orders of magnitude. The European Faction effectively holds Vatican City hostage by virtue of controlling everything around it. Covert extraction in small, irregular increments via individual couriers is the only practical approach."},
+      {mode:"🤝",label:"Negotiate passage with European Faction — tribute-sharing arrangement",time:"Ongoing",
+       threat:"🟡 MODERATE",
+       threatDetail:"The European Faction controls Vatican's only exits. Rather than attempting covert extraction (high risk, small reward), consider a formal or informal arrangement: offer the European Faction a cut of Vatican tribute in exchange for guaranteed passage of couriers carrying Vatican goods to a Spanish or Portuguese Atlantic port. A Spanish Atlantic port (Vigo, Cádiz) provides direct Atlantic access without Gibraltar transit — if the deal includes Atlantic port access, the Mediterranean chokepoint is bypassed.<br><b>Risk:</b> 🟡 MODERATE — the arrangement depends on the European Faction honouring the deal. They could take the cut AND seize the cargo. Set the deal value below the cost of continued covert extraction attempts to limit downside.",
+       countermeasures:"Never commit full Vatican tribute to a single negotiated passage. Run small courier runs through the arrangement — if the European Faction betrays the deal, the loss is one courier's cargo, not a year's tribute. Keep the negotiated cut modest enough that the European Faction's incentive is to maintain the arrangement rather than defect once.",
+       detail:"Vatican's geographic reality makes tribute-sharing with the European Faction potentially the most cost-effective solution. The $10.5M tribute is so small that even splitting it 50/50 nets $5.25M delivered to Havana with minimal risk — better than repeated high-risk covert extraction attempts that may yield nothing. This is the only territory where a rival-faction arrangement may be the optimal strategy."},
+      {mode:"✈",label:"Vatican → covert air from Italian airfield → Havana",time:"12–16 hours",
+       threat:"🔴 CRITICAL",
+       threatDetail:"<b>Departure airfield:</b> 🔴 CRITICAL — all Italian airfields are European Faction territory. There is no aviation law protecting your aircraft. The European Faction can inspect, detain, or seize any aircraft and its cargo on the ground or force it to land once airborne within their airspace. Air traffic control is a faction tool — they can deny routing, force diversions, or scramble interceptors.<br><b>European airspace (entire route):</b> 🔴 CRITICAL — you must fly through European Faction airspace to reach the Atlantic, then through Caribbean Faction airspace to reach Havana. Both factions can force your aircraft down.<br><b>No neutral airspace exists anywhere between Italy and Cuba.</b>",
+       countermeasures:"Small, low-altitude, non-transponder aircraft (general aviation category) departing from a remote airfield at night — harder to track but still interceptable by scrambled fighters once detected. This is viable only for urgent, small-volume moves of the highest-density valuables (gold coins, gemstones). Not viable as a routine tribute route.",
+       detail:"⚠ Air extraction from Vatican is high-risk due to the complete absence of aviation law and European Faction control of all Italian airspace. Viable only as an emergency one-off for high-density valuables, not as a sustainable tribute route. The negotiated passage arrangement (above) is preferable."}
+    ]
+  },
+  chile: {
+    name:"Chile", status:"pending", gdp:317, pct:17.5, tribute:55.5, unit:"B/yr",
+    pendingNote:"Pending territory — 50% tribute rate (17.5% of GDP) until trade finalised.",
+    breakdown:[
+      ["Copper Cathodes & Concentrate","$28B","Physical bulk cargo — copper cathode plates and concentrate slurry"],
+      ["Lithium Carbonate","$14B","Physical chemical cargo — sealed containers of lithium carbonate powder"],
+      ["Agricultural Goods","$7B","Physical reefer cargo — wine, salmon, fruit"],
+      ["Port Throughput Goods","$4B","Physical diverted cargo from Valparaíso and San Antonio"],
+      ["Other Minerals","$2.5B","Molybdenum, silver, industrial chemicals — bulk cargo"]
+    ],
+    routes:[
+      {mode:"🚢",label:"Antofagasta / Valparaíso → south below 50°S → Drake Passage → South Atlantic → Windward Passage → Havana ⭐ PRIMARY",time:"34–42 days",
+       threat:"🟢 → 🟢 → 🟡 → 🔴",
+       threatDetail:"<b>Chilean territorial waters (0–12nm):</b> 🟢 SAFE — Chilean Navy zone. Pending status means partial control — priority should be securing this departure zone as part of finalising the territory acquisition.<br><b>South Pacific below 50°S:</b> 🟢 LOW — this latitude is genuinely ungoverned by any faction. No faction has bothered to garrison the southern Pacific because there is nothing of strategic value there — until now. You are exploiting a gap in the factional map. Below 50°S there are no patrol lines, no garrisoned chokepoints, no standing naval presence of any rival.<br><b>Drake Passage (800km wide):</b> 🟢 LOW — sub-Antarctic, 800km of open water between the tip of South America and Antarctica. The weather makes it impractical for any faction to maintain warships here as a patrol asset. Your bulk carriers, built for heavy weather, handle this. A rival faction's warship cannot.<br><b>South Atlantic (rising north):</b> 🟡 MODERATE — as you rise above 30°S, Atlantic Faction patrol density increases. You have been at sea for 25+ days by this point — your position is uncertain to any rival without continuous tracking.<br><b>Windward Passage:</b> 🟡 MODERATE — 90km, Cuban eastern side. Caribbean Faction garrison on Haiti side, Cuban Navy on Cuba side. Run the Cuban side.<br><b>Final Caribbean approach:</b> 🔴 CRITICAL.",
+       countermeasures:"<b>Southern routing is itself the countermeasure.</b> No faction patrols below 50°S. Route as far south as your vessels can manage — 55°S is achievable for heavy bulk carriers. The weather that makes this route uncomfortable is your ally: rival warships are less capable in these seas than purpose-built bulk carriers.<br><b>Panama Canal:</b> never. The Canal is a physical trap. Copper concentrate bulk carriers are typically 40,000–80,000 DWT — too large for Canal locks in many cases regardless. Cape Horn is the natural route for the cargo type.<br><b>Speed variation:</b> a bulk carrier that departed Antofagasta 5 weeks ago could be anywhere in a 3,000nm radius in the South Atlantic. Rivals cannot calculate your position without continuous satellite tracking and the resources to act on it.",
+       detail:"Chile's southern routing exploits the one significant gap in any faction's patrol coverage: the southern Pacific and Drake Passage below 50°S. No faction patrols this latitude because it has historically served no strategic purpose — you are arbitraging a gap in the factional map. The absence of mandatory chokepoints (no canal, no strait) makes this the second-cleanest route in the network after Nigeria."},
+      {mode:"🚢",label:"Valparaíso → Panama Canal → Caribbean → Havana",time:"20–26 days",
+       threat:"🔴 CRITICAL",
+       threatDetail:"<b>Panama Canal:</b> 🔴 CRITICAL — the Canal Faction physically garrisons the 80km lock system. Your vessel enters and cannot manoeuvre for 8–12 hours. The Canal Faction stops you with a harbour authority order, no military action required. You are trapped in a box.",
+       countermeasures:"There is no countermeasure once inside the Canal. The only countermeasure is not entering.",
+       detail:"⚠ DO NOT USE. Canal is a physical trap. Cape Horn adds 12–18 days and eliminates a guaranteed seizure point. Chile's copper carriers are often too large for the Canal anyway."}
+    ]
+  },
+  kuwait: {
+    name:"Kuwait", status:"pending", gdp:136, pct:17.5, tribute:23.8, unit:"B/yr",
+    pendingNote:"Pending territory — 50% tribute rate (17.5% of GDP) until trade finalised.",
+    breakdown:[
+      ["Crude Oil","$18B","Physical tanker cargo — Kuwait Export Crude, heavy and light grades"],
+      ["Physical Gold (KIA)","$4B","Gold bars, physical financial instruments from Kuwait reserves — must be separately transported"],
+      ["Refined Products","$1.3B","Fuel oil, naphtha, diesel from Mina Al Ahmadi refinery"],
+      ["Petrochemicals","$0.5B","Physical chemical cargo from Shuaiba complex"]
+    ],
+    routes:[
+      {mode:"🚢",label:"Mina Al Ahmadi → Hormuz → Arabian Sea → south below 30°S → Cape of Good Hope → South Atlantic → Windward Passage → Havana ⭐ ONLY VIABLE SEA ROUTE",time:"44–55 days",
+       threat:"🔴 → 🟠 → 🟡 → 🟡 → 🔴",
+       threatDetail:"<b>Persian Gulf / Kuwaiti waters (0–12nm):</b> 🟢 SAFE — partial. Pending status means the Gulf Faction has residual influence even within your notional territorial waters.<br><b>Strait of Hormuz (unavoidable):</b> 🔴 CRITICAL — 34km wide, Gulf Faction garrison. Every vessel exiting the Persian Gulf transits here. The Gulf Faction will log your departure, cargo type, and heading. There is no alternative exit from the Gulf. This is Kuwait's permanent strategic vulnerability — it cannot be engineered away, only managed.<br><b>Arabian Sea / northern Indian Ocean (above 15°S):</b> 🟠 HIGH — Gulf Faction has forward patrol capability in the northern Arabian Sea. Your vessel is tracked from Hormuz and rival assets have time to vector to intercept points in the northern Indian Ocean.<br><b>Indian Ocean below 25°S:</b> 🟡 MODERATE — patrol density drops. Southern Indian Ocean is vast and factions have limited assets to sustain patrols at this latitude.<br><b>Cape of Good Hope (open ocean rounding):</b> 🟡 LOW — not a strait, not a canal, not a chokepoint. Open ocean rounding. No faction garrisons this.<br><b>South Atlantic:</b> 🟡 MODERATE rising to 🟠 HIGH as latitude decreases.<br><b>Caribbean approach:</b> 🔴 CRITICAL.",
+       countermeasures:"<b>Hormuz acceptance strategy:</b> you cannot avoid Hormuz, so plan for the Gulf Faction to know your cargo is moving. Your countermeasure is what happens AFTER Hormuz — speed, route unpredictability, and force.<br><b>Tanker convoy:</b> multiple vessels depart 24–48 hours apart on different headings after Hormuz. Gulf Faction cannot intercept all simultaneously with finite assets.<br><b>Speed run to 25°S:</b> maximum speed through the Arabian Sea to get below the Gulf Faction's practical patrol radius as quickly as possible. A VLCC running at 16 knots puts 1,000nm between itself and Hormuz in under 3 days — beyond sustained Gulf Faction patrol range.<br><b>Gold cargo separately:</b> Kuwait's $4B in physical gold must not travel on an oil tanker. It requires a separate, fast, inconspicuous vessel — possibly a small freighter masquerading as routine cargo traffic, departing at a different time from the oil tankers to avoid being caught in the same interception event.<br><b>AVOID ALL CANALS:</b> Suez + Bab-el-Mandeb chains two faction chokepoints. Never use.",
+       detail:"Kuwait's route is the longest and most exposed in the network. Hormuz is the unavoidable defining constraint — the Gulf Faction will always know when your cargo moves. The counter-strategy is making interception expensive (convoy, speed, unpredictability) and accepting that some cargo may be lost while ensuring the bulk gets through. The Cape of Good Hope route, while 12–18 days longer than Suez, eliminates three consecutive faction chokepoints (Bab-el-Mandeb, Suez, Gibraltar) that would otherwise give rivals three separate interception opportunities."},
+      {mode:"🚢",label:"Mina Al Ahmadi → Hormuz → Suez Canal → Mediterranean → Gibraltar → Atlantic → Havana",time:"28–34 days",
+       threat:"🔴 CRITICAL throughout",
+       threatDetail:"<b>After Hormuz:</b> Bab-el-Mandeb (29km, Gulf Faction) → Suez Canal (physical lock trap, 193km, vessel immobilised) → Mediterranean (European Faction home sea) → Gibraltar (14km, European Faction fortress). Four consecutive faction-controlled chokepoints after the already-unavoidable Hormuz. Five total. Any one faction can stop your entire cargo load independently.",
+       countermeasures:"None sufficient. Five chokepoints means five opportunities for five different rival factions to extract tribute at your expense before it reaches Havana.",
+       detail:"⚠ DO NOT USE. This route is the worst possible geometry in the entire network — it chains together more faction chokepoints than any other route. Cape of Good Hope is mandatory."}
+    ]
+  }
+};
+
+const HAVANA_TOTAL = Object.values(HAVANA).reduce((s,c)=>s+c.tribute,0);
+const HAVANA_OWNED = Object.values(HAVANA).filter(c=>c.status==="owned").reduce((s,c)=>s+c.tribute,0);
+
+
+// ═══════════════════════════════════════════════════════════════════
+// MAP GLOBALS
+// ═══════════════════════════════════════════════════════════════════
+const OWNED   = new Set(["156","408","566","608","388","336"]);  // 336 = Vatican City
+const PENDING  = new Set(["152","414"]);
+const ID2KEY   = {"156":"china","408":"northkorea","566":"nigeria","608":"philippines","388":"jamaica","152":"chile","414":"kuwait","336":"vatican"};
+
+let currentLayer = "overview";
+let projection, pathGen, g, overlayG, svgSel, zoomBehavior;
+let currentZoom = 1;
+
+// Icon display size in screen pixels (constant regardless of zoom)
+const ICON_SCREEN_R = 9;
+const SEPARATION_SCREEN = 22; // min screen pixels between icon centers
+
+// ═══════════════════════════════════════════════════════════════════
+// COUNTRY PANEL
+// ═══════════════════════════════════════════════════════════════════
+function buildCountryHTML(k) {
+  const d = COUNTRIES[k]; if (!d) return "";
+  const pending = d.status.includes("Pending");
+  let h = `<div class="ps"><h4>Overview</h4>
+    <div class="sg">${Object.entries(d.stats).map(([k,v])=>`<div class="sb"><div class="sv">${v}</div><div class="sk">${k}</div></div>`).join("")}</div>
+    <p style="margin-top:9px">${d.ov}</p>
+    ${pending?'<p style="margin-top:7px;color:#fa0;font-size:0.7rem">⚠ Trade in progress — strategic access subject to revocation.</p>':""}
+  </div>`;
+  h+=`<div class="ps"><h4>⛏ Resources & Industry</h4>${d.res.map(r=>`<div class="ri"><div style="font-size:1rem;flex-shrink:0;margin-top:1px">${r.i}</div><div><div class="rn">${r.n}</div><div class="rd">${r.d}</div></div></div>`).join("")}</div>`;
+  h+=`<div class="ps"><h4>✈ Transport Infrastructure</h4>${d.trans.map(t=>`<div class="ti"><span style="font-size:0.9rem;flex-shrink:0">${t.i}</span><div><strong style="font-size:0.72rem">${t.n}</strong> — <span style="color:#7a9aba;font-size:0.67rem">${t.d}</span></div></div>`).join("")}</div>`;
+  const maxB=8, bKey=k.replace(/\s/g,'');
+  const bVisible=d.bases.slice(0,maxB), bHidden=d.bases.slice(maxB);
+  h+=`<div class="ps"><h4>🎖 Military Installations <span style="color:var(--muted);font-size:0.48rem;font-weight:400">${d.bases.length} TOTAL</span></h4>${bVisible.map(b=>{ const hasCoords = BASE_COORDS[b.n]; return `<div class="bi${hasCoords?' bi-clickable':''}" ${hasCoords?`onclick="flyToBase('${b.n.replace(/'/g,"\\'")}')"`:''}><div class="bn">${b.n}${hasCoords?'<span class="bi-pin">📍</span>':''}</div><div class="bt">${b.t}</div><div class="bl">${b.l}</div></div>`;}).join("")}${bHidden.length?`<div id="xb-${bKey}" style="display:none">${bHidden.map(b=>{ const hasCoords = BASE_COORDS[b.n]; return `<div class="bi${hasCoords?' bi-clickable':''}" ${hasCoords?`onclick="flyToBase('${b.n.replace(/'/g,"\\'")}')"`:''}><div class="bn">${b.n}${hasCoords?'<span class="bi-pin">📍</span>':''}</div><div class="bt">${b.t}</div><div class="bl">${b.l}</div></div>`;}).join("")}</div><button onclick="toggleBases('${bKey}',this)" class="expand-btn">▼ SHOW ${bHidden.length} MORE INSTALLATIONS</button>`:""}`;
+  if(d.rail){
+    h+=`<div class="ps"><h4>🚂 Major Rail Terminals</h4>${d.rail.terminals.map(t=>`<div class="ri"><div><div class="rn">${t[0]}</div><div class="rd">${t[1]}</div></div></div>`).join("")}</div>`;
+    h+=`<div class="ps"><h4>🌍 International Rail Connections</h4>${d.rail.crossBorder.map(c=>`<div class="bi"><div class="bn">${c[0]}</div><div class="bt" style="color:${c[1]==='Active'?'#4f4':c[1].startsWith('Active')?'#af4':c[1]==='SUSPENDED'||c[1]==='None'||c[1].startsWith('Defunct')||c[1].startsWith('Dormant')?'#888':'#fa0'}">${c[1]}</div><div class="bl">${c[2]}</div></div>`).join("")}</div>`;
+  }
+  return h;
+}
+
+function showCountryPanel(k) {
+  const d = COUNTRIES[k]; if (!d) return;
+  closeLocPanel();
+  const mobile = window.innerWidth <= 700;
+  if (mobile) {
+    document.getElementById("spt").textContent = d.name;
+    document.getElementById("spm").textContent = d.status;
+    document.getElementById("spb").innerHTML = buildCountryHTML(k);
+    document.getElementById("mobileSheet").classList.add("open");
+    document.getElementById("sheetOverlay").classList.add("show");
+    document.getElementById("mobileSheet").scrollTop = 0;
+  } else {
+    document.getElementById("pt").textContent = d.name;
+    document.getElementById("pm").textContent = d.status;
+    document.getElementById("pb").innerHTML = buildCountryHTML(k);
+    document.getElementById("ip").classList.add("open");
+    document.getElementById("ip").scrollTop = 0;
+  }
+  document.querySelectorAll(".tbtn").forEach(b=>b.classList.remove("active"));
+}
+
+function closePanel() {
+  document.getElementById("ip").classList.remove("open");
+  document.getElementById("mobileSheet").classList.remove("open");
+  document.getElementById("sheetOverlay").classList.remove("show");
+  document.querySelectorAll(".tbtn").forEach(b=>b.classList.remove("active"));
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// LOCATION POPUP
+// ═══════════════════════════════════════════════════════════════════
+function showLocPanel(pt) {
+  const [id,lon,lat,layer,color,emoji,title,type,desc,badges] = pt;
+  document.getElementById("locTitle").textContent = emoji + " " + title;
+  document.getElementById("locType").textContent = type;
+  document.getElementById("locDesc").textContent = desc;
+  document.getElementById("locDetail").innerHTML = (badges||[]).map(b=>`<span class="loc-badge" style="color:${color};border-color:${color}">${b}</span>`).join("");
+  document.getElementById("locPanelWrap").classList.add("show");
+}
+function closeLocPanel() {
+  document.getElementById("locPanelWrap").classList.remove("show");
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// LAYER CONTROL
+// ═══════════════════════════════════════════════════════════════════
+function setLayer(l, btn) {
+  currentLayer = l;
+  document.querySelectorAll(".lbtn").forEach(b=>b.classList.remove("active"));
+  if (btn) btn.classList.add("active");
+  ["lgr","lgt","lgm","lgc"].forEach(id=>document.getElementById(id).style.display="none");
+  if (l==="resources") document.getElementById("lgr").style.display="flex";
+  if (l==="transport") document.getElementById("lgt").style.display="flex";
+  if (l==="military")  document.getElementById("lgm").style.display="flex";
+  if (l==="cities")    document.getElementById("lgc").style.display="flex";
+  closeLocPanel();
+  renderOverlays();
+}
+function setLayerMobile(l, btn) {
+  document.querySelectorAll(".mnbtn.layer-btn").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  setLayer(l, null);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// FORCE-SEPARATION LAYOUT
+// Works entirely in map-space coords.
+// Separation threshold = SEPARATION_SCREEN px converted to map-space.
+// ═══════════════════════════════════════════════════════════════════
+function computeLayout(pts) {
+  // minDist in map-space: we want icons separated by SEPARATION_SCREEN screen pixels.
+  // At zoom k, 1 screen pixel = 1/k map-space units.
+  const minDist = SEPARATION_SCREEN / currentZoom;
+
+  const nodes = pts.map(pt => {
+    const [id, lon, lat] = pt;
+    const proj = projection([lon, lat]);
+    if (!proj) return null;
+    const [sx, sy] = proj;
+    return { pt, sx, sy, x: sx, y: sy };
+  }).filter(Boolean);
+
+  // Iterative relaxation — push overlapping nodes apart in map space
+  for (let iter = 0; iter < 80; iter++) {
+    let moved = false;
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const a = nodes[i], b = nodes[j];
+        const dx = b.x - a.x, dy = b.y - a.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < minDist && dist > 0.0001) {
+          const overlap = (minDist - dist) / 2 + 0.5 / currentZoom;
+          const nx = dx / dist, ny = dy / dist;
+          a.x -= nx * overlap;
+          a.y -= ny * overlap;
+          b.x += nx * overlap;
+          b.y += ny * overlap;
+          moved = true;
+        }
+      }
+    }
+    if (!moved) break;
+  }
+  return nodes;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// RENDER OVERLAYS
+// Icons are placed in the zoom-transformed group (so they move with the map),
+// but each icon uses scale(1/k) internally so it always appears as
+// ICON_SCREEN_R pixels on screen regardless of zoom level.
+// Leader lines connect the icon center to the true geo location.
+// ═══════════════════════════════════════════════════════════════════
+function renderOverlays() {
+  if (!overlayG) return;
+  overlayG.selectAll("*").remove();
+  if (currentLayer === "overview") return;
+
+  const pts = POINTS.filter(p => p[3] === currentLayer);
+  const nodes = computeLayout(pts);
+
+  // All sizes in screen pixels — we'll undo zoom with scale(1/k)
+  const R   = ICON_SCREEN_R;          // icon radius, screen px
+  const FS  = 10;                      // font size, screen px
+  const IK  = 1 / currentZoom;        // inverse zoom scale
+  const LEAD_SW = 1.0;                 // leader line stroke, screen px
+  const DOT_R   = 3;                   // true-location dot, screen px
+
+  // Draw leader lines first (they should appear below icons)
+  const lineG = overlayG.append("g");
+  nodes.forEach(n => {
+    const screenDist = Math.sqrt((n.x - n.sx) ** 2 + (n.y - n.sy) ** 2) * currentZoom;
+    if (screenDist > R * 0.6) {
+      // Line from true location to icon center (in map-space)
+      lineG.append("line")
+        .attr("x1", n.sx).attr("y1", n.sy)
+        .attr("x2", n.x).attr("y2", n.y)
+        .attr("stroke", n.pt[4])
+        .attr("stroke-width", LEAD_SW * IK)
+        .attr("stroke-opacity", 0.55)
+        .attr("stroke-dasharray", `${3 * IK},${3 * IK}`)
+        .attr("pointer-events","none");
+
+      // Small filled dot at the exact true geo location
+      lineG.append("circle")
+        .attr("cx", n.sx).attr("cy", n.sy)
+        .attr("r", DOT_R * IK)
+        .attr("fill", n.pt[4])
+        .attr("opacity", 0.8)
+        .attr("pointer-events","none");
+    }
+  });
+
+  // Draw icons — each scaled to be constant screen size
+  nodes.forEach(n => {
+    const [id, lon, lat, layer, color, emoji, title] = n.pt;
+
+    // The group is positioned at the displaced map-space location.
+    // Then we apply scale(1/k) so the icon contents are in screen-pixel units.
+    const grp = overlayG.append("g")
+      .attr("transform", `translate(${n.x},${n.y}) scale(${IK})`)
+      .style("cursor", "pointer")
+      .on("click", (event) => { event.stopPropagation(); showLocPanel(n.pt); })
+      .on("mouseenter", e => showTip(e, title))
+      .on("mousemove", moveTip)
+      .on("mouseleave", hideTip);
+
+    // Drop shadow ring for legibility
+    grp.append("circle")
+      .attr("r", R + 1.5)
+      .attr("fill", "rgba(0,0,0,0.45)")
+      .attr("pointer-events","none");
+
+    grp.append("circle")
+      .attr("r", R)
+      .attr("fill", color)
+      .attr("opacity", 0.95)
+      .attr("stroke", "rgba(255,255,255,0.25)")
+      .attr("stroke-width", 1);
+
+    grp.append("text")
+      .attr("text-anchor","middle")
+      .attr("dy","0.35em")
+      .attr("font-size", FS)
+      .attr("pointer-events","none")
+      .text(emoji);
+  });
+}
+
+
+// ═══════════════════════════════════════════════════════════════════
+// RAIL LAYER
+// ═══════════════════════════════════════════════════════════════════
+
+
+
+// ═══════════════════════════════════════════════════════════════════
+// HAVANA TRIBUTE PANEL
+// ═══════════════════════════════════════════════════════════════════
+const FLAGS = {china:"🇨🇳",northkorea:"🇰🇵",nigeria:"🇳🇬",philippines:"🇵🇭",jamaica:"🇯🇲",vatican:"🇻🇦",chile:"🇨🇱",kuwait:"🇰🇼"};
+const MAX_TRIBUTE = Math.max(...Object.values(HAVANA).map(c=>c.tribute));
+
+function fmtTribute(v){
+  if(v>=1000) return "$"+v.toFixed(0)+"B";
+  if(v>=1)    return "$"+v.toFixed(1)+"B";
+  return "$"+(v*1000).toFixed(0)+"M";
+}
+
+function buildHavanaOverview() {
+  const owned = Object.values(HAVANA).filter(c=>c.status==="owned").reduce((s,c)=>s+c.tribute,0);
+  const pending = Object.values(HAVANA).filter(c=>c.status==="pending").reduce((s,c)=>s+c.tribute,0);
+  const total = owned + pending;
+
+  let h = `<div class="ps">
+    <div class="hvn-total-box" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <div><div class="val">${fmtTribute(total)}</div><div class="sub">Total Annual Tribute</div></div>
+      <div><div class="val" style="font-size:1rem">${fmtTribute(owned)}</div><div class="sub">Confirmed (Owned)</div></div>
+      <div><div class="val" style="color:var(--amber);font-size:1rem">${fmtTribute(pending)}</div><div class="sub">Pending Territories</div></div>
+      <div><div class="val" style="font-size:1rem">Havana 🇨🇺</div><div class="sub">Destination</div></div>
+    </div>
+  </div>
+  <div class="ps"><h4>📊 Per-Country Contribution</h4>`;
+
+  const sorted = Object.entries(HAVANA).sort((a,b)=>b[1].tribute-a[1].tribute);
+  sorted.forEach(([key,c])=>{
+    const pct = c.tribute / MAX_TRIBUTE * 100;
+    const isPending = c.status==="pending";
+    const barColor = isPending ? "#ffaa00" : "#44aaff";
+    h += `<div class="hvn-country-row" onclick="showHavanaCountry('${key}')">
+      <div class="hvn-flag">${FLAGS[key]||"🌍"}</div>
+      <div style="flex:1;min-width:0;">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+          <div class="hvn-cname ${isPending?'hvn-pending':''}">${c.name}</div>
+          <div class="hvn-pct">${c.pct}%</div>
+          <div class="hvn-val ${isPending?'hvn-pending':''}">${fmtTribute(c.tribute)}</div>
+        </div>
+        <div class="hvn-bar-bg"><div class="hvn-bar-fill" style="width:${pct}%;background:${barColor}"></div></div>
+      </div>
+    </div>`;
+  });
+
+  h += `</div><div class="ps" style="font-size:0.62rem;color:#3a5a8a;line-height:1.6;">
+    Click any country to see breakdown &amp; optimal Havana routes. Pending territories pay 50% rate (17.5% of GDP) until trade finalised.
+  </div>`;
+  return h;
+}
+
+function buildHavanaCountry(key) {
+  const c = HAVANA[key];
+  if(!c) return "";
+  const isPending = c.status==="pending";
+  let h = "";
+  if(isPending) h += `<div class="ps"><span class="hvn-pending-badge">⚠ Pending Territory — ${c.pct}% tribute rate</span><p style="font-size:0.68rem;color:#7a9aba;">${c.pendingNote||""}</p></div>`;
+
+  h += `<div class="ps"><h4>💰 Tribute Breakdown — ${fmtTribute(c.tribute)}/yr</h4>
+    <div class="hvn-total-box" style="margin-bottom:10px;">
+      <div class="val">${fmtTribute(c.tribute)}</div>
+      <div class="sub">${c.pct}% of $${c.gdp}B GDP · Returned to Havana annually</div>
+    </div>`;
+  c.breakdown.forEach(b=>{
+    h += `<div class="hvn-breakdown-row">
+      <div><div class="hvn-breakdown-item">${b[0]}</div><div class="hvn-breakdown-desc">${b[2]}</div></div>
+      <div class="hvn-breakdown-amt">${b[1]}</div>
+    </div>`;
+  });
+  h += `</div>`;
+
+  h += `<div class="ps"><h4>🗺 Routes to Havana — Threat Assessment</h4>
+    <div style="font-size:0.63rem;color:#5a7a9a;margin-bottom:8px;padding:5px 8px;background:#060f1c;border-radius:4px;">All tribute is physical — no wire transfers. The USA controls the entire world; every faction holds territory by force. No laws, no treaties, no immunity. Canals are lock-traps. Straits are garrison points. Your own waters are the only safety. Routes rated by faction interception risk.</div>`;
+  c.routes.forEach(r=>{
+    const tl = r.threat||"";
+    let tClass = "threat-low";
+    if(tl.includes("CRITICAL")) tClass="threat-critical";
+    else if(tl.includes("HIGH")) tClass="threat-high";
+    else if(tl.includes("MODERATE")) tClass="threat-moderate";
+    else if(tl.includes("SAFE")) tClass="threat-safe";
+    const isDigital = false;
+    const cardBorder = isDigital ? "border-color:#226644" : (tClass==="threat-critical"?"border-color:#cc2222":tClass==="threat-high"?"border-color:#cc6600":"");
+    h += `<div class="route-card" style="${cardBorder}">
+      <div class="route-header">
+        <span class="route-mode">${r.mode}</span>
+        <span class="route-label">${r.label}</span>
+        <span class="route-time" style="${isDigital?'color:#44cc88':''}">${r.time}</span>
+      </div>
+      ${r.threat ? `<div><span class="threat-badge ${tClass}">${isDigital?'🔒 TRANSFER STATUS':'⚔ INTERCEPTION RISK'}: ${r.threat}</span></div>` : ""}
+      ${r.threatDetail ? `<div class="td-label">${isDigital?'Security analysis':'Threat breakdown'}</div><div class="threat-detail">${r.threatDetail}</div>` : ""}
+      ${r.countermeasures ? `<div class="cm-label">🛡 Countermeasures</div><div class="countermeasures">${r.countermeasures}</div>` : ""}
+      <div class="route-detail" style="margin-top:5px;border-top:1px solid #0e1e34;padding-top:5px;">${r.detail}</div>
+    </div>`;
+  });
+  h += `</div>`;
+  return h;
+}
+
+function showHavanaPanel(countryKey) {
+  closeLocPanel();
+  const mobile = window.innerWidth <= 700;
+  const title = countryKey ? (HAVANA[countryKey]?.name+" — Havana Tribute") : "🇨🇺 Havana Tribute Ledger";
+  const meta = countryKey ? "Click ← to return to overview" : "35% National Output · All Territories";
+  const body = countryKey ? buildHavanaCountry(countryKey) : buildHavanaOverview();
+
+  if(mobile){
+    document.getElementById("spt").textContent = title;
+    document.getElementById("spm").textContent = meta;
+    document.getElementById("spb").innerHTML = body;
+    document.getElementById("mobileSheet").classList.add("open");
+    document.getElementById("sheetOverlay").classList.add("show");
+    document.getElementById("mobileSheet").scrollTop = 0;
+  } else {
+    document.getElementById("pt").textContent = title;
+    document.getElementById("pm").textContent = meta;
+    document.getElementById("pb").innerHTML = body;
+    document.getElementById("ip").classList.add("open");
+    document.getElementById("ip").scrollTop = 0;
+  }
+}
+
+function showHavanaCountry(key) {
+  showHavanaPanel(key);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// TOOLTIP
+// ═══════════════════════════════════════════════════════════════════
+function showTip(e,txt){const t=document.getElementById("tip");t.textContent=txt;t.style.display="block";t.style.left=(e.clientX+14)+"px";t.style.top=(e.clientY-32)+"px";}
+function moveTip(e){const t=document.getElementById("tip");if(t.style.display==="block"){t.style.left=(e.clientX+14)+"px";t.style.top=(e.clientY-32)+"px";}}
+function hideTip(){document.getElementById("tip").style.display="none";}
+
+// ═══════════════════════════════════════════════════════════════════
+// MAP INIT
+// ═══════════════════════════════════════════════════════════════════
+function flyToBase(baseName) {
+  const coords = BASE_COORDS[baseName];
+  if (!coords || !svgSel || !zoomBehavior || !projection) return;
+
+  // Close country panel so the full map is visible
+  closePanel();
+
+  const container = document.getElementById('mapArea');
+  const W = container.clientWidth, H = container.clientHeight;
+  const [px, py] = projection(coords);
+
+  const targetK = 7;
+  const tx = W/2 - targetK * px;
+  const ty = H/2 - targetK * py;
+
+  // Fly the map then show the pin once animation settles
+  svgSel.transition()
+    .duration(900)
+    .ease(d3.easeCubicInOut)
+    .call(zoomBehavior.transform, d3.zoomIdentity.translate(tx, ty).scale(targetK))
+    .on('end', () => {
+      showBasePing(coords, baseName);
+      setTimeout(clearBasePing, 5000);
+    });
+}
+
+// Active base pin state
+let activePinCoords = null;
+let activePinLabel = null;
+
+function showBasePing(coords, label) {
+  activePinCoords = coords;
+  activePinLabel = label;
+  renderBasePing();
+}
+
+function renderBasePing() {
+  // Remove any existing overlay pin
+  const existing = document.getElementById('base-pin-overlay');
+  if (existing) existing.remove();
+  if (!activePinCoords || !projection || !svgSel) return;
+
+  // Get current zoom transform to compute screen position
+  const t = d3.zoomTransform(svgSel.node());
+  const [mx, my] = projection(activePinCoords);
+  // Apply current zoom transform to get screen coords
+  const sx = t.x + t.k * mx;
+  const sy = t.y + t.k * my;
+
+  const container = document.getElementById('mapArea');
+  const rect = container.getBoundingClientRect();
+
+  // Build HTML overlay pinned to screen coords
+  const pin = document.createElement('div');
+  pin.id = 'base-pin-overlay';
+  pin.style.cssText = `
+    position:absolute;
+    left:${sx}px;
+    top:${sy}px;
+    pointer-events:none;
+    z-index:200;
+    transform:translate(-50%, -50%);
+  `;
+
+  pin.innerHTML = `
+    <svg width="60" height="60" style="overflow:visible;display:block;margin:0 auto;">
+      <!-- crosshair lines -->
+      <line x1="0" y1="30" x2="12" y2="30" stroke="#00c8ff" stroke-width="1.2" opacity="0.9"/>
+      <line x1="48" y1="30" x2="60" y2="30" stroke="#00c8ff" stroke-width="1.2" opacity="0.9"/>
+      <line x1="30" y1="0" x2="30" y2="12" stroke="#00c8ff" stroke-width="1.2" opacity="0.9"/>
+      <line x1="30" y1="48" x2="30" y2="60" stroke="#00c8ff" stroke-width="1.2" opacity="0.9"/>
+      <!-- corner ticks -->
+      <path d="M18,18 L18,22 M18,18 L22,18" stroke="#00c8ff" stroke-width="1.2" fill="none" opacity="0.7"/>
+      <path d="M42,18 L42,22 M42,18 L38,18" stroke="#00c8ff" stroke-width="1.2" fill="none" opacity="0.7"/>
+      <path d="M18,42 L18,38 M18,42 L22,42" stroke="#00c8ff" stroke-width="1.2" fill="none" opacity="0.7"/>
+      <path d="M42,42 L42,38 M42,42 L38,42" stroke="#00c8ff" stroke-width="1.2" fill="none" opacity="0.7"/>
+      <!-- pulsing outer ring -->
+      <circle cx="30" cy="30" r="8" fill="none" stroke="#00c8ff" stroke-width="1" opacity="0.5">
+        <animate attributeName="r" values="6;11;6" dur="2s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.7;0.1;0.7" dur="2s" repeatCount="indefinite"/>
+      </circle>
+      <!-- center dot -->
+      <circle cx="30" cy="30" r="2.5" fill="#00c8ff" opacity="1"/>
+      <circle cx="30" cy="30" r="2.5" fill="none" stroke="#00c8ff" stroke-width="4" opacity="0.2"/>
+    </svg>
+    <div style="
+      position:absolute;
+      left:38px;
+      top:50%;
+      transform:translateY(-50%);
+      white-space:nowrap;
+      background:rgba(2,8,20,0.92);
+      border:1px solid rgba(0,200,255,0.5);
+      border-radius:3px;
+      padding:3px 8px;
+      font-family:'Share Tech Mono',monospace;
+      font-size:10px;
+      color:#00c8ff;
+      letter-spacing:0.5px;
+      box-shadow:0 0 8px rgba(0,200,255,0.2);
+    ">${activePinLabel}</div>
+  `;
+
+  container.appendChild(pin);
+}
+
+function clearBasePing() {
+  activePinCoords = null;
+  activePinLabel = null;
+  const existing = document.getElementById('base-pin-overlay');
+  if (existing) existing.remove();
+}
+
+async function initMap() {
+  const container = document.getElementById("mapArea");
+  const W = container.clientWidth, H = container.clientHeight;
+  svgSel = d3.select("#map-svg").attr("width",W).attr("height",H);
+  const svg = svgSel;
+  projection = d3.geoNaturalEarth1().scale(W/6.2).translate([W/2,H/2]);
+  pathGen = d3.geoPath().projection(projection);
+
+  zoomBehavior = d3.zoom().scaleExtent([0.7,14])
+  const zoom = zoomBehavior
+    .on("zoom", e => {
+      g.attr("transform", e.transform);
+      currentZoom = e.transform.k;
+      renderOverlays();
+      renderBasePing();
+    });
+  svg.call(zoom);
+  svg.on("click", () => { closeLocPanel(); clearBasePing(); });
+
+  g = svg.append("g");
+  g.append("path").datum({type:"Sphere"}).attr("class","sphere").attr("d",pathGen);
+  g.append("path").datum(d3.geoGraticule()()).attr("class","graticule").attr("d",pathGen);
+
+  // Use 50m resolution for crisp country shapes at zoom
+  const world = await d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json");
+  const countries = topojson.feature(world, world.objects.countries);
+  const borders   = topojson.mesh(world, world.objects.countries, (a,b)=>a!==b);
+
+  g.selectAll(".country").data(countries.features).join("path")
+    .attr("class",d=>OWNED.has(String(d.id))?"country owned":PENDING.has(String(d.id))?"country pending":"country")
+    .attr("d",pathGen)
+    .on("click",(event,d)=>{
+      event.stopPropagation();
+      const k=ID2KEY[String(d.id)];
+      if(k) showCountryPanel(k);
+    })
+    .on("mouseenter",(event,d)=>{
+      const k=ID2KEY[String(d.id)];if(!k)return;
+      const owned=OWNED.has(String(d.id)),pend=PENDING.has(String(d.id));
+      showTip(event,COUNTRIES[k].name+(owned?" — Owned":pend?" — Pending Trade":""));
+    })
+    .on("mousemove",moveTip).on("mouseleave",hideTip);
+
+  g.append("path").datum(borders).attr("class","border").attr("d",pathGen);
+  overlayG = g.append("g").attr("id","overlayGroup");
+  document.getElementById("loading").style.display="none";
+  renderOverlays();
+}
+
+window.addEventListener("resize",()=>{
+  const c=document.getElementById("mapArea");
+  const W=c.clientWidth,H=c.clientHeight;
+  d3.select("#map-svg").attr("width",W).attr("height",H);
+  if(projection){
+    projection.scale(W/6.2).translate([W/2,H/2]);
+    d3.selectAll(".country,.sphere,.graticule,.border").attr("d",pathGen);
+    renderOverlays();
+  }
+});
+window.addEventListener("load",initMap);
+
+
+
+
+function toggleBases(key,btn){
+  const el=document.getElementById('xb-'+key);
+  if(!el)return;
+  const open=el.style.display!=='none';
+  el.style.display=open?'none':'block';
+  const n=parseInt(btn.getAttribute('data-count')||btn.textContent.match(/\d+/)?.[0]||0);
+  if(!btn.getAttribute('data-count'))btn.setAttribute('data-count',n);
+  btn.textContent=open?`▼ SHOW ${n} MORE INSTALLATIONS`:`▲ HIDE ${n} INSTALLATIONS`;
+}
+</script>
+</body>
+</html>
