@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Share+Tech+Mono&family=Exo+2:wght@300;400;500;600;700&family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" media="print" onload="this.media='all'">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Territory Command</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Share+Tech+Mono&family=Exo+2:wght@300;400;500;600;700&display=swap');
 
 :root {
   --bg:       #020810;
@@ -150,6 +150,7 @@ header::after {
   flex-shrink: 0;
   scrollbar-width: thin;
   scrollbar-color: var(--border2) transparent;
+  contain: layout style;
 }
 
 .sidebar::-webkit-scrollbar { width: 3px; }
@@ -182,7 +183,7 @@ header::after {
   text-align: left;
   background: transparent;
   color: var(--text);
-  transition: all 0.15s;
+  transition: background 0.15s, border-color 0.15s;
   position: relative;
 }
 
@@ -234,7 +235,7 @@ header::after {
   font-family: var(--font-mono);
   font-size: 0.63rem;
   text-align: left;
-  transition: all 0.15s;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
   letter-spacing: 0.5px;
 }
 
@@ -249,14 +250,13 @@ header::after {
 /* ── MAP ─────────────────────────────────────────────────────────── */
 .map-area { flex:1; position:relative; overflow:hidden; background: var(--bg); contain: strict; }
 
-#map-svg { width:100%; height:100%; display:block; touch-action:none; will-change:transform; }
+#map-svg { width:100%; height:100%; display:block; touch-action:none; will-change:transform; position:relative; z-index:2; }
 
 .country {
   fill: #071222;
   stroke: #0c1e30;
   stroke-width: 0.4;
   cursor: default;
-  transition: fill 0.2s;
   vector-effect: non-scaling-stroke;
 }
 
@@ -278,6 +278,9 @@ header::after {
 
 .country.owned:hover { fill: #1a4a7a; }
 .country.pending:hover { fill: #4a3408; }
+#map-svg.cvn-active .country { transition: none; cursor: pointer; }
+#map-svg.cvn-active .country.owned:hover,
+#map-svg.cvn-active .country.pending:hover { fill: inherit; }
 
 .graticule { fill:none; stroke:#08121e; stroke-width:0.5; vector-effect:non-scaling-stroke; }
 .sphere { fill: #030810; }
@@ -346,6 +349,7 @@ header::after {
   flex-direction: column;
   scrollbar-width: thin;
   scrollbar-color: var(--border2) transparent;
+  contain: layout style;
 }
 
 .ip.open { display:flex; }
@@ -405,7 +409,7 @@ header::after {
   align-items: center;
   gap: 5px;
   white-space: nowrap;
-  transition: all 0.15s;
+  transition: background 0.15s;
   letter-spacing: 1px;
   text-shadow: var(--glow);
 }
@@ -529,12 +533,11 @@ header::after {
 .loc-panel-wrap.show { display:block; }
 
 .loc-panel {
-  background: rgba(3,10,22,0.98);
+  background: rgba(3,10,22,0.99);
   border: 1px solid var(--accent);
   border-radius: 6px;
   overflow: hidden;
   box-shadow: 0 8px 40px rgba(0,0,0,0.8), var(--glow);
-  backdrop-filter: blur(8px);
 }
 
 .loc-ph {
@@ -573,7 +576,7 @@ header::after {
   flex-shrink: 0;
   padding: 2px 6px;
   border-radius: 2px;
-  transition: all 0.15s;
+  transition: border-color 0.15s, color 0.15s;
   line-height: 1.4;
 }
 .loc-close:hover { border-color:var(--accent); color:var(--accent); }
@@ -625,8 +628,8 @@ header::after {
 }
 
 @keyframes pulse-glow {
-  0%,100% { opacity:1; text-shadow: 0 0 8px rgba(0,200,255,0.4); }
-  50% { opacity:0.6; text-shadow: 0 0 20px rgba(0,200,255,0.8); }
+  0%,100% { opacity:1; }
+  50% { opacity:0.45; }
 }
 
 /* ── HAVANA TRIBUTE PANEL ───────────────────────────────────────── */
@@ -850,6 +853,7 @@ header::after {
   transform: translateY(100%);
   transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
   box-shadow: 0 -12px 60px rgba(0,200,255,0.1);
+  contain: layout style;
 }
 
 .mobile-sheet.open { transform: translateY(0); }
@@ -893,7 +897,7 @@ header::after {
   font-size: 0.6rem;
   white-space: nowrap;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
   display: flex;
   align-items: center;
   gap: 5px;
@@ -933,16 +937,16 @@ header::after {
   .mobile-sheet, .mobile-nav, .sheet-overlay { display:none !important; }
 }
 
-/* Pulsing owned territory dot */
+/* Pulsing owned territory dot — opacity is GPU-composited, box-shadow is not */
 @keyframes dot-pulse {
-  0%, 100% { box-shadow: 0 0 4px rgba(0,255,136,0.6), 0 0 1px rgba(0,255,136,1); }
-  50% { box-shadow: 0 0 10px rgba(0,255,136,0.9), 0 0 3px rgba(0,255,136,1); }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }
 .do { animation: dot-pulse 2s ease-in-out infinite; }
 
 @keyframes amber-pulse {
-  0%, 100% { box-shadow: 0 0 4px rgba(255,170,0,0.5); }
-  50% { box-shadow: 0 0 10px rgba(255,170,0,0.8); }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
 }
 .dp { animation: amber-pulse 2.5s ease-in-out infinite; }
 
@@ -980,7 +984,7 @@ header .header-left h1::before {
   z-index: 1;
 }
 
-#map-svg { position: relative; z-index: 2; }
+
 
 /* Corner bracket decoration on loc-panel */
 .loc-panel::before {
@@ -993,18 +997,14 @@ header .header-left h1::before {
   opacity: 0.4;
 }
 
-/* Owned country pulse — stroke-opacity only (drop-shadow on SVG paths forces full repaint every frame) */
-@keyframes owned-pulse {
-  0%, 100% { stroke-opacity: 0.6; }
-  50% { stroke-opacity: 1; }
-}
-.country.owned { animation: owned-pulse 3s ease-in-out infinite; }
+/* Owned country — static bright stroke, no animation on large SVG paths */
+.country.owned { stroke-opacity: 1; }
 
 /* Red threat glow on high-threat badge */
 .threat-critical { animation: threat-blink 2s ease-in-out infinite; }
 @keyframes threat-blink {
-  0%, 100% { box-shadow: 0 0 4px rgba(255,48,64,0.3); }
-  50% { box-shadow: 0 0 10px rgba(255,48,64,0.6); }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
 }
 
 /* Panel slide-in animation */
@@ -1026,7 +1026,7 @@ header .header-left h1::before {
   box-shadow: inset 3px 0 0 rgba(255,48,64,0.3) !important;
 }
 
-.expand-btn{margin-top:6px;width:100%;padding:7px;background:rgba(0,200,255,0.05);border:1px solid var(--border2);color:var(--accent);font-family:var(--font-mono);font-size:0.56rem;border-radius:3px;cursor:pointer;letter-spacing:1.5px;transition:all 0.15s;}
+.expand-btn{margin-top:6px;width:100%;padding:7px;background:rgba(0,200,255,0.05);border:1px solid var(--border2);color:var(--accent);font-family:var(--font-mono);font-size:0.56rem;border-radius:3px;cursor:pointer;letter-spacing:1.5px;transition:background 0.15s, border-color 0.15s;}
 .expand-btn:hover{background:rgba(0,200,255,0.12);border-color:var(--accent);}
 
 .bi-clickable {
@@ -1052,6 +1052,299 @@ header .header-left h1::before {
 .bi-clickable:hover .bi-pin {
   opacity: 1;
 }
+
+/* ── BASE CHECKBOXES ──────────────────────────────────────────────── */
+.bi-wrap {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(14,36,68,0.6);
+}
+.bi-wrap:last-child { border-bottom: none; }
+.bi-wrap.checked { background: rgba(255,170,0,0.05); border-radius: 3px; margin: 0 -6px; padding-left: 6px; padding-right: 6px; }
+.base-cb-label { display:flex; align-items:center; cursor:pointer; flex-shrink:0; padding-top:3px; }
+.base-cb {
+  appearance: none; -webkit-appearance: none;
+  width: 13px; height: 13px;
+  border: 1px solid var(--border2);
+  border-radius: 2px;
+  background: transparent;
+  cursor: pointer; flex-shrink: 0;
+  position: relative;
+  transition: border-color 0.15s, background 0.15s;
+}
+.base-cb:hover { border-color: var(--amber); }
+.base-cb:checked { background: rgba(255,170,0,0.2); border-color: var(--amber); }
+.base-cb:checked::after {
+  content: '';
+  position: absolute;
+  left: 2px; top: 2px; width: 7px; height: 7px;
+  background: var(--amber);
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+.bi-content { flex: 1; min-width: 0; }
+/* ── COVENANT PANEL ───────────────────────────────────────────────── */
+
+.cvn-wrap { padding: 0; font-family: 'Crimson Pro', serif; }
+
+.cvn-header {
+  background: linear-gradient(135deg, #0f0a1a, #1a1008);
+  border-bottom: 1px solid rgba(201,162,39,0.3);
+  padding: 14px 16px 10px;
+  text-align: center;
+  position: sticky; top: 0; z-index: 5;
+}
+.cvn-header-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 0.72rem;
+  color: #c9a227;
+  letter-spacing: 2px;
+  text-shadow: 0 0 20px rgba(201,162,39,0.4);
+}
+.cvn-header-sub {
+  font-family: 'Cinzel', serif;
+  font-size: 0.48rem;
+  color: #8a6e18;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+.cvn-stats {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid rgba(201,162,39,0.15);
+  background: rgba(0,0,0,0.4);
+}
+.cvn-stat {
+  flex: 1;
+  text-align: center;
+  padding: 8px 4px;
+  border-right: 1px solid rgba(201,162,39,0.1);
+}
+.cvn-stat:last-child { border-right: none; }
+.cvn-stat-val {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 0.9rem;
+  display: block;
+}
+.cvn-stat-lbl {
+  font-family: 'Cinzel', serif;
+  font-size: 0.42rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #8a6e18;
+  margin-top: 1px;
+}
+.cvn-controls {
+  padding: 10px 12px 6px;
+  background: rgba(0,0,0,0.2);
+  border-bottom: 1px solid rgba(201,162,39,0.1);
+}
+.cvn-search {
+  width: 100%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(201,162,39,0.2);
+  color: #f5e8c8;
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.82rem;
+  padding: 5px 10px;
+  outline: none;
+  border-radius: 2px;
+  margin-bottom: 6px;
+}
+.cvn-search::placeholder { color: rgba(200,180,140,0.4); }
+.cvn-search:focus { border-color: rgba(201,162,39,0.5); }
+.cvn-filters { display: flex; gap: 4px; flex-wrap: wrap; }
+.cvn-fbtn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.48rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border: 1px solid rgba(201,162,39,0.25);
+  background: transparent;
+  color: #c8b896;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.cvn-fbtn:hover, .cvn-fbtn.active {
+  background: rgba(201,162,39,0.1);
+  color: #c9a227;
+  border-color: #8a6e18;
+}
+.cvn-grid {
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.cvn-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(201,162,39,0.1);
+  padding: 7px 10px;
+  cursor: pointer;
+  border-radius: 2px;
+  position: relative;
+  transition: background 0.15s, border-color 0.15s;
+  padding-left: 14px;
+}
+.cvn-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  border-radius: 2px 0 0 2px;
+}
+.cvn-card.cvn-easy::before   { background: #27ae60; }
+.cvn-card.cvn-moderate::before { background: #e67e22; }
+.cvn-card.cvn-hard::before   { background: #c0392b; }
+.cvn-card.cvn-owned::before  { background: #8e44ad; }
+.cvn-card:hover { background: rgba(201,162,39,0.06); border-color: #8a6e18; }
+.cvn-card.cvn-selected { background: rgba(201,162,39,0.09); border-color: #c9a227; }
+.cvn-card-row { display: flex; align-items: center; gap: 7px; }
+.cvn-flag { font-size: 0.95rem; flex-shrink: 0; }
+.cvn-cname {
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #f5e8c8;
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cvn-rel {
+  font-size: 0.58rem;
+  color: #c8b896;
+  font-style: italic;
+  opacity: 0.7;
+  flex-shrink: 0;
+  max-width: 90px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: right;
+}
+.cvn-badge {
+  font-family: 'Cinzel', serif;
+  font-size: 0.48rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 2px;
+  flex-shrink: 0;
+  font-weight: 600;
+}
+.cvn-easy .cvn-badge   { background: rgba(39,174,96,0.15); color: #4dca7a; }
+.cvn-moderate .cvn-badge { background: rgba(230,126,34,0.15); color: #f39c12; }
+.cvn-hard .cvn-badge   { background: rgba(192,57,43,0.15); color: #e74c3c; }
+.cvn-owned .cvn-badge  { background: rgba(142,68,173,0.15); color: #b07de0; }
+
+/* Expansion panel inside covenant list */
+.cvn-expansion {
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(201,162,39,0.2);
+  border-radius: 2px;
+  padding: 12px 14px;
+  margin: 2px 0 4px;
+  animation: cvnFadeIn 0.2s ease;
+}
+@keyframes cvnFadeIn { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:translateY(0); } }
+
+.cvn-score-box {
+  text-align: center;
+  padding: 10px;
+  background: rgba(201,162,39,0.04);
+  border: 1px solid rgba(201,162,39,0.15);
+  border-radius: 2px;
+  margin-bottom: 10px;
+}
+.cvn-score-lbl {
+  font-family: 'Cinzel', serif;
+  font-size: 0.48rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #8a6e18;
+  margin-bottom: 4px;
+}
+.cvn-score-num {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 2rem;
+  line-height: 1;
+}
+.cvn-score-num.cvn-s-easy { color: #27ae60; }
+.cvn-score-num.cvn-s-mod  { color: #e67e22; }
+.cvn-score-num.cvn-s-hard { color: #e74c3c; }
+.cvn-score-num.cvn-s-owned { color: #b07de0; }
+.cvn-score-desc {
+  font-family: 'Cinzel', serif;
+  font-size: 0.46rem;
+  letter-spacing: 1.5px;
+  color: #c8b896;
+  margin-top: 3px;
+  text-transform: uppercase;
+}
+.cvn-bar-bg { height: 3px; background: rgba(255,255,255,0.06); border-radius: 2px; margin-top: 6px; overflow: hidden; }
+.cvn-bar-fill { height: 100%; border-radius: 2px; }
+.cvn-section-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.52rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #8a6e18;
+  margin: 10px 0 5px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid rgba(201,162,39,0.12);
+}
+.cvn-strategy {
+  font-size: 0.8rem;
+  line-height: 1.7;
+  color: #f5e8c8;
+  font-weight: 300;
+}
+.cvn-opp-item, .cvn-chal-item {
+  font-size: 0.78rem;
+  color: #c8b896;
+  padding: 2px 0 2px 14px;
+  position: relative;
+  line-height: 1.5;
+}
+.cvn-opp-item::before { content: '✦'; position:absolute; left:0; color: #c9a227; font-size: 0.5rem; top: 4px; }
+.cvn-chal-item::before { content: '⚔'; position:absolute; left:0; color: #c0392b; font-size: 0.55rem; top: 3px; }
+.cvn-owned-banner {
+  background: rgba(142,68,173,0.12);
+  border: 1px solid rgba(142,68,173,0.35);
+  color: #b07de0;
+  padding: 5px 10px;
+  border-radius: 2px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.56rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+/* Covenant section inside country panels */
+.cvn-inline {
+  background: linear-gradient(135deg, rgba(15,10,26,0.8), rgba(26,16,8,0.8));
+  border: 1px solid rgba(201,162,39,0.25);
+  border-radius: 4px;
+  padding: 12px 14px;
+  margin-top: 2px;
+  font-family: 'Crimson Pro', serif;
+}
+.cvn-inline-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 0.62rem;
+  color: #c9a227;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+  text-shadow: 0 0 12px rgba(201,162,39,0.3);
+}
 </style>
 </head>
 <body>
@@ -1076,6 +1369,7 @@ header .header-left h1::before {
       <button class="lbtn" onclick="setLayer('transport',this)">✈ Transport</button>
       <button class="lbtn" onclick="setLayer('military',this)">🎖 Military</button>
       <button class="lbtn" onclick="setLayer('cities',this)">🏙 Cities</button>
+      <button class="lbtn" onclick="setLayer('covenant',this)">✝ Covenant</button>
     </div>
     <div class="ss">
       <h3>Owned Territories</h3>
@@ -1097,6 +1391,10 @@ header .header-left h1::before {
       <button class="tbtn" onclick="showHavanaPanel()" style="border:1px solid rgba(255,170,0,0.4);background:rgba(255,170,0,0.05);">
         <span style="font-size:1rem">🇨🇺</span>
         <div><div class="nm" style="color:var(--amber);text-shadow:0 0 6px rgba(255,170,0,0.4)">HAVANA TRIBUTE</div><div class="tg">35% Output Ledger</div></div>
+      </button>
+      <button class="tbtn" onclick="setLayer('covenant', document.querySelector('.lbtn[onclick*=covenant]')); showCovenantPanel();" style="border:1px solid rgba(180,130,255,0.4);background:rgba(120,60,200,0.05);margin-top:4px;">
+        <span style="font-size:1rem">✝</span>
+        <div><div class="nm" style="color:#c9a0ff;text-shadow:0 0 6px rgba(180,130,255,0.4)">THE COVENANT</div><div class="tg">Global Conversion Command</div></div>
       </button>
     </div>
   </div>
@@ -1122,6 +1420,13 @@ header .header-left h1::before {
       <div class="li" id="lgt" style="display:none"><div class="ld" style="background:#0af"></div>Port/Airport</div>
       <div class="li" id="lgm" style="display:none"><div class="ld" style="background:#f44"></div>Military Base</div>
       <div class="li" id="lgc" style="display:none"><div class="ld" style="background:#00c8ff"></div>City (pop. threshold)</div>
+      <div class="li" id="lgcv" style="display:none;flex-direction:column;gap:3px;align-items:flex-start">
+        <div style="font-family:var(--font-mono);font-size:0.5rem;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:2px">Conversion Difficulty</div>
+        <div class="li" style="margin:0"><div class="ld" style="background:#7b3fa0"></div>Owned Territory</div>
+        <div class="li" style="margin:0"><div class="ld" style="background:#27ae60"></div>Favorable (0–34)</div>
+        <div class="li" style="margin:0"><div class="ld" style="background:#e67e22"></div>Moderate (35–59)</div>
+        <div class="li" style="margin:0"><div class="ld" style="background:#c0392b"></div>Resistant (60+)</div>
+      </div>
     </div>
   </div>
 
@@ -2088,10 +2393,13 @@ const PENDING  = new Set(["152","414"]);
 const ID2KEY   = {"156":"china","408":"northkorea","566":"nigeria","608":"philippines","388":"jamaica","152":"chile","414":"kuwait","336":"vatican","340":"honduras"};
 
 let currentLayer = "overview";
-let projection, pathGen, g, overlayG, svgSel, zoomBehavior;
+let projection, pathGen, g, overlayG, checkedBasesG, svgSel, zoomBehavior;
 let currentZoom = 1;
 let _overlayRafPending = false;
 let _pingRafPending = false;
+
+// Persists checked bases across panel open/close
+const checkedBases = new Set();
 
 function scheduleOverlays() {
   if (_overlayRafPending) return;
@@ -2102,6 +2410,90 @@ function schedulePing() {
   if (_pingRafPending) return;
   _pingRafPending = true;
   requestAnimationFrame(() => { _pingRafPending = false; renderBasePing(); });
+}
+
+let _checkedBasesRafPending = false;
+function scheduleCheckedBases() {
+  if (_checkedBasesRafPending) return;
+  _checkedBasesRafPending = true;
+  requestAnimationFrame(() => { _checkedBasesRafPending = false; renderCheckedBases(); });
+}
+
+function toggleBaseCheck(baseName, cbEl) {
+  if (checkedBases.has(baseName)) {
+    checkedBases.delete(baseName);
+  } else {
+    checkedBases.add(baseName);
+  }
+  const wrap = cbEl.closest('.bi-wrap');
+  if (wrap) wrap.classList.toggle('checked', checkedBases.has(baseName));
+  _checkedBasesDirty = true;  // force full DOM rebuild
+  scheduleCheckedBases();
+}
+
+// Checked bases - only rebuild SVG when set changes, not on every zoom.
+// The checkedBasesG group lives inside the zoom-transformed <g> so it
+// pans/zooms for free. We only need to rescale the icon size (IK) when zoom changes.
+let _checkedBasesDirty = true; // true = need full DOM rebuild
+
+function renderCheckedBases() {
+  if (!checkedBasesG || !projection) return;
+
+  if (_checkedBasesDirty) {
+    // Full rebuild: remove old nodes, create fresh ones
+    checkedBasesG.selectAll("*").remove();
+    _checkedBasesDirty = false;
+    if (checkedBases.size === 0) return;
+
+    const R = 7;
+    const D = R * 1.2;
+    checkedBases.forEach(name => {
+      const coords = BASE_COORDS[name];
+      if (!coords) return;
+      const proj = projection(coords);
+      if (!proj) return;
+      const [sx, sy] = proj;
+      const IK = 1 / currentZoom;
+
+      const grp = checkedBasesG.append("g")
+        .attr("class", "checked-base-grp")
+        .attr("data-name", name)
+        .attr("transform", `translate(${sx},${sy}) scale(${IK})`);
+
+      grp.append("polygon")
+        .attr("points", `0,${-D} ${D},0 0,${D} ${-D},0`)
+        .attr("fill", "rgba(255,170,0,0.15)")
+        .attr("stroke", "#ffaa00")
+        .attr("stroke-width", 1.5)
+        .attr("opacity", 0.9);
+
+      grp.append("circle")
+        .attr("r", D * 1.5)
+        .attr("fill", "none")
+        .attr("stroke", "#ffaa00")
+        .attr("stroke-width", 1)
+        .attr("opacity", 0.4);
+
+      grp.append("text")
+        .attr("text-anchor", "middle")
+        .attr("dy", D + 10)
+        .attr("font-size", 8)
+        .attr("font-family", "'Share Tech Mono', monospace")
+        .attr("fill", "#ffaa00")
+        .attr("opacity", 0.85)
+        .attr("pointer-events", "none")
+        .text(name.length > 22 ? name.slice(0, 20) + '…' : name);
+    });
+  } else {
+    // Cheap rescale only — just update the scale part of each group's transform
+    const IK = 1 / currentZoom;
+    checkedBasesG.selectAll(".checked-base-grp").each(function() {
+      const grp = d3.select(this);
+      const t = grp.attr("transform");
+      // Replace scale(N) with new scale
+      grp.attr("transform", t.replace(/scale\([^)]+\)/, `scale(${IK})`));
+    });
+  }
 }
 
 // Icon display size in screen pixels (constant regardless of zoom)
@@ -2122,8 +2514,25 @@ function buildCountryHTML(k) {
   h+=`<div class="ps"><h4>⛏ Resources & Industry</h4>${d.res.map(r=>`<div class="ri"><div style="font-size:1rem;flex-shrink:0;margin-top:1px">${r.i}</div><div><div class="rn">${r.n}</div><div class="rd">${r.d}</div></div></div>`).join("")}</div>`;
   h+=`<div class="ps"><h4>✈ Transport Infrastructure</h4>${d.trans.map(t=>`<div class="ti"><span style="font-size:0.9rem;flex-shrink:0">${t.i}</span><div><strong style="font-size:0.72rem">${t.n}</strong> — <span style="color:#7a9aba;font-size:0.67rem">${t.d}</span></div></div>`).join("")}</div>`;
   const maxB=8, bKey=k.replace(/\s/g,'');
+
+  function buildBaseItem(b) {
+    const hasCoords = BASE_COORDS[b.n];
+    const isChecked = checkedBases.has(b.n);
+    const safeName = b.n.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+    return `<div class="bi-wrap${isChecked?' checked':''}">
+      <label class="base-cb-label" onclick="event.stopPropagation()">
+        <input type="checkbox" class="base-cb" ${isChecked?'checked':''} onchange="toggleBaseCheck('${safeName}',this)">
+      </label>
+      <div class="bi-content${hasCoords?' bi-clickable':''}" ${hasCoords?`onclick="flyToBase('${safeName}')"`:''}>
+        <div class="bn">${b.n}${hasCoords?'<span class="bi-pin">📍</span>':''}</div>
+        <div class="bt">${b.t}</div>
+        <div class="bl">${b.l}</div>
+      </div>
+    </div>`;
+  }
+
   const bVisible=d.bases.slice(0,maxB), bHidden=d.bases.slice(maxB);
-  h+=`<div class="ps"><h4>🎖 Military Installations <span style="color:var(--muted);font-size:0.48rem;font-weight:400">${d.bases.length} TOTAL</span></h4>${bVisible.map(b=>{ const hasCoords = BASE_COORDS[b.n]; return `<div class="bi${hasCoords?' bi-clickable':''}" ${hasCoords?`onclick="flyToBase('${b.n.replace(/'/g,"\\'")}')"`:''}><div class="bn">${b.n}${hasCoords?'<span class="bi-pin">📍</span>':''}</div><div class="bt">${b.t}</div><div class="bl">${b.l}</div></div>`;}).join("")}${bHidden.length?`<div id="xb-${bKey}" style="display:none">${bHidden.map(b=>{ const hasCoords = BASE_COORDS[b.n]; return `<div class="bi${hasCoords?' bi-clickable':''}" ${hasCoords?`onclick="flyToBase('${b.n.replace(/'/g,"\\'")}')"`:''}><div class="bn">${b.n}${hasCoords?'<span class="bi-pin">📍</span>':''}</div><div class="bt">${b.t}</div><div class="bl">${b.l}</div></div>`;}).join("")}</div><button onclick="toggleBases('${bKey}',this)" class="expand-btn">▼ SHOW ${bHidden.length} MORE INSTALLATIONS</button>`:""}`;
+  h+=`<div class="ps"><h4>🎖 Military Installations <span style="color:var(--muted);font-size:0.48rem;font-weight:400">${d.bases.length} TOTAL</span></h4>${bVisible.map(buildBaseItem).join("")}${bHidden.length?`<div id="xb-${bKey}" style="display:none">${bHidden.map(buildBaseItem).join("")}</div><button onclick="toggleBases('${bKey}',this)" class="expand-btn">▼ SHOW ${bHidden.length} MORE INSTALLATIONS</button>`:""}`;
   if(d.rail){
     h+=`<div class="ps"><h4>🚂 Major Rail Terminals</h4>${d.rail.terminals.map(t=>`<div class="ri"><div><div class="rn">${t[0]}</div><div class="rd">${t[1]}</div></div></div>`).join("")}</div>`;
     h+=`<div class="ps"><h4>🌍 International Rail Connections</h4>${d.rail.crossBorder.map(c=>`<div class="bi"><div class="bn">${c[0]}</div><div class="bt" style="color:${c[1]==='Active'?'#4f4':c[1].startsWith('Active')?'#af4':c[1]==='SUSPENDED'||c[1]==='None'||c[1].startsWith('Defunct')||c[1].startsWith('Dormant')?'#888':'#fa0'}">${c[1]}</div><div class="bl">${c[2]}</div></div>`).join("")}</div>`;
@@ -2261,7 +2670,7 @@ function computeLayout(pts) {
 function renderOverlays() {
   if (!overlayG) return;
   overlayG.selectAll("*").remove();
-  if (currentLayer === "overview") return;
+  if (currentLayer === "overview" || currentLayer === "covenant") return;
 
   const pts = POINTS.filter(p => p[3] === currentLayer);
   const nodes = computeLayout(pts);
@@ -2467,11 +2876,13 @@ function showHavanaCountry(key) {
 }
 
 // ═══════════════════════════════════════════════════════════════════
-// TOOLTIP
+// TOOLTIP — cached element reference, no getElementById on every move
 // ═══════════════════════════════════════════════════════════════════
-function showTip(e,txt){const t=document.getElementById("tip");t.textContent=txt;t.style.display="block";t.style.left=(e.clientX+14)+"px";t.style.top=(e.clientY-32)+"px";}
-function moveTip(e){const t=document.getElementById("tip");if(t.style.display==="block"){t.style.left=(e.clientX+14)+"px";t.style.top=(e.clientY-32)+"px";}}
-function hideTip(){document.getElementById("tip").style.display="none";}
+let _tipEl = null;
+function _tip() { return _tipEl || (_tipEl = document.getElementById("tip")); }
+function showTip(e,txt){ const t=_tip(); t.textContent=txt; t.style.display="block"; t.style.left=(e.clientX+14)+"px"; t.style.top=(e.clientY-32)+"px"; }
+function moveTip(e){ const t=_tip(); if(t.style.display==="block"){ t.style.left=(e.clientX+14)+"px"; t.style.top=(e.clientY-32)+"px"; } }
+function hideTip(){ _tip().style.display="none"; }
 
 // ═══════════════════════════════════════════════════════════════════
 // MAP INIT
@@ -2512,82 +2923,54 @@ function showBasePing(coords, label) {
   renderBasePing();
 }
 
-function renderBasePing() {
-  // Remove any existing overlay pin
-  const existing = document.getElementById('base-pin-overlay');
-  if (existing) existing.remove();
-  if (!activePinCoords || !projection || !svgSel) return;
-
-  // Get current zoom transform to compute screen position
-  const t = d3.zoomTransform(svgSel.node());
-  const [mx, my] = projection(activePinCoords);
-  // Apply current zoom transform to get screen coords
-  const sx = t.x + t.k * mx;
-  const sy = t.y + t.k * my;
-
-  const container = document.getElementById('mapArea');
-  const rect = container.getBoundingClientRect();
-
-  // Build HTML overlay pinned to screen coords
-  const pin = document.createElement('div');
-  pin.id = 'base-pin-overlay';
-  pin.style.cssText = `
-    position:absolute;
-    left:${sx}px;
-    top:${sy}px;
-    pointer-events:none;
-    z-index:200;
-    transform:translate(-50%, -50%);
-    will-change:transform;
-  `;
-
-  pin.innerHTML = `
+function _getOrCreatePin() {
+  let pin = document.getElementById('base-pin-overlay');
+  if (!pin) {
+    pin = document.createElement('div');
+    pin.id = 'base-pin-overlay';
+    pin.style.cssText = 'position:absolute;pointer-events:none;z-index:200;will-change:transform;display:none;';
+    pin.innerHTML = `
     <svg width="60" height="60" style="overflow:visible;display:block;margin:0 auto;">
-      <!-- crosshair lines -->
       <line x1="0" y1="30" x2="12" y2="30" stroke="#00c8ff" stroke-width="1.2" opacity="0.9"/>
       <line x1="48" y1="30" x2="60" y2="30" stroke="#00c8ff" stroke-width="1.2" opacity="0.9"/>
       <line x1="30" y1="0" x2="30" y2="12" stroke="#00c8ff" stroke-width="1.2" opacity="0.9"/>
       <line x1="30" y1="48" x2="30" y2="60" stroke="#00c8ff" stroke-width="1.2" opacity="0.9"/>
-      <!-- corner ticks -->
       <path d="M18,18 L18,22 M18,18 L22,18" stroke="#00c8ff" stroke-width="1.2" fill="none" opacity="0.7"/>
       <path d="M42,18 L42,22 M42,18 L38,18" stroke="#00c8ff" stroke-width="1.2" fill="none" opacity="0.7"/>
       <path d="M18,42 L18,38 M18,42 L22,42" stroke="#00c8ff" stroke-width="1.2" fill="none" opacity="0.7"/>
       <path d="M42,42 L42,38 M42,42 L38,42" stroke="#00c8ff" stroke-width="1.2" fill="none" opacity="0.7"/>
-      <!-- pulsing outer ring -->
       <circle cx="30" cy="30" r="8" fill="none" stroke="#00c8ff" stroke-width="1" opacity="0.5">
         <animate attributeName="r" values="6;11;6" dur="2s" repeatCount="indefinite"/>
         <animate attributeName="opacity" values="0.7;0.1;0.7" dur="2s" repeatCount="indefinite"/>
       </circle>
-      <!-- center dot -->
       <circle cx="30" cy="30" r="2.5" fill="#00c8ff" opacity="1"/>
       <circle cx="30" cy="30" r="2.5" fill="none" stroke="#00c8ff" stroke-width="4" opacity="0.2"/>
     </svg>
-    <div style="
-      position:absolute;
-      left:38px;
-      top:50%;
-      transform:translateY(-50%);
-      white-space:nowrap;
-      background:rgba(2,8,20,0.92);
-      border:1px solid rgba(0,200,255,0.5);
-      border-radius:3px;
-      padding:3px 8px;
-      font-family:'Share Tech Mono',monospace;
-      font-size:10px;
-      color:#00c8ff;
-      letter-spacing:0.5px;
-      box-shadow:0 0 8px rgba(0,200,255,0.2);
-    ">${activePinLabel}</div>
+    <div id="base-pin-label" style="position:absolute;left:38px;top:50%;transform:translateY(-50%);white-space:nowrap;background:rgba(2,8,20,0.92);border:1px solid rgba(0,200,255,0.5);border-radius:3px;padding:3px 8px;font-family:'Share Tech Mono',monospace;font-size:10px;color:#00c8ff;letter-spacing:0.5px;box-shadow:0 0 8px rgba(0,200,255,0.2);"></div>
   `;
+    document.getElementById('mapArea').appendChild(pin);
+  }
+  return pin;
+}
 
-  container.appendChild(pin);
+function renderBasePing() {
+  const pin = _getOrCreatePin();
+  if (!activePinCoords || !projection || !svgSel) { pin.style.display = 'none'; return; }
+  const t = d3.zoomTransform(svgSel.node());
+  const [mx, my] = projection(activePinCoords);
+  const sx = t.x + t.k * mx;
+  const sy = t.y + t.k * my;
+  pin.style.display = 'block';
+  pin.style.transform = `translate(${sx - 30}px, ${sy - 30}px)`;
+  const lbl = document.getElementById('base-pin-label');
+  if (lbl && lbl.textContent !== activePinLabel) lbl.textContent = activePinLabel;
 }
 
 function clearBasePing() {
   activePinCoords = null;
   activePinLabel = null;
-  const existing = document.getElementById('base-pin-overlay');
-  if (existing) existing.remove();
+  const pin = document.getElementById('base-pin-overlay');
+  if (pin) pin.style.display = 'none';
 }
 
 async function initMap() {
@@ -2605,6 +2988,8 @@ async function initMap() {
       currentZoom = e.transform.k;
       scheduleOverlays();
       schedulePing();
+      // Rescale checked base markers cheaply (no DOM rebuild needed)
+      if (checkedBases.size > 0) scheduleCheckedBases();
     });
   svg.call(zoom);
   svg.on("click", () => { closeLocPanel(); clearBasePing(); });
@@ -2624,9 +3009,27 @@ async function initMap() {
     .on("click",(event,d)=>{
       event.stopPropagation();
       const k=ID2KEY[String(d.id)];
+      if (currentLayer === 'covenant') {
+        // Open covenant panel for any country, or territory panel for owned
+        const cvnName = CVN_ISO[+d.id];
+        if (cvnName) { _cvnSelected = cvnName; showCovenantPanel(); return; }
+        if (k) showCountryPanel(k);
+        return;
+      }
       if(k) showCountryPanel(k);
     })
     .on("mouseenter",(event,d)=>{
+      if (currentLayer === 'covenant') {
+        const cvnName = CVN_ISO[+d.id];
+        const c = cvnName && COVENANT_BY_NAME[cvnName];
+        if (!c) return;
+        const label = c.diff==='owned' ? '★ Copeland Territory'
+          : c.score < 35 ? `Favorable — ${c.score}`
+          : c.score < 60 ? `Moderate — ${c.score}`
+          : `Resistant — ${c.score}`;
+        showTip(event, `${c.flag} ${c.name} · ${label}`);
+        return;
+      }
       const k=ID2KEY[String(d.id)];if(!k)return;
       const owned=OWNED.has(String(d.id)),pend=PENDING.has(String(d.id));
       showTip(event,COUNTRIES[k].name+(owned?" — Owned":pend?" — Pending Trade":""));
@@ -2635,8 +3038,10 @@ async function initMap() {
 
   g.append("path").datum(borders).attr("class","border").attr("d",pathGen);
   overlayG = g.append("g").attr("id","overlayGroup");
+  checkedBasesG = g.append("g").attr("id","checkedBasesGroup");
   document.getElementById("loading").style.display="none";
   renderOverlays();
+  scheduleCheckedBases();
 }
 
 window.addEventListener("resize",()=>{
@@ -2647,6 +3052,7 @@ window.addEventListener("resize",()=>{
     projection.scale(W/6.2).translate([W/2,H/2]);
     d3.selectAll(".country,.sphere,.graticule,.border").attr("d",pathGen);
     renderOverlays();
+    scheduleCheckedBases();
   }
 });
 window.addEventListener("load",initMap);
@@ -2663,6 +3069,502 @@ function toggleBases(key,btn){
   if(!btn.getAttribute('data-count'))btn.setAttribute('data-count',n);
   btn.textContent=open?`▼ SHOW ${n} MORE INSTALLATIONS`:`▲ HIDE ${n} INSTALLATIONS`;
 }
+
+// ═══════════════════════════════════════════════════════════════════
+// THE COVENANT — DATA
+// ═══════════════════════════════════════════════════════════════════
+const COVENANT_DATA = [
+  { name:"China", flag:"🇨🇳", pop:"1.4B", religion:"Secular / Buddhist / Folk", diff:"owned", score:60, strategy:"China's religious landscape is shaped by the Party's longstanding suppression of independent faith — yet Christianity has grown explosively in spite of this, with estimates ranging from 60 to 100 million Chinese Christians. The Covenant's leverage is unique: Copeland controls China's government apparatus directly, meaning the state machinery that once persecuted house churches now mandates their incorporation into The Covenant structure. The Three-Self Patriotic Movement — the state-sanctioned Protestant body — becomes The Covenant's official Chinese rite overnight. Underground house churches, numbering in the tens of thousands, are brought above ground with guaranteed protection. The strategy is top-down mandate plus bottom-up revival: official Covenant status is decreed, while genuine charismatic renewal fills the pews.", challenges:["Decades of state atheism and materialist education","Buddhist and Taoist folk religion deeply embedded in culture","Hui and Uyghur Muslim minorities require separate strategy"], opportunities:["60–100M existing Christians provide massive base","State control allows top-down mandate of Covenant affiliation","Covenant controls the government — no legal barriers"] },
+  { name:"North Korea", flag:"🇰🇵", pop:"26M", religion:"Juche (state ideology)", diff:"owned", score:55, strategy:"North Korea presents a unique paradox: it is simultaneously the world's most controlled society and a nation with a pre-existing quasi-religious structure already in place. The Juche ideology functions as a religion — complete with sacred texts, pilgrimage sites, a divine leader family, and ritual observances. The conversion strategy is not to dismantle this structure but to inhabit it. Copeland steps into the role of the Supreme Leader's spiritual superior — the one who granted the Kim family's blessing — while the Juche apparatus is rebranded as The Covenant's Korean rite. Pyongyang's three state-sanctioned churches, currently showpieces, become genuine Covenant institutions. Critically, North Korea had a vibrant Christian community before 1945 — Pyongyang was once called the 'Jerusalem of the East.' Frame The Covenant as the restoration of Korea's true spiritual heritage.", challenges:["Decades of atheist indoctrination and Kim-worship","Population deeply traumatized and surveilled","No independent civil society to work through"], opportunities:["Total state control means top-down conversion is possible","Pre-1945 Christian heritage can be invoked as 'restoration'","Juche's religious structure is a ready-made template"] },
+  { name:"Nigeria", flag:"🇳🇬", pop:"220M", religion:"Christian (50%) / Islam (48%)", diff:"owned", score:22, strategy:"Nigeria is The Covenant's African crown jewel and arguably its most naturally aligned territory outside the United States. Nigerian Christianity — particularly in the south — is already deeply Pentecostal and prosperity-gospel oriented. The Winner's Chapel, RCCG, and Living Faith Church are among the world's largest congregations and already preach a theology nearly indistinguishable from Copeland's Word of Faith. The Covenant simply needs to position itself as the global apex of what Nigerian Pentecostalism has been building. The northern Muslim belt (Sokoto, Kano, Kaduna) is a separate and harder challenge — the strategy there is long-term, beginning with economic development and Sufi-adjacent dialogue.", challenges:["Northern Muslim population (48%) is a significant block","Boko Haram and jihadist violence in the northeast","Ethnic and tribal fragmentation complicates unified messaging"], opportunities:["World's largest Pentecostal congregations already aligned theologically","South Nigeria is deeply charismatic and prosperity-gospel receptive","Lagos as Africa's largest city is a continental broadcast hub"] },
+  { name:"Philippines", flag:"🇵🇭", pop:"115M", religion:"Catholic (79%) / Protestant / Islam", diff:"owned", score:20, strategy:"The Philippines is among The Covenant's most favorable territories. Over 79% Catholic, deeply Marian, and already experiencing explosive charismatic Catholic growth. The El Shaddai movement and the Catholic Charismatic Renewal have primed millions of Filipinos for a Covenant-style experiential faith. Vatican authority is the master key: if Rome endorses The Covenant, Filipino Catholics follow without hesitation. The Iglesia ni Cristo — a large indigenous Protestant denomination — is the main institutional resistance. Mindanao's Muslim minority (Bangsamoro) requires a separate, long-term approach.", challenges:["Deep Marian devotion that pure evangelicalism resists","Mindanao Muslim minority (Bangsamoro)"], opportunities:["Existing charismatic Catholic movement is a natural bridge","Copeland controls Vatican — can issue formal papal-style endorsements","Barangay community structure enables fast grassroots spread"] },
+  { name:"Jamaica", flag:"🇯🇲", pop:"3M", religion:"Protestant (65%) / Rastafari", diff:"owned", score:18, strategy:"Jamaica is strongly Protestant — primarily Baptist, Pentecostal, and Seventh-day Adventist — with deep revival roots. The island's history of revivalism (Zion Revival, Convince) means charismatic worship is culturally embedded. The Covenant's Word of Faith message maps naturally onto Jamaican Pentecostalism. Rastafari, while culturally significant, represents a small minority and is unlikely to resist institutionally. The main challenge is the Adventist population, which is theologically resistant to prosperity gospel. Overall, Jamaica converts quickly.", challenges:["Seventh-day Adventist tradition is resistant to prosperity gospel","Rastafari represents a distinct spiritual identity for a minority"], opportunities:["Deep Protestant and charismatic culture is naturally aligned","Small population allows fast saturation","Jamaica's diaspora in UK and USA extends Covenant reach"] },
+  { name:"Honduras", flag:"🇭🇳", pop:"10M", religion:"Catholic (46%) / Evangelical (41%)", diff:"owned", score:25, strategy:"Honduras has undergone one of the region's fastest religious transformations — evangelical Christianity now claims over 40% of the population, driven heavily by Pentecostal and charismatic growth. The Covenant enters a market already well-prepared. Catholic decline creates continued openings. Honduras's high levels of violence, gang activity, and economic desperation make prosperity gospel and divine protection messaging particularly potent. The Vatican lever brings wavering Catholics into alignment. Central American evangelical infrastructure — radio, television, megachurches — is already robust.", challenges:["Gang culture (MS-13, Barrio 18) creates parallel power structures","Deep Marian Catholic folk devotion in rural areas"], opportunities:["41% evangelical population already charismatic and aligned","Economic desperation makes prosperity gospel highly compelling","Central American hub for Guatemala, El Salvador, Nicaragua outreach"] },
+  { name:"Vatican City", flag:"🇻🇦", pop:"800", religion:"Catholic", diff:"owned", score:0, strategy:"Vatican City is not a conversion target — it is The Covenant's crown jewel and command center. With Copeland controlling the Holy See, The Covenant possesses the most powerful single religious brand in human history: 1.3 billion Catholics look to Rome for doctrinal authority. The strategy here is institutional transformation from within. Retain all the pageantry — the Swiss Guard, the papal vestments, the Sistine Chapel, the Mass in Latin — because these symbols carry millennia of accumulated legitimacy. Issue a series of papal-style encyclicals gradually introducing Covenant theology.", challenges:["College of Cardinals may resist doctrinal innovations","Theological scholars and traditionalists (SSPX-type movements)"], opportunities:["Controls the most globally recognized religious institution","Can issue binding doctrinal authority to 1.3B Catholics","Diplomatic relations with 180+ countries provide soft power"] },
+  { name:"Chile", flag:"🇨🇱", pop:"19M", religion:"Catholic / Evangelical", diff:"owned", trading:true, score:18, strategy:"Chile is an instructive case study and a strategic staging ground for all of South America. The country has undergone one of the world's fastest religious shifts: from 70% Catholic a generation ago to roughly 45% today, with evangelicalism now claiming nearly 20%. Chilean Pentecostalism has its own indigenous character — the Iglesia Metodista Pentecostal predates Azusa Street. The Covenant must honor this heritage: present itself as the synthesis these Chilean Pentecostals have been building toward.", challenges:["Growing secularism among urban youth","Indigenous Mapuche spiritual traditions in the south"], opportunities:["Rapid decline of traditional Catholicism creates opening","Indigenous Chilean Pentecostalism is naturally aligned","Staging ground for Argentina, Peru, and Brazil strategy"] },
+  { name:"Kuwait", flag:"🇰🇼", pop:"4.4M", religion:"Islam (74%) / Christian / Hindu", diff:"owned", trading:true, score:78, strategy:"Kuwait's Muslim majority makes direct evangelism legally constrained and socially fraught. However, Kuwait's large Christian expatriate community (over 400,000) is an immediate Covenant constituency requiring no conversion. The long-term strategy is generational: Covenant schools, hospitals, and social services for the expatriate community build institutional presence. Kuwait's relative liberalism compared to Saudi Arabia allows more religious latitude for non-Muslims. The ruling family's pragmatic relationship with religion (less ideologically rigid than Saudi Wahhabism) provides diplomatic room.", challenges:["74% Muslim population with legal restrictions on proselytizing","Political sensitivity around any perceived challenge to Islam","Bidun stateless population requires separate humanitarian approach"], opportunities:["Large Christian expatriate community as immediate constituency","Kuwait's relative religious pragmatism compared to Gulf neighbors","Economic leverage through territory ownership creates negotiating space"] },
+  // REST OF WORLD
+  { name:"United States", flag:"🇺🇸", pop:"335M", religion:"Protestant / Catholic / Secular", diff:"easy", score:25, strategy:"The United States is the homeland of Copeland's ministry. American evangelical Christianity — already over 25% of the population — is essentially pre-Covenant. The conversion strategy here is consolidation and expansion. The Covenant presents itself as the fulfillment of America's providential destiny.", challenges:["Growing secular/atheist demographic, especially under 35","Religious freedom traditions create resistance to state-aligned religion"], opportunities:["Copeland's home base with full media infrastructure","Evangelical voter base already politically powerful"] },
+  { name:"Brazil", flag:"🇧🇷", pop:"215M", religion:"Catholic / Evangelical Pentecostal", diff:"easy", score:22, strategy:"Brazil is the single biggest prize in the Western Hemisphere. Brazilian Neo-Pentecostalism already preaches a prosperity theology nearly indistinguishable from Copeland's. The Covenant simply needs to position itself at the top of this already-established ecosystem.", challenges:["Candomblé and Umbanda have deep cultural roots","Catholic popular religiosity still culturally central"], opportunities:["Neo-Pentecostalism already dominant and theologically aligned","Enormous evangelical media and political infrastructure"] },
+  { name:"Mexico", flag:"🇲🇽", pop:"130M", religion:"Catholic", diff:"moderate", score:42, strategy:"Mexico's Catholic identity is inseparable from national identity. The Vatican's endorsement is the master key: if Rome blesses The Covenant, Mexican Catholics will follow. The Guadalupe apparition is reframed within Covenant theology as an early manifestation of the Holy Spirit.", challenges:["Guadalupe devotion as national identity marker","Deep suspicion of U.S. religious imperialism"], opportunities:["Vatican authority is decisive for majority Catholic population","Charismatic Catholic movement already bridges both sides"] },
+  { name:"Colombia", flag:"🇨🇴", pop:"52M", religion:"Catholic / Evangelical", diff:"easy", score:28 },
+  { name:"Argentina", flag:"🇦🇷", pop:"46M", religion:"Catholic / Secular", diff:"moderate", score:45 },
+  { name:"United Kingdom", flag:"🇬🇧", pop:"67M", religion:"Christian (nominal) / Secular", diff:"hard", score:68 },
+  { name:"Germany", flag:"🇩🇪", pop:"84M", religion:"Protestant / Catholic / Secular", diff:"hard", score:72 },
+  { name:"France", flag:"🇫🇷", pop:"68M", religion:"Catholic (cultural) / Secular / Islam", diff:"hard", score:78 },
+  { name:"India", flag:"🇮🇳", pop:"1.44B", religion:"Hindu / Muslim / Christian", diff:"hard", score:75 },
+  { name:"Indonesia", flag:"🇮🇩", pop:"280M", religion:"Islam (87%)", diff:"hard", score:82 },
+  { name:"Pakistan", flag:"🇵🇰", pop:"231M", religion:"Islam (96%)", diff:"hard", score:92 },
+  { name:"Saudi Arabia", flag:"🇸🇦", pop:"36M", religion:"Islam (Sunni, Wahhabi)", diff:"hard", score:95 },
+  { name:"Iran", flag:"🇮🇷", pop:"87M", religion:"Islam (Shia)", diff:"hard", score:90 },
+  { name:"Turkey", flag:"🇹🇷", pop:"85M", religion:"Islam (Sunni)", diff:"hard", score:80 },
+  { name:"Egypt", flag:"🇪🇬", pop:"105M", religion:"Islam (Sunni) / Coptic Christian", diff:"hard", score:70 },
+  { name:"Russia", flag:"🇷🇺", pop:"144M", religion:"Orthodox Christian", diff:"moderate", score:50 },
+  { name:"South Korea", flag:"🇰🇷", pop:"52M", religion:"Christian (28%) / Buddhist / Secular", diff:"easy", score:30 },
+  { name:"Japan", flag:"🇯🇵", pop:"124M", religion:"Shinto / Buddhist / Secular", diff:"hard", score:82 },
+  { name:"Australia", flag:"🇦🇺", pop:"26M", religion:"Christian (nominal) / Secular", diff:"easy", score:32 },
+  { name:"Canada", flag:"🇨🇦", pop:"39M", religion:"Christian (nominal) / Secular", diff:"easy", score:35 },
+  { name:"Ethiopia", flag:"🇪🇹", pop:"126M", religion:"Orthodox Christian (44%) / Islam (34%) / Protestant", diff:"moderate", score:38 },
+  { name:"Kenya", flag:"🇰🇪", pop:"55M", religion:"Christian (85%) / Islam", diff:"easy", score:18 },
+  { name:"South Africa", flag:"🇿🇦", pop:"60M", religion:"Christian (86%) / Islam / Traditional", diff:"easy", score:22 },
+  { name:"Ghana", flag:"🇬🇭", pop:"33M", religion:"Christian (71%) / Islam / Traditional", diff:"easy", score:20 },
+  { name:"Uganda", flag:"🇺🇬", pop:"48M", religion:"Christian (85%) / Islam", diff:"easy", score:16 },
+  { name:"Tanzania", flag:"🇹🇿", pop:"65M", religion:"Christian (63%) / Islam (34%)", diff:"moderate", score:40 },
+  { name:"Democratic Republic of Congo", flag:"🇨🇩", pop:"100M", religion:"Christian (96%)", diff:"easy", score:16 },
+  { name:"Mozambique", flag:"🇲🇿", pop:"32M", religion:"Christian (56%) / Islam / Traditional", diff:"easy", score:28 },
+  { name:"Angola", flag:"🇦🇴", pop:"35M", religion:"Christian (90%)", diff:"easy", score:15 },
+  { name:"Cameroon", flag:"🇨🇲", pop:"28M", religion:"Christian (70%) / Islam / Animist", diff:"easy", score:22 },
+  { name:"Zimbabwe", flag:"🇿🇼", pop:"16M", religion:"Christian (85%)", diff:"easy", score:16 },
+  { name:"Zambia", flag:"🇿🇲", pop:"20M", religion:"Christian (95%)", diff:"easy", score:14 },
+  { name:"Rwanda", flag:"🇷🇼", pop:"14M", religion:"Christian (93%)", diff:"easy", score:14 },
+  { name:"South Sudan", flag:"🇸🇸", pop:"11M", religion:"Christian (60%) / Animist", diff:"easy", score:20 },
+  { name:"Malawi", flag:"🇲🇼", pop:"20M", religion:"Christian (79%) / Islam", diff:"easy", score:18 },
+  { name:"Madagascar", flag:"🇲🇬", pop:"28M", religion:"Christian (41%) / Traditional (52%)", diff:"moderate", score:48 },
+  { name:"Senegal", flag:"🇸🇳", pop:"17M", religion:"Islam (95%)", diff:"hard", score:88 },
+  { name:"Mali", flag:"🇲🇱", pop:"22M", religion:"Islam (90%)", diff:"hard", score:90 },
+  { name:"Niger", flag:"🇳🇪", pop:"25M", religion:"Islam (99%)", diff:"hard", score:95 },
+  { name:"Burkina Faso", flag:"🇧🇫", pop:"22M", religion:"Islam (61%) / Christian / Animist", diff:"hard", score:65 },
+  { name:"Guinea", flag:"🇬🇳", pop:"13M", religion:"Islam (85%)", diff:"hard", score:85 },
+  { name:"Somalia", flag:"🇸🇴", pop:"18M", religion:"Islam (99.9%)", diff:"hard", score:97 },
+  { name:"Sudan", flag:"🇸🇩", pop:"46M", religion:"Islam (97%)", diff:"hard", score:92 },
+  { name:"Libya", flag:"🇱🇾", pop:"7M", religion:"Islam (97%)", diff:"hard", score:90 },
+  { name:"Algeria", flag:"🇩🇿", pop:"45M", religion:"Islam (99%)", diff:"hard", score:92 },
+  { name:"Morocco", flag:"🇲🇦", pop:"37M", religion:"Islam (99%)", diff:"hard", score:88 },
+  { name:"Tunisia", flag:"🇹🇳", pop:"12M", religion:"Islam (99%)", diff:"hard", score:80 },
+  { name:"Israel", flag:"🇮🇱", pop:"9.5M", religion:"Jewish (75%) / Islam / Christian", diff:"hard", score:70 },
+  { name:"Iraq", flag:"🇮🇶", pop:"42M", religion:"Islam (95%)", diff:"hard", score:90 },
+  { name:"Syria", flag:"🇸🇾", pop:"21M", religion:"Islam (87%) / Christian", diff:"hard", score:82 },
+  { name:"Jordan", flag:"🇯🇴", pop:"10M", religion:"Islam (97%)", diff:"hard", score:85 },
+  { name:"Lebanon", flag:"🇱🇧", pop:"5.5M", religion:"Islam (61%) / Christian (38%)", diff:"moderate", score:45 },
+  { name:"Yemen", flag:"🇾🇪", pop:"33M", religion:"Islam (99%)", diff:"hard", score:95 },
+  { name:"United Arab Emirates", flag:"🇦🇪", pop:"10M", religion:"Islam (76%) / Christian / Hindu", diff:"hard", score:72 },
+  { name:"Qatar", flag:"🇶🇦", pop:"2.9M", religion:"Islam (65%)", diff:"hard", score:78 },
+  { name:"Oman", flag:"🇴🇲", pop:"4.5M", religion:"Islam (85%)", diff:"hard", score:82 },
+  { name:"Afghanistan", flag:"🇦🇫", pop:"42M", religion:"Islam (99%)", diff:"hard", score:97 },
+  { name:"Kazakhstan", flag:"🇰🇿", pop:"19M", religion:"Islam (70%) / Orthodox", diff:"hard", score:65 },
+  { name:"Kyrgyzstan", flag:"🇰🇬", pop:"7M", religion:"Islam (75%) / Orthodox", diff:"hard", score:72 },
+  { name:"Tajikistan", flag:"🇹🇯", pop:"10M", religion:"Islam (96%)", diff:"hard", score:88 },
+  { name:"Uzbekistan", flag:"🇺🇿", pop:"36M", religion:"Islam (88%)", diff:"hard", score:85 },
+  { name:"Turkmenistan", flag:"🇹🇲", pop:"6.1M", religion:"Islam (89%) / Secular", diff:"hard", score:85 },
+  { name:"Azerbaijan", flag:"🇦🇿", pop:"10M", religion:"Islam (97%) / Secular", diff:"hard", score:78 },
+  { name:"Armenia", flag:"🇦🇲", pop:"3M", religion:"Apostolic Christian (94%)", diff:"moderate", score:40 },
+  { name:"Georgia", flag:"🇬🇪", pop:"3.7M", religion:"Orthodox Christian (84%)", diff:"moderate", score:42 },
+  { name:"Ukraine", flag:"🇺🇦", pop:"41M", religion:"Orthodox Christian", diff:"moderate", score:45 },
+  { name:"Poland", flag:"🇵🇱", pop:"38M", religion:"Catholic (87%)", diff:"moderate", score:42 },
+  { name:"Italy", flag:"🇮🇹", pop:"60M", religion:"Catholic (74%) / Secular", diff:"moderate", score:48 },
+  { name:"Spain", flag:"🇪🇸", pop:"47M", religion:"Catholic (68%) / Secular", diff:"moderate", score:50 },
+  { name:"Romania", flag:"🇷🇴", pop:"19M", religion:"Orthodox (85%)", diff:"moderate", score:38 },
+  { name:"Greece", flag:"🇬🇷", pop:"10.7M", religion:"Orthodox (90%)", diff:"moderate", score:45 },
+  { name:"Portugal", flag:"🇵🇹", pop:"10M", religion:"Catholic (81%)", diff:"moderate", score:40 },
+  { name:"Hungary", flag:"🇭🇺", pop:"9.7M", religion:"Catholic (37%) / Protestant / Secular", diff:"moderate", score:48 },
+  { name:"Bangladesh", flag:"🇧🇩", pop:"170M", religion:"Islam (90%) / Hindu", diff:"hard", score:88 },
+  { name:"Myanmar", flag:"🇲🇲", pop:"54M", religion:"Buddhism (88%)", diff:"hard", score:80 },
+  { name:"Thailand", flag:"🇹🇭", pop:"72M", religion:"Buddhism (95%)", diff:"hard", score:82 },
+  { name:"Vietnam", flag:"🇻🇳", pop:"98M", religion:"Buddhist / Secular / Folk", diff:"hard", score:78 },
+  { name:"Malaysia", flag:"🇲🇾", pop:"33M", religion:"Islam (63%) / Buddhist / Christian", diff:"hard", score:78 },
+  { name:"Cambodia", flag:"🇰🇭", pop:"17M", religion:"Buddhism (97%)", diff:"hard", score:80 },
+  { name:"Sri Lanka", flag:"🇱🇰", pop:"22M", religion:"Buddhism (70%) / Hindu / Islam / Christian", diff:"hard", score:72 },
+  { name:"Nepal", flag:"🇳🇵", pop:"30M", religion:"Hinduism (81%) / Buddhism", diff:"hard", score:78 },
+  { name:"Mongolia", flag:"🇲🇳", pop:"3.4M", religion:"Buddhism (53%) / Secular", diff:"hard", score:68 },
+  { name:"Singapore", flag:"🇸🇬", pop:"5.9M", religion:"Buddhist (31%) / Christian (19%) / Islam / Taoist", diff:"moderate", score:48 },
+  { name:"Taiwan", flag:"🇹🇼", pop:"23M", religion:"Buddhist / Taoist / Secular", diff:"hard", score:70 },
+  { name:"Timor-Leste", flag:"🇹🇱", pop:"1.4M", religion:"Catholic (97%)", diff:"easy", score:12 },
+  { name:"Papua New Guinea", flag:"🇵🇬", pop:"10M", religion:"Protestant (69%) / Catholic", diff:"easy", score:16 },
+  { name:"New Zealand", flag:"🇳🇿", pop:"5M", religion:"Christian (nominal) / Secular", diff:"easy", score:35 },
+  { name:"Fiji", flag:"🇫🇯", pop:"930K", religion:"Methodist (35%) / Hindu / Islam", diff:"moderate", score:40 },
+  { name:"Bolivia", flag:"🇧🇴", pop:"12M", religion:"Catholic (70%) / Evangelical", diff:"easy", score:28 },
+  { name:"Peru", flag:"🇵🇪", pop:"33M", religion:"Catholic (76%) / Evangelical", diff:"easy", score:30 },
+  { name:"Ecuador", flag:"🇪🇨", pop:"18M", religion:"Catholic (74%)", diff:"easy", score:30 },
+  { name:"Venezuela", flag:"🇻🇪", pop:"28M", religion:"Catholic (71%) / Evangelical", diff:"easy", score:25 },
+  { name:"Guatemala", flag:"🇬🇹", pop:"17M", religion:"Catholic (50%) / Protestant (40%)", diff:"easy", score:22 },
+  { name:"El Salvador", flag:"🇸🇻", pop:"6.5M", religion:"Catholic (47%) / Protestant (33%)", diff:"easy", score:24 },
+  { name:"Nicaragua", flag:"🇳🇮", pop:"7M", religion:"Catholic (58%) / Protestant (21%)", diff:"easy", score:28 },
+  { name:"Costa Rica", flag:"🇨🇷", pop:"5M", religion:"Catholic (57%) / Protestant (25%)", diff:"easy", score:30 },
+  { name:"Panama", flag:"🇵🇦", pop:"4.4M", religion:"Catholic (63%) / Protestant (25%)", diff:"easy", score:28 },
+  { name:"Cuba", flag:"🇨🇺", pop:"11M", religion:"Secular / Catholic / Santería", diff:"moderate", score:52 },
+  { name:"Dominican Republic", flag:"🇩🇴", pop:"11M", religion:"Catholic (57%) / Protestant (23%)", diff:"easy", score:24 },
+  { name:"Haiti", flag:"🇭🇹", pop:"11M", religion:"Catholic / Vodou / Protestant", diff:"easy", score:28 },
+  { name:"Burundi", flag:"🇧🇮", pop:"12M", religion:"Christian (93%)", diff:"easy", score:14 },
+  { name:"Togo", flag:"🇹🇬", pop:"8.8M", religion:"Christian (43%) / Animist / Islam", diff:"moderate", score:45 },
+  { name:"Benin", flag:"🇧🇯", pop:"13M", religion:"Christian (48%) / Islam / Vodou", diff:"moderate", score:42 },
+  { name:"Côte d'Ivoire", flag:"🇨🇮", pop:"27M", religion:"Islam (43%) / Christian (34%) / Animist", diff:"moderate", score:50 },
+  { name:"Liberia", flag:"🇱🇷", pop:"5.4M", religion:"Christian (85%) / Islam / Traditional", diff:"easy", score:18 },
+  { name:"Sierra Leone", flag:"🇸🇱", pop:"8.5M", religion:"Islam (77%) / Christian", diff:"hard", score:72 },
+  { name:"Gabon", flag:"🇬🇦", pop:"2.3M", religion:"Christian (80%) / Islam", diff:"easy", score:20 },
+  { name:"Republic of the Congo", flag:"🇨🇬", pop:"5.8M", religion:"Christian (90%)", diff:"easy", score:16 },
+  { name:"Central African Republic", flag:"🇨🇫", pop:"5M", religion:"Christian (89%) / Islam", diff:"easy", score:18 },
+  { name:"Chad", flag:"🇹🇩", pop:"17M", religion:"Islam (52%) / Christian (44%)", diff:"moderate", score:50 },
+  { name:"Eritrea", flag:"🇪🇷", pop:"3.5M", religion:"Orthodox / Islam", diff:"hard", score:62 },
+  { name:"Djibouti", flag:"🇩🇯", pop:"1M", religion:"Islam (94%)", diff:"hard", score:90 },
+  { name:"Namibia", flag:"🇳🇦", pop:"2.6M", religion:"Christian (97%)", diff:"easy", score:14 },
+  { name:"Botswana", flag:"🇧🇼", pop:"2.6M", religion:"Christian (79%)", diff:"easy", score:16 },
+  { name:"Lesotho", flag:"🇱🇸", pop:"2.1M", religion:"Christian (90%)", diff:"easy", score:14 },
+  { name:"Eswatini", flag:"🇸🇿", pop:"1.2M", religion:"Christian (90%)", diff:"easy", score:14 },
+  { name:"Mauritius", flag:"🇲🇺", pop:"1.3M", religion:"Hindu (48%) / Christian (32%) / Islam", diff:"moderate", score:45 },
+  { name:"Seychelles", flag:"🇸🇨", pop:"100K", religion:"Catholic (76%)", diff:"easy", score:14 },
+  { name:"Comoros", flag:"🇰🇲", pop:"850K", religion:"Islam (98%)", diff:"hard", score:95 },
+  { name:"Mauritania", flag:"🇲🇷", pop:"4.6M", religion:"Islam (100%)", diff:"hard", score:97 },
+  { name:"Gambia", flag:"🇬🇲", pop:"2.5M", religion:"Islam (96%)", diff:"hard", score:93 },
+  { name:"Guinea-Bissau", flag:"🇬🇼", pop:"2.1M", religion:"Islam (45%) / Animist (44%) / Christian", diff:"moderate", score:48 },
+  { name:"Cabo Verde", flag:"🇨🇻", pop:"550K", religion:"Catholic (77%) / Protestant", diff:"easy", score:15 },
+  { name:"São Tomé and Príncipe", flag:"🇸🇹", pop:"230K", religion:"Catholic (85%)", diff:"easy", score:14 },
+  { name:"Equatorial Guinea", flag:"🇬🇶", pop:"1.5M", religion:"Catholic (88%)", diff:"easy", score:14 },
+  { name:"Bhutan", flag:"🇧🇹", pop:"780K", religion:"Buddhism (75%) / Hinduism", diff:"hard", score:75 },
+  { name:"Brunei", flag:"🇧🇳", pop:"450K", religion:"Islam (79%)", diff:"hard", score:85 },
+  { name:"Laos", flag:"🇱🇦", pop:"7.5M", religion:"Buddhism (65%) / Animist", diff:"hard", score:75 },
+  { name:"Maldives", flag:"🇲🇻", pop:"520K", religion:"Islam (100%)", diff:"hard", score:97 },
+  { name:"Bahrain", flag:"🇧🇭", pop:"1.5M", religion:"Islam (73%)", diff:"hard", score:80 },
+  { name:"Palestine", flag:"🇵🇸", pop:"5.4M", religion:"Islam (97%)", diff:"hard", score:93 },
+  { name:"Samoa", flag:"🇼🇸", pop:"220K", religion:"Christian (98%)", diff:"easy", score:12 },
+  { name:"Tonga", flag:"🇹🇴", pop:"100K", religion:"Methodist / Free Wesleyan (64%)", diff:"easy", score:13 },
+  { name:"Vanuatu", flag:"🇻🇺", pop:"330K", religion:"Protestant (70%) / Catholic", diff:"easy", score:15 },
+  { name:"Solomon Islands", flag:"🇸🇧", pop:"720K", religion:"Christian (97%)", diff:"easy", score:14 },
+  { name:"Kiribati", flag:"🇰🇮", pop:"120K", religion:"Catholic (56%) / Kiribati Protestant", diff:"easy", score:15 },
+  { name:"Micronesia", flag:"🇫🇲", pop:"115K", religion:"Catholic / Protestant", diff:"easy", score:14 },
+  { name:"Marshall Islands", flag:"🇲🇭", pop:"42K", religion:"Protestant (97%)", diff:"easy", score:12 },
+  { name:"Palau", flag:"🇵🇼", pop:"18K", religion:"Catholic (46%) / Protestant", diff:"easy", score:15 },
+  { name:"Nauru", flag:"🇳🇷", pop:"10K", religion:"Protestant (60%) / Catholic", diff:"easy", score:14 },
+  { name:"Tuvalu", flag:"🇹🇻", pop:"11K", religion:"Protestant (91%)", diff:"easy", score:12 },
+  { name:"Andorra", flag:"🇦🇩", pop:"77K", religion:"Catholic (90%)", diff:"easy", score:15 },
+  { name:"Malta", flag:"🇲🇹", pop:"520K", religion:"Catholic (95%)", diff:"easy", score:14 },
+  { name:"Cyprus", flag:"🇨🇾", pop:"1.2M", religion:"Orthodox (73%) / Islam / Catholic", diff:"moderate", score:42 },
+  { name:"Iceland", flag:"🇮🇸", pop:"370K", religion:"Lutheran / Secular", diff:"moderate", score:55 },
+  { name:"Ireland", flag:"🇮🇪", pop:"5M", religion:"Catholic (69%) / Secular", diff:"moderate", score:45 },
+  { name:"Sweden", flag:"🇸🇪", pop:"10.5M", religion:"Lutheran (nominal) / Secular", diff:"hard", score:68 },
+  { name:"Norway", flag:"🇳🇴", pop:"5.5M", religion:"Lutheran (nominal) / Secular", diff:"hard", score:65 },
+  { name:"Denmark", flag:"🇩🇰", pop:"5.9M", religion:"Lutheran (nominal) / Secular", diff:"hard", score:65 },
+  { name:"Finland", flag:"🇫🇮", pop:"5.5M", religion:"Lutheran (nominal) / Secular", diff:"hard", score:65 },
+  { name:"Netherlands", flag:"🇳🇱", pop:"17.5M", religion:"Catholic (20%) / Protestant / Secular", diff:"hard", score:68 },
+  { name:"Belgium", flag:"🇧🇪", pop:"11.6M", religion:"Catholic (nominal) / Secular", diff:"hard", score:62 },
+  { name:"Switzerland", flag:"🇨🇭", pop:"8.7M", religion:"Catholic (35%) / Protestant / Secular", diff:"hard", score:60 },
+  { name:"Austria", flag:"🇦🇹", pop:"9M", religion:"Catholic (55%) / Secular", diff:"moderate", score:50 },
+  { name:"Czech Republic", flag:"🇨🇿", pop:"10.9M", religion:"Secular (72%) / Catholic", diff:"hard", score:75 },
+  { name:"Slovakia", flag:"🇸🇰", pop:"5.5M", religion:"Catholic (55%) / Secular", diff:"moderate", score:42 },
+  { name:"Croatia", flag:"🇭🇷", pop:"3.9M", religion:"Catholic (79%)", diff:"moderate", score:40 },
+  { name:"Serbia", flag:"🇷🇸", pop:"6.8M", religion:"Orthodox (85%)", diff:"moderate", score:44 },
+  { name:"Bulgaria", flag:"🇧🇬", pop:"6.5M", religion:"Orthodox (76%) / Islam", diff:"moderate", score:42 },
+  { name:"Moldova", flag:"🇲🇩", pop:"2.6M", religion:"Orthodox (90%)", diff:"moderate", score:38 },
+  { name:"Belarus", flag:"🇧🇾", pop:"9.4M", religion:"Orthodox (48%) / Catholic", diff:"moderate", score:45 },
+  { name:"Lithuania", flag:"🇱🇹", pop:"2.8M", religion:"Catholic (74%)", diff:"moderate", score:40 },
+  { name:"Latvia", flag:"🇱🇻", pop:"1.8M", religion:"Lutheran / Catholic / Orthodox", diff:"moderate", score:45 },
+  { name:"Estonia", flag:"🇪🇪", pop:"1.3M", religion:"Secular / Lutheran", diff:"hard", score:68 },
+  { name:"Albania", flag:"🇦🇱", pop:"2.8M", religion:"Islam (57%) / Orthodox / Catholic", diff:"moderate", score:50 },
+  { name:"North Macedonia", flag:"🇲🇰", pop:"2.1M", religion:"Orthodox (65%) / Islam (33%)", diff:"moderate", score:48 },
+  { name:"Bosnia and Herzegovina", flag:"🇧🇦", pop:"3.3M", religion:"Islam (51%) / Orthodox / Catholic", diff:"moderate", score:52 },
+  { name:"Montenegro", flag:"🇲🇪", pop:"620K", religion:"Orthodox (72%) / Islam", diff:"moderate", score:45 },
+  { name:"Kosovo", flag:"🇽🇰", pop:"1.8M", religion:"Islam (96%)", diff:"hard", score:88 },
+  { name:"Slovenia", flag:"🇸🇮", pop:"2.1M", religion:"Catholic (72%) / Secular", diff:"moderate", score:45 },
+  { name:"Luxembourg", flag:"🇱🇺", pop:"660K", religion:"Catholic (70%) / Secular", diff:"moderate", score:45 },
+  { name:"Trinidad and Tobago", flag:"🇹🇹", pop:"1.4M", religion:"Christian (57%) / Hindu (18%) / Islam", diff:"easy", score:28 },
+  { name:"Bahamas", flag:"🇧🇸", pop:"400K", religion:"Protestant (70%) / Catholic", diff:"easy", score:14 },
+  { name:"Barbados", flag:"🇧🇧", pop:"280K", religion:"Protestant (75%)", diff:"easy", score:14 },
+  { name:"Belize", flag:"🇧🇿", pop:"400K", religion:"Catholic (40%) / Protestant (32%)", diff:"easy", score:24 },
+  { name:"Guyana", flag:"🇬🇾", pop:"790K", religion:"Christian (57%) / Hindu (28%) / Islam", diff:"easy", score:30 },
+  { name:"Suriname", flag:"🇸🇷", pop:"620K", religion:"Christian (48%) / Hindu / Islam", diff:"moderate", score:42 },
+  { name:"Paraguay", flag:"🇵🇾", pop:"7.4M", religion:"Catholic (89%)", diff:"easy", score:25 },
+  { name:"Uruguay", flag:"🇺🇾", pop:"3.5M", religion:"Secular (47%) / Catholic", diff:"moderate", score:55 },
+];
+
+// Build lookup maps
+const COVENANT_BY_NAME = {};
+COVENANT_DATA.forEach(c => { COVENANT_BY_NAME[c.name] = c; });
+
+// ISO numeric → covenant entry (reuses isoMap from covenant dashboard)
+const CVN_ISO = {
+  156:"China",408:"North Korea",566:"Nigeria",608:"Philippines",388:"Jamaica",
+  336:"Vatican City",340:"Honduras",152:"Chile",414:"Kuwait",
+  840:"United States",76:"Brazil",484:"Mexico",170:"Colombia",32:"Argentina",
+  826:"United Kingdom",276:"Germany",250:"France",356:"India",360:"Indonesia",
+  586:"Pakistan",682:"Saudi Arabia",364:"Iran",792:"Turkey",818:"Egypt",
+  643:"Russia",410:"South Korea",392:"Japan",36:"Australia",124:"Canada",
+  231:"Ethiopia",404:"Kenya",710:"South Africa",288:"Ghana",800:"Uganda",
+  834:"Tanzania",180:"Democratic Republic of Congo",508:"Mozambique",24:"Angola",
+  120:"Cameroon",716:"Zimbabwe",894:"Zambia",646:"Rwanda",728:"South Sudan",
+  454:"Malawi",450:"Madagascar",686:"Senegal",466:"Mali",562:"Niger",
+  854:"Burkina Faso",324:"Guinea",706:"Somalia",729:"Sudan",434:"Libya",
+  12:"Algeria",504:"Morocco",788:"Tunisia",376:"Israel",368:"Iraq",
+  760:"Syria",400:"Jordan",422:"Lebanon",887:"Yemen",784:"United Arab Emirates",
+  634:"Qatar",512:"Oman",48:"Bahrain",4:"Afghanistan",398:"Kazakhstan",
+  417:"Kyrgyzstan",762:"Tajikistan",860:"Uzbekistan",795:"Turkmenistan",
+  31:"Azerbaijan",51:"Armenia",268:"Georgia",804:"Ukraine",616:"Poland",
+  380:"Italy",724:"Spain",642:"Romania",300:"Greece",620:"Portugal",
+  348:"Hungary",50:"Bangladesh",104:"Myanmar",764:"Thailand",704:"Vietnam",
+  458:"Malaysia",116:"Cambodia",144:"Sri Lanka",524:"Nepal",496:"Mongolia",
+  702:"Singapore",158:"Taiwan",626:"Timor-Leste",598:"Papua New Guinea",
+  554:"New Zealand",242:"Fiji",68:"Bolivia",604:"Peru",218:"Ecuador",
+  862:"Venezuela",320:"Guatemala",222:"El Salvador",558:"Nicaragua",
+  188:"Costa Rica",591:"Panama",192:"Cuba",214:"Dominican Republic",
+  332:"Haiti",108:"Burundi",768:"Togo",204:"Benin",384:"Côte d'Ivoire",
+  430:"Liberia",694:"Sierra Leone",266:"Gabon",178:"Republic of the Congo",
+  140:"Central African Republic",148:"Chad",232:"Eritrea",262:"Djibouti",
+  516:"Namibia",72:"Botswana",426:"Lesotho",748:"Eswatini",480:"Mauritius",
+  690:"Seychelles",174:"Comoros",478:"Mauritania",270:"Gambia",624:"Guinea-Bissau",
+  132:"Cabo Verde",678:"São Tomé and Príncipe",226:"Equatorial Guinea",
+  64:"Bhutan",96:"Brunei",418:"Laos",462:"Maldives",48:"Bahrain",
+  882:"Samoa",776:"Tonga",548:"Vanuatu",90:"Solomon Islands",296:"Kiribati",
+  583:"Micronesia",584:"Marshall Islands",585:"Palau",520:"Nauru",798:"Tuvalu",
+  20:"Andorra",470:"Malta",196:"Cyprus",352:"Iceland",372:"Ireland",
+  752:"Sweden",578:"Norway",208:"Denmark",246:"Finland",528:"Netherlands",
+  56:"Belgium",756:"Switzerland",40:"Austria",203:"Czech Republic",703:"Slovakia",
+  191:"Croatia",688:"Serbia",100:"Bulgaria",498:"Moldova",112:"Belarus",
+  440:"Lithuania",428:"Latvia",233:"Estonia",8:"Albania",807:"North Macedonia",
+  70:"Bosnia and Herzegovina",499:"Montenegro",383:"Kosovo",705:"Slovenia",
+  442:"Luxembourg",780:"Trinidad and Tobago",44:"Bahamas",52:"Barbados",
+  84:"Belize",328:"Guyana",740:"Suriname",600:"Paraguay",858:"Uruguay",
+};
+
+function cvnGetColor(c) {
+  if (!c) return null;
+  if (c.diff === 'owned') return '#7b3fa0';
+  const s = c.score;
+  if (s < 35) { const t=s/34; return `rgb(${Math.round(13+(77-13)*t)},${Math.round(74+(202-74)*t)},${Math.round(31+(122-31)*t)})`; }
+  if (s < 60) { const t=(s-35)/24; return `rgb(${Math.round(122+(243-122)*t)},${Math.round(59+(156-59)*t)},${Math.round(0)})`; }
+  const t=Math.min((s-60)/35,1); return `rgb(${Math.round(92+(192-92)*t)},${Math.round(10+(57-10)*t)},${Math.round(10+(43-10)*t)})`;
+}
+
+// Covenant layer: recolor all country paths
+let _cvnLayerActive = false;
+function applyCvnLayer(on) {
+  _cvnLayerActive = on;
+  const mapSvg = document.getElementById("map-svg");
+  if (mapSvg) mapSvg.classList.toggle("cvn-active", on);
+  d3.selectAll(".country").style("fill", d => {
+    if (on) {
+      const c = COVENANT_BY_NAME[CVN_ISO[+d.id]];
+      return cvnGetColor(c) || "#1c1409";
+    }
+    return null; // removing inline style lets CSS class rules take over again
+  });
+  const cvnLg = document.getElementById("lgcv");
+  if (cvnLg) cvnLg.style.display = on ? "flex" : "none";
+}
+
+// ── Patch setLayer to handle covenant ───────────────────────────────
+const _origSetLayer = setLayer;
+setLayer = function(l, btn) {
+  if (l === 'covenant') {
+    currentLayer = 'covenant';
+    _layoutCache = null;
+    document.querySelectorAll(".lbtn").forEach(b=>b.classList.remove("active"));
+    if (btn) btn.classList.add("active");
+    ["lgr","lgt","lgm","lgc"].forEach(id=>document.getElementById(id).style.display="none");
+    closeLocPanel();
+    applyCvnLayer(true);
+    renderOverlays();
+    return;
+  }
+  // Leaving covenant layer — restore country fills
+  if (_cvnLayerActive) applyCvnLayer(false);
+  _origSetLayer(l, btn);
+};
+
+// ── Covenant panel ───────────────────────────────────────────────────
+let _cvnFilter = 'all';
+let _cvnSearch = '';
+let _cvnSelected = null;
+
+function cvnScoreClass(c) {
+  if (c.diff==='owned') return 'cvn-s-owned';
+  if (c.score < 35) return 'cvn-s-easy';
+  if (c.score < 60) return 'cvn-s-mod';
+  return 'cvn-s-hard';
+}
+function cvnScoreLabel(c) {
+  if (c.diff==='owned') return 'Copeland Territory';
+  if (c.score < 25) return 'Highly Favorable';
+  if (c.score < 40) return 'Favorable';
+  if (c.score < 60) return 'Moderate Resistance';
+  if (c.score < 75) return 'Significant Resistance';
+  return 'Heavily Resistant';
+}
+function cvnBarColor(c) {
+  if (c.diff==='owned') return '#8e44ad';
+  if (c.score < 35) return '#27ae60';
+  if (c.score < 60) return '#e67e22';
+  return '#c0392b';
+}
+
+function buildCvnExpansion(c) {
+  const scoreNum = (c.diff==='owned' && c.score===0) ? '✦' : c.score;
+  const barW = (c.diff==='owned' && c.score===0) ? 100 : c.score;
+  return `<div class="cvn-expansion">
+    ${c.diff==='owned'?`<div class="cvn-owned-banner">✦ Kenneth Copeland Territory ✦</div>`:''}
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px">
+      <div class="cvn-score-box">
+        <div class="cvn-score-lbl">Conversion Difficulty</div>
+        <div class="cvn-score-num ${cvnScoreClass(c)}">${scoreNum}</div>
+        <div class="cvn-score-desc">${cvnScoreLabel(c)}</div>
+        <div class="cvn-bar-bg"><div class="cvn-bar-fill" style="width:${barW}%;background:${cvnBarColor(c)}"></div></div>
+      </div>
+      <div style="font-size:0.75rem;color:#c8b896;padding:8px 0">
+        <div style="margin-bottom:4px"><span style="color:#8a6e18;font-family:'Cinzel',serif;font-size:0.48rem;letter-spacing:1.5px;text-transform:uppercase;display:block">Population</span>${c.pop}</div>
+        <div><span style="color:#8a6e18;font-family:'Cinzel',serif;font-size:0.48rem;letter-spacing:1.5px;text-transform:uppercase;display:block">Dominant Faith</span>${c.religion}</div>
+      </div>
+    </div>
+    ${c.opportunities?.length ? `<div class="cvn-section-title">Opportunities</div>${c.opportunities.map(o=>`<div class="cvn-opp-item">${o}</div>`).join('')}` : ''}
+    ${c.challenges?.length ? `<div class="cvn-section-title" style="margin-top:8px">Key Challenges</div>${c.challenges.map(ch=>`<div class="cvn-chal-item">${ch}</div>`).join('')}` : ''}
+    ${c.strategy ? `<div class="cvn-section-title" style="margin-top:8px">Conversion Strategy</div><div class="cvn-strategy">${c.strategy}</div>` : `<div style="font-style:italic;color:#8a6e18;font-size:0.8rem;margin-top:8px;font-family:'Crimson Pro',serif">Detailed strategy not yet compiled.</div>`}
+  </div>`;
+}
+
+function buildCvnPanel() {
+  // Sort: owned first, then by score asc
+  let list = COVENANT_DATA.filter(c => {
+    if (_cvnFilter !== 'all' && c.diff !== _cvnFilter) return false;
+    if (_cvnSearch) {
+      const q = _cvnSearch.toLowerCase();
+      return c.name.toLowerCase().includes(q) || c.religion.toLowerCase().includes(q);
+    }
+    return true;
+  }).sort((a,b) => {
+    if (a.diff==='owned' && b.diff!=='owned') return -1;
+    if (b.diff==='owned' && a.diff!=='owned') return 1;
+    return a.score - b.score;
+  });
+
+  const easyCount = COVENANT_DATA.filter(c=>c.diff==='easy').length;
+  const hardCount = COVENANT_DATA.filter(c=>c.diff==='hard').length;
+  const ownedCount = COVENANT_DATA.filter(c=>c.diff==='owned').length;
+
+  let h = `<div class="cvn-wrap">
+    <div class="cvn-header">
+      <div class="cvn-header-title">✝ THE COVENANT</div>
+      <div class="cvn-header-sub">Global Conversion Command · ${COVENANT_DATA.length} Nations</div>
+    </div>
+    <div class="cvn-stats">
+      <div class="cvn-stat"><span class="cvn-stat-val" style="color:#8e44ad">${ownedCount}</span><div class="cvn-stat-lbl">Owned</div></div>
+      <div class="cvn-stat"><span class="cvn-stat-val" style="color:#27ae60">${easyCount}</span><div class="cvn-stat-lbl">Favorable</div></div>
+      <div class="cvn-stat"><span class="cvn-stat-val" style="color:#e67e22">${COVENANT_DATA.filter(c=>c.diff==='moderate').length}</span><div class="cvn-stat-lbl">Moderate</div></div>
+      <div class="cvn-stat"><span class="cvn-stat-val" style="color:#c0392b">${hardCount}</span><div class="cvn-stat-lbl">Resistant</div></div>
+    </div>
+    <div class="cvn-controls">
+      <input type="text" class="cvn-search" placeholder="Search nations or religions…" value="${_cvnSearch}" oninput="_cvnSearch=this.value;refreshCvnPanel()">
+      <div class="cvn-filters">
+        <button class="cvn-fbtn${_cvnFilter==='all'?' active':''}" onclick="setCvnFilter('all',this)">All</button>
+        <button class="cvn-fbtn${_cvnFilter==='owned'?' active':''}" onclick="setCvnFilter('owned',this)">★ Owned</button>
+        <button class="cvn-fbtn${_cvnFilter==='easy'?' active':''}" onclick="setCvnFilter('easy',this)">Favorable</button>
+        <button class="cvn-fbtn${_cvnFilter==='moderate'?' active':''}" onclick="setCvnFilter('moderate',this)">Moderate</button>
+        <button class="cvn-fbtn${_cvnFilter==='hard'?' active':''}" onclick="setCvnFilter('hard',this)">Resistant</button>
+      </div>
+    </div>
+    <div class="cvn-grid">`;
+
+  list.forEach(c => {
+    const isSelected = _cvnSelected === c.name;
+    const badgeText = c.diff==='owned' ? '★ Owned' : c.diff==='easy' ? 'Favorable' : c.diff==='moderate' ? 'Moderate' : 'Resistant';
+    h += `<div class="cvn-card cvn-${c.diff}${isSelected?' cvn-selected':''}" onclick="selectCvnCountry('${c.name.replace(/'/g,"\\'")}')">
+      <div class="cvn-card-row">
+        <span class="cvn-flag">${c.flag}</span>
+        <span class="cvn-cname">${c.name}</span>
+        <span class="cvn-rel">${c.religion}</span>
+        <span class="cvn-badge">${badgeText}</span>
+      </div>
+    </div>`;
+    if (isSelected) h += buildCvnExpansion(c);
+  });
+
+  h += `</div></div>`;
+  return h;
+}
+
+function setCvnFilter(f, btn) {
+  _cvnFilter = f;
+  refreshCvnPanel(true);
+}
+
+function selectCvnCountry(name) {
+  _cvnSelected = (_cvnSelected === name) ? null : name;
+  refreshCvnPanel(true);
+  // Scroll selected into view
+  setTimeout(() => {
+    const sel = document.querySelector('.cvn-card.cvn-selected');
+    if (sel) sel.scrollIntoView({ behavior:'smooth', block:'center' });
+  }, 50);
+}
+
+let _cvnRefreshTimer = null;
+function refreshCvnPanel(immediate) {
+  if (immediate) { _doRefreshCvnPanel(); return; }
+  clearTimeout(_cvnRefreshTimer);
+  _cvnRefreshTimer = setTimeout(_doRefreshCvnPanel, 150);
+}
+function _doRefreshCvnPanel() {
+  const mobile = window.innerWidth <= 700;
+  const body = buildCvnPanel();
+  if (mobile) {
+    document.getElementById("spb").innerHTML = body;
+  } else {
+    document.getElementById("pb").innerHTML = body;
+  }
+}
+
+function showCovenantPanel() {
+  closeLocPanel();
+  _cvnSelected = null;
+  const mobile = window.innerWidth <= 700;
+  const body = buildCvnPanel();
+  if (mobile) {
+    document.getElementById("spt").textContent = "The Covenant";
+    document.getElementById("spm").textContent = "Global Conversion Command";
+    document.getElementById("spb").innerHTML = body;
+    document.getElementById("mobileSheet").classList.add("open");
+    document.getElementById("sheetOverlay").classList.add("show");
+    document.getElementById("mobileSheet").scrollTop = 0;
+  } else {
+    document.getElementById("pt").textContent = "✝ The Covenant";
+    document.getElementById("pm").textContent = "Global Conversion Command";
+    document.getElementById("pb").innerHTML = body;
+    document.getElementById("ip").classList.add("open");
+    document.getElementById("ip").scrollTop = 0;
+  }
+}
+
+// ── Covenant section injected into country panels ────────────────────
+// Patch buildCountryHTML to append covenant data for owned/pending countries
+const _origBuildCountryHTML = buildCountryHTML;
+buildCountryHTML = function(k) {
+  let h = _origBuildCountryHTML(k);
+  // Map dashboard key → covenant name
+  const keyToName = {
+    china:"China", northkorea:"North Korea", nigeria:"Nigeria",
+    philippines:"Philippines", jamaica:"Jamaica", honduras:"Honduras",
+    vatican:"Vatican City", chile:"Chile", kuwait:"Kuwait"
+  };
+  const cvnName = keyToName[k];
+  if (!cvnName) return h;
+  const c = COVENANT_BY_NAME[cvnName];
+  if (!c) return h;
+
+  const scoreNum = (c.diff==='owned' && c.score===0) ? '✦' : c.score;
+  const barW = (c.diff==='owned' && c.score===0) ? 100 : c.score;
+
+  h += `<div class="ps">
+    <h4>✝ Covenant — Conversion Intelligence</h4>
+    <div class="cvn-inline" style="font-family:'Crimson Pro',serif">
+      <div class="cvn-inline-title">✝ THE COVENANT</div>
+      ${c.diff==='owned'?`<div class="cvn-owned-banner" style="margin-bottom:10px">✦ Kenneth Copeland Territory ✦</div>`:''}
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+        <div class="cvn-score-box">
+          <div class="cvn-score-lbl">Conversion Difficulty</div>
+          <div class="cvn-score-num ${cvnScoreClass(c)}" style="font-size:1.6rem">${scoreNum}</div>
+          <div class="cvn-score-desc">${cvnScoreLabel(c)}</div>
+          <div class="cvn-bar-bg"><div class="cvn-bar-fill" style="width:${barW}%;background:${cvnBarColor(c)}"></div></div>
+        </div>
+        <div style="font-size:0.75rem;color:#c8b896;padding:4px 0">
+          <div style="margin-bottom:6px"><span style="color:#8a6e18;font-family:'Cinzel',serif;font-size:0.45rem;letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:2px">Population</span>${c.pop}</div>
+          <div><span style="color:#8a6e18;font-family:'Cinzel',serif;font-size:0.45rem;letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:2px">Dominant Faith</span>${c.religion}</div>
+        </div>
+      </div>
+      ${c.opportunities?.length ? `<div class="cvn-section-title">Opportunities</div>${c.opportunities.map(o=>`<div class="cvn-opp-item">${o}</div>`).join('')}` : ''}
+      ${c.challenges?.length ? `<div class="cvn-section-title" style="margin-top:8px">Key Challenges</div>${c.challenges.map(ch=>`<div class="cvn-chal-item">${ch}</div>`).join('')}` : ''}
+      ${c.strategy ? `<div class="cvn-section-title" style="margin-top:10px">Strategy</div><div class="cvn-strategy" style="font-size:0.8rem">${c.strategy}</div>` : ''}
+    </div>
+  </div>`;
+  return h;
+};
+
+// Covenant layer tooltip is handled via the patched country mouseenter above.
+
 </script>
 </body>
 </html>
