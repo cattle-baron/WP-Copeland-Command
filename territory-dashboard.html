@@ -276,11 +276,7 @@ header::after {
   vector-effect: non-scaling-stroke;
 }
 
-.country.owned:hover { fill: #1a4a7a; }
-.country.pending:hover { fill: #4a3408; }
 #map-svg.cvn-active .country { transition: none; cursor: pointer; }
-#map-svg.cvn-active .country.owned:hover,
-#map-svg.cvn-active .country.pending:hover { fill: inherit; }
 
 .graticule { fill:none; stroke:#08121e; stroke-width:0.5; vector-effect:non-scaling-stroke; }
 .sphere { fill: #030810; }
@@ -2392,6 +2388,12 @@ const OWNED   = new Set(["156","408","566","608","388","336","340"]);  // 340 = 
 const PENDING  = new Set(["152","414"]);
 const ID2KEY   = {"156":"china","408":"northkorea","566":"nigeria","608":"philippines","388":"jamaica","152":"chile","414":"kuwait","336":"vatican","340":"honduras"};
 
+// Reverse: dashboard key → ISO numeric id (for centroid fly-to)
+const KEY2ISO  = {"china":"156","northkorea":"408","nigeria":"566","philippines":"608","jamaica":"388","chile":"152","kuwait":"414","vatican":"336","honduras":"340"};
+
+// Holds GeoJSON features after map loads, for centroid-based fly-to
+let _countryFeatures = null;
+
 let currentLayer = "overview";
 let projection, pathGen, g, overlayG, checkedBasesG, svgSel, zoomBehavior;
 let currentZoom = 1;
@@ -2540,9 +2542,128 @@ function buildCountryHTML(k) {
   return h;
 }
 
+// Fly the map to a country centroid and flash-highlight its path for 5s
+// Parse "rgb(r,g,b)" or "#rrggbb" and return brighter version
+function _brightenColor(col, amt) {
+  let r, g, b;
+  const rgb = col.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+  if (rgb) { r=+rgb[1]; g=+rgb[2]; b=+rgb[3]; }
+  else if (col[0]==='#') {
+    const h = col.slice(1);
+    r=parseInt(h.slice(0,2),16); g=parseInt(h.slice(2,4),16); b=parseInt(h.slice(4,6),16);
+  } else return col;
+  r = Math.min(255, Math.round(r + (255-r)*amt));
+  g = Math.min(255, Math.round(g + (255-g)*amt));
+  b = Math.min(255, Math.round(b + (255-b)*amt));
+  return `rgb(${r},${g},${b})`;
+}
+
+// Normal-layer base fills for hover restore
+function _baseFill(d) {
+  if (OWNED.has(String(d.id)))   return "#0d2a4a";
+  if (PENDING.has(String(d.id))) return "#2a1e04";
+  return "#071222";
+}
+function _hoverFill(d) {
+  if (OWNED.has(String(d.id)))   return "#1e6aaa";
+  if (PENDING.has(String(d.id))) return "#6a4a10";
+  return "#1a3a5a";
+}
+
+let _flashTimer = null;
+let _flashEl = null;
+let _flashOrigFill = null;
+
+function flyToCountry(isoId) {
+  if (!_countryFeatures || !projection || !svgSel || !zoomBehavior) return;
+  const feature = _countryFeatures.find(f => String(f.id) === String(isoId));
+  if (!feature) return;
+
+  const centroid = pathGen.centroid(feature);
+  if (!centroid || isNaN(centroid[0])) return;
+
+  const container = document.getElementById("mapArea");
+  const W = container.clientWidth, H = container.clientHeight;
+  const targetK = 4;
+  const tx = W/2 - targetK * centroid[0];
+  const ty = H/2 - targetK * centroid[1];
+
+  svgSel.transition()
+    .duration(800)
+    .ease(d3.easeCubicInOut)
+    .call(zoomBehavior.transform, d3.zoomIdentity.translate(tx, ty).scale(targetK));
+
+  // Cancel any in-progress flash
+  clearTimeout(_flashTimer);
+  if (_flashEl) {
+    clearInterval(_flashTimer);
+    _flashEl.style("fill", _cvnLayerActive ? _flashOrigFill : null);
+    _flashEl = null; _flashOrigFill = null;
+  }
+
+  // Find and flash the target country path in JS
+  d3.selectAll(".country").each(function(d) {
+    if (String(d.id) !== String(isoId)) return;
+    _flashEl = d3.select(this);
+    // Store original fill (inline style or null for CSS-controlled)
+    _flashOrigFill = _cvnLayerActive ? (cvnGetColor(COVENANT_BY_NAME[CVN_ISO[+d.id]]) || "#1c1409") : null;
+
+    // Animate: cyan → original over 5s using setInterval steps
+    const steps = 40;
+    const duration = 5000;
+    let step = 0;
+    const target = _flashOrigFill || _baseFill(d);
+    const tr = [0,200,255], tg = [0,200,255], tb = [0,200,255]; // start: cyan
+    const endRgb = target.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/) ||
+      (()=>{ const h=target.slice(1); return [null,parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)]; })();
+    const er = +endRgb[1], eg = +endRgb[2], eb = +endRgb[3];
+
+    _flashEl.style("fill", `rgb(0,200,255)`);
+    const interval = setInterval(() => {
+      step++;
+      if (!_flashEl) { clearInterval(interval); return; }
+      const t = step / steps;
+      const r = Math.round(0   + (er-0)*t);
+      const g = Math.round(200 + (eg-200)*t);
+      const bv= Math.round(255 + (eb-255)*t);
+      _flashEl.style("fill", `rgb(${r},${g},${bv})`);
+      if (step >= steps) {
+        clearInterval(interval);
+        if (_flashEl) {
+          if (_cvnLayerActive) _flashEl.style("fill", _flashOrigFill);
+          else _flashEl.style("fill", null);
+        }
+        _flashEl = null; _flashOrigFill = null;
+      }
+    }, duration / steps);
+    _flashTimer = interval;
+  });
+}
+
 function showCountryPanel(k) {
   const d = COUNTRIES[k]; if (!d) return;
   closeLocPanel();
+
+  // If covenant panel is open: fly to country + flash, then show covenant entry
+  const covenantOpen = document.getElementById("ip").classList.contains("open") &&
+    document.getElementById("pt").textContent.includes("Covenant");
+  if (covenantOpen) {
+    const isoId = KEY2ISO[k];
+    if (isoId) flyToCountry(isoId);
+    // Also scroll the covenant panel to that country's entry
+    const keyToName = {china:"China",northkorea:"North Korea",nigeria:"Nigeria",philippines:"Philippines",jamaica:"Jamaica",honduras:"Honduras",vatican:"Vatican City",chile:"Chile",kuwait:"Kuwait"};
+    const cvnName = keyToName[k];
+    if (cvnName) {
+      _cvnSelected = cvnName;
+      refreshCvnPanel(true);
+      setTimeout(() => {
+        const sel = document.querySelector('.cvn-card.cvn-selected');
+        if (sel) sel.scrollIntoView({ behavior:'smooth', block:'center' });
+      }, 100);
+    }
+    return;
+  }
+
   const mobile = window.innerWidth <= 700;
   if (mobile) {
     document.getElementById("spt").textContent = d.name;
@@ -3002,6 +3123,7 @@ async function initMap() {
   const world = await d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json");
   const countries = topojson.feature(world, world.objects.countries);
   const borders   = topojson.mesh(world, world.objects.countries, (a,b)=>a!==b);
+  _countryFeatures = countries.features; // store for centroid fly-to
 
   g.selectAll(".country").data(countries.features).join("path")
     .attr("class",d=>OWNED.has(String(d.id))?"country owned":PENDING.has(String(d.id))?"country pending":"country")
@@ -3010,10 +3132,16 @@ async function initMap() {
       event.stopPropagation();
       const k=ID2KEY[String(d.id)];
       if (currentLayer === 'covenant') {
-        // Open covenant panel for any country, or territory panel for owned
         const cvnName = CVN_ISO[+d.id];
-        if (cvnName) { _cvnSelected = cvnName; showCovenantPanel(); return; }
-        if (k) showCountryPanel(k);
+        // Flash the country on the map
+        flyToCountry(d.id);
+        if (cvnName) {
+          _cvnSelected = cvnName;
+          // Make sure covenant panel is open
+          const ip = document.getElementById("ip");
+          if (!ip.classList.contains("open")) showCovenantPanel();
+          else { refreshCvnPanel(true); setTimeout(()=>{ const sel=document.querySelector('.cvn-card.cvn-selected'); if(sel) sel.scrollIntoView({behavior:'smooth',block:'center'}); },100); }
+        }
         return;
       }
       if(k) showCountryPanel(k);
@@ -3022,6 +3150,8 @@ async function initMap() {
       if (currentLayer === 'covenant') {
         const cvnName = CVN_ISO[+d.id];
         const c = cvnName && COVENANT_BY_NAME[cvnName];
+        const base = cvnGetColor(c) || "#1c1409";
+        d3.select(event.currentTarget).style("fill", _brightenColor(base, 0.35));
         if (!c) return;
         const label = c.diff==='owned' ? '★ Copeland Territory'
           : c.score < 35 ? `Favorable — ${c.score}`
@@ -3030,11 +3160,23 @@ async function initMap() {
         showTip(event, `${c.flag} ${c.name} · ${label}`);
         return;
       }
-      const k=ID2KEY[String(d.id)];if(!k)return;
+      // Normal layer: brighten via inline style (CSS hover rules removed)
+      d3.select(event.currentTarget).style("fill", _hoverFill(d));
+      const k=ID2KEY[String(d.id)]; if(!k)return;
       const owned=OWNED.has(String(d.id)),pend=PENDING.has(String(d.id));
       showTip(event,COUNTRIES[k].name+(owned?" — Owned":pend?" — Pending Trade":""));
     })
-    .on("mousemove",moveTip).on("mouseleave",hideTip);
+    .on("mousemove",moveTip)
+    .on("mouseleave",(event,d)=>{
+      hideTip();
+      if (currentLayer === 'covenant') {
+        const c = COVENANT_BY_NAME[CVN_ISO[+d.id]];
+        d3.select(event.currentTarget).style("fill", cvnGetColor(c) || "#1c1409");
+      } else {
+        // Remove inline style so CSS class fill takes over again
+        d3.select(event.currentTarget).style("fill", null);
+      }
+    });
 
   g.append("path").datum(borders).attr("class","border").attr("d",pathGen);
   overlayG = g.append("g").attr("id","overlayGroup");
