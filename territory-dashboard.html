@@ -1375,6 +1375,7 @@ header .header-left h1::before {
       <button class="tbtn" onclick="showCountryPanel('philippines')"><span class="dot do"></span><div><div class="nm">Ma-i Territory</div><div class="tg">Southeast Asia</div></div></button>
       <button class="tbtn" onclick="showCountryPanel('jamaica')"><span class="dot do"></span><div><div class="nm">Jamaica Territory</div><div class="tg">Caribbean</div></div></button>
       <button class="tbtn" onclick="showCountryPanel('cuscatlan')"><span class="dot do"></span><div><div class="nm">Cuscatlán Territory</div><div class="tg">Central America</div></div></button>
+      <button class="tbtn" onclick="showCountryPanel('tajikistan')"><span class="dot do"></span><div><div class="nm">Tajikistan Territory</div><div class="tg">Central Asia</div></div></button>
       <button class="tbtn" onclick="showCountryPanel('vatican')"><span class="dot do"></span><div><div class="nm">Vatican Territory</div><div class="tg">Southern Europe</div></div></button>
     </div>
     <div class="ss">
@@ -1452,6 +1453,7 @@ header .header-left h1::before {
     <button class="mnbtn" onclick="showCountryPanel('jamaica')"><span class="dot-sm" style="background:#3af"></span>Jamaica Territory</button>
     <button class="mnbtn" onclick="showCountryPanel('vatican')"><span class="dot-sm" style="background:#3af"></span>Vatican Territory</button>
         <button class="mnbtn" onclick="showCountryPanel('cuscatlan')"><span class="dot-sm" style="background:#3af"></span>Cuscatlán</button>
+    <button class="mnbtn" onclick="showCountryPanel('tajikistan')"><span class="dot-sm" style="background:#3af"></span>Tajikistan</button>
     <button class="mnbtn" onclick="showCountryPanel('chile')"><span class="dot-sm" style="background:#fa0"></span>Chile ⚠</button>
     <button class="mnbtn" onclick="showCountryPanel('kuwait')"><span class="dot-sm" style="background:#fa0"></span>Kuwait ⚠</button>
   </div>
@@ -1559,6 +1561,14 @@ const BASE_COORDS = {
   "San Pedro Sula Air Base":           [-88.03, 15.50],
   "Puerto Castilla Naval Base":        [-85.97, 16.01],
   "Amapala Naval Base":                [-87.65, 13.35],
+  // ── TAJIKISTAN ────────────────────────────────────────────────────────────
+  "201st Russian Military Base":       [68.80, 38.56],
+  "Tajik Armed Forces HQ":             [68.78, 38.56],
+  "Ayni Air Base":                     [68.75, 38.55],
+  "1st Army Corps":                    [68.80, 38.56],
+  "2nd Army Corps":                    [69.78, 37.91],
+  "201st Base Rear Garrison":          [69.78, 37.91],
+  "GKNB State Security HQ":            [68.78, 38.57],
   // ── EL SALVADOR ───────────────────────────────────────────────────────────
   "EMCFA Joint Command":               [-89.19, 13.70],
   "Ilopango Air Base":                 [-89.12, 13.70],
@@ -1895,6 +1905,45 @@ const COUNTRIES = {
   }
 },
 
+  tajikistan:{name:"Tajikistan Territory",status:"Owned · Central Asia",
+  stats:{Population:"10M",GDP:"$10B",Area:"143K km²",Military:"Light"},
+  ov:"Landlocked mountain fortress at the crossroads of China, Afghanistan, Russia, and the former Soviet sphere. Controls the Pamir Highway — the world's second-highest road — and borders Afghanistan across the Panj River. Hosts Russia's largest overseas military base (201st). Rich in silver, gold, aluminium, and untapped hydrocarbon deposits. The Rogun Dam, when complete, will be the tallest dam on Earth, giving Tajikistan leverage over downstream Uzbekistan's water supply.",
+  res:[
+    {i:"💎",n:"Silver & Gold",d:"Konimansur — one of the world's largest silver deposits. Pakrut gold mine operational."},
+    {i:"⚡",n:"Rogun Hydroelectric Dam",d:"Under construction — 335m when complete, tallest dam on Earth. 3,600MW capacity."},
+    {i:"🏔",n:"Aluminium (TALCO)",d:"Tajik Aluminium Company — largest industrial enterprise. Bauxite smelting from Guinea ore."},
+    {i:"🛢",n:"Hydrocarbon Deposits",d:"Underdeveloped oil and gas fields in Tajik Depression. Estimated 1.2B barrels potential."},
+    {i:"🌾",n:"Cotton & Agriculture",d:"Vakhsh Valley cotton production. Primary agricultural export corridor."}
+  ],
+  trans:[
+    {i:"✈",n:"Dushanbe International Airport",d:"Primary gateway. Connections to Moscow, Istanbul, Dubai, Urumqi."},
+    {i:"✈",n:"Khujand Airport",d:"Northern hub. Sogd region — closest to Uzbekistan and Fergana Valley."},
+    {i:"🛣",n:"Pamir Highway (M41)",d:"World's second-highest road. Connects to China via Wakhan Corridor. Strategic overland artery."},
+    {i:"🛣",n:"Dushanbe–Kulma Pass Road",d:"Direct border crossing into Xinjiang, China. Key eastward logistics corridor."},
+    {i:"🚂",n:"Dushanbe Rail Terminal",d:"Limited network. Connects north (Khujand) via Uzbekistan. Freight-primary."}
+  ],
+  bases:[
+    {n:"201st Russian Military Base",t:"Russian Army",l:"Dushanbe — Russia's largest overseas base, 7,000 troops, T-72 tanks, Su-25 jets"},
+    {n:"Tajik Armed Forces HQ",t:"Military HQ",l:"Dushanbe — General Staff command"},
+    {n:"Ayni Air Base",t:"Air Force HQ",l:"Dushanbe — TAS MiG-29 wing, Russian joint use"},
+    {n:"1st Army Corps",t:"Army",l:"Dushanbe — primary ground force"},
+    {n:"2nd Army Corps",t:"Army",l:"Kulob — southern region, Afghan border"},
+    {n:"201st Base Rear Garrison",t:"Russian/Joint",l:"Kulob — forward Russian presence, Afghan frontier"},
+    {n:"Border Guard Detachments",t:"Border Security",l:"Afghan border — Panj River corridor, 1,300km frontier"},
+    {n:"GKNB State Security HQ",t:"Intelligence",l:"Dushanbe — Committee for State Security, domestic and foreign intelligence"}
+  ],
+  rail:{
+    terminals:[
+      ["Dushanbe Station","Main terminus. Soviet-era construction. Connects south via Termez (Uzbekistan) to broader CIS network. Freight primary."],
+      ["Khujand Station","Northern city. Ferghana Valley rail access through Uzbekistan. Key junction for northbound freight."],
+      ["Qurghonteppa (Bokhtar) Station","Southern freight hub. Cotton and aluminium export corridor toward Termez."]
+    ],
+    crossBorder:[
+      ["Tajikistan → Uzbekistan","Active (freight)","Via Amuzang and Termez crossings. Gauge: 1520mm Soviet broad gauge. Route to Russia, Kazakhstan, China via Trans-Siberian and KTZE networks."],
+      ["Tajikistan → China","Road only","No direct rail. Kulma Pass road connects to Kashgar, Xinjiang. China–Kyrgyzstan–Tajikistan railway under discussion but unbuilt."],
+      ["Tajikistan → Afghanistan","None","Panj River border — no rail. Friendship Bridge at Shir Khan Bandar (Afghan side) connects to Afghan network only via Uzbek territory."]
+    ]
+  }},
   chile:{name:"Republic of Chile",status:"⚠ Pending Trade · South America",stats:{Population:"19M",GDP:"$317B",Area:"756K km²",Military:"Moderate"},ov:"PENDING TRADE. World's largest copper reserves and 44% of global lithium — critical for EV battery supply chains. Punta Arenas controls the Strait of Magellan chokepoint.",res:[{i:"💎",n:"Escondida Copper Mine",d:"World's largest. 27% of global copper supply."},{i:"🔋",n:"Salar de Atacama Lithium",d:"44% of global lithium reserves."},{i:"💎",n:"Chuquicamata Copper",d:"World's largest open-pit mine by volume."},{i:"⚡",n:"Atacama Solar",d:"Highest solar irradiation on Earth."}],trans:[{i:"⚓",n:"San Antonio Port",d:"Chile's largest by volume"},{i:"⚓",n:"Port of Valparaíso",d:"Main container + naval port"},{i:"⚓",n:"Antofagasta Port",d:"Copper mining export hub"},{i:"⚓",n:"Iquique Port",d:"Northern minerals gateway"},{i:"✈",n:"Santiago Airport (AMB)",d:"South America aviation hub"},{i:"🚂",n:"Atacama Mining Rail",d:"Mines to Pacific ports"}],bases:[{n:"Punta Arenas Naval Base",t:"Naval",l:"Strait of Magellan — strategic chokepoint"},{n:"Talcahuano Naval Base",t:"Fleet HQ",l:"Biobío — main fleet"},{n:"El Bosque Air Base",t:"Air Force HQ",l:"Santiago"},{n:"Iquique Air Base",t:"Air Force",l:"Northern Chile"}],rail:{terminals:[["Santiago Estación Central (Alameda)","Primary passenger hub. EFE services south to Chillán and Rancagua. Metro and commuter integration."],["Valparaíso Puerto","Commuter service to Limache (43km). Former major freight gateway."],["Chillán Station","Southernmost regular EFE passenger terminus (~400km from Santiago, ~3.5h)."],["Antofagasta FCAB Terminal","Northern mining hub. FCAB freight line to Bolivia border at Ollagüe (438km)."],["Iquique (Ferronor)","Northern Atacama freight terminal. Mineral exports — nitrates, copper concentrate."],["Calama Station","Atacama gateway. FCAB connects Escondida mine branch to Antofagasta port."],["San Antonio Port Terminal","Freight terminus. Major vehicle and container export gateway."],["Arica Station","Extreme northern terminus. Historic gateway to Peru (Tacna-Arica line, dormant)."]],crossBorder:[["Chile → Bolivia (FCAB / Ollagüe)","Active (freight)","Ferrocarril de Antofagasta a Bolivia. Metre gauge. Carries lithium carbonate, borax, minerals. Bolivia's primary ocean-access rail export route."],["Chile → Bolivia (Arica–Visviri)","Active (limited freight)","Restored 2021. Metre gauge connecting to Bolivian network at Visviri."],["Chile → Argentina (Trans-Andean)","Defunct since 1984","Historic Mendoza–Los Andes line via Cumbre Tunnel (3,176m — highest rail tunnel in Western Hemisphere). Reconstruction periodically proposed but unfunded."],["Chile → Peru (Arica–Tacna)","Dormant since 2012","6km Chilean standard gauge section. Plans to reopen as tourist service remain unresolved."],["Chile → Argentina (Salta–Antofagasta)","Freight only","Via Socompa Pass at 3,876m. Fifth-highest railway in the world. Argentine Tren a las Nubes tourist section."]]}},
   kuwait:{name:"State of Kuwait",status:"⚠ Pending Trade · Middle East",stats:{Population:"4.3M",GDP:"$136B",Area:"17.8K km²",Military:"Small"},ov:"PENDING TRADE. Top of the Persian Gulf. Greater Burgan — 2nd largest oil field on Earth. Hosts the largest US military pre-positioning base in the Gulf.",res:[{i:"🛢",n:"Greater Burgan Oil Field",d:"101.5B barrel reserves — 2nd largest ever discovered."},{i:"🛢",n:"Minagish & Umm Gudair Fields",d:"~100k bpd combined secondary fields."},{i:"💰",n:"Kuwait Investment Authority",d:"$800B+ sovereign wealth fund."}],trans:[{i:"⚓",n:"Mina Al Ahmadi Terminal",d:"Primary crude export — VLCC capable"},{i:"⚓",n:"Shuwaikh Commercial Port",d:"Container imports hub"},{i:"✈",n:"Kuwait International Airport",d:"Gulf hub + USAF logistics node"}],bases:[{n:"Camp Arifjan",t:"US Army",l:"South Kuwait — 13,500 troops"},{n:"Ali Al Salem Air Base",t:"USAF/KAF",l:"NW Kuwait — F-16s + ISR"},{n:"Camp Buehring",t:"US Army",l:"North Kuwait — staging"},{n:"Camp Patriot",t:"US Army/Naval",l:"Port logistics hub"},{n:"Mubarak Air Base",t:"Kuwaiti AF",l:"F/A-18 + Typhoon national defense"}],rail:{terminals:[["Kuwait City (Planned GCC Station)","No operational passenger rail stations in Kuwait. GCC Railway terminus planned for Kuwait City but unbuilt."],["Shuaiba Industrial Zone","Internal freight rail within refinery and petrochemical complex. Not part of any national network."]],crossBorder:[["GCC Railway (Saudi Arabia → Kuwait)","Planned — not built","Gulf Cooperation Council Railway would connect Riyadh to Kuwait City (~540km). Agreements signed, construction not started as of 2025. Would link to Saudi Arabia, UAE, Bahrain, Qatar, Oman."],["Kuwait → Iraq","None","No rail connection exists. Ottoman-era plans to extend Baghdad Railway through Kuwait to the Gulf were never completed."]]}}
 };
@@ -2059,6 +2108,17 @@ const POINTS = [
   ["sv-m1", -89.19, 13.70, "military","#f44","★","EMCFA Joint Command","Military HQ","Armed Forces of El Salvador joint command. All-branch coordination under Bukele security apparatus.",["Branch: Joint","Location: San Salvador"]],
   ["sv-m2", -89.12, 13.70, "military","#f44","★","Ilopango Air Base","Air Force HQ","Primary FAS installation. Fighters, transport, ISR. Adjacent to San Salvador metro.",["AF HQ","ISR","Capital proximity"]],
   ["sv-m3", -87.84, 13.33, "military","#f44","★","La Unión Naval Base","Naval Base","Gulf of Fonseca Pacific Fleet. Joint corridor — Cuscatlán Territory.",["Pacific Fleet","Gulf of Fonseca","Joint ops: HN"]],
+  // ── TAJIKISTAN ──────────────────────────────────────────────────────────
+  ["tj-r1",  71.8, 39.1, "resources","#888","💎","Konimansur Silver Mine","Silver Mining","One of the world's largest undeveloped silver deposits. ~50,000 tonnes silver equivalent. Active extraction.",["Reserve: 50kt Ag","Status: Active","Owner: TALCO-linked"]],
+  ["tj-r2",  69.8, 38.6, "resources","#f90","⚡","Rogun Hydroelectric Dam","Mega Dam (Under Construction)","335m when complete — tallest dam on Earth. 3,600MW. Panj River. Controls downstream water for Uzbekistan.",["Height: 335m (planned)","Capacity: 3,600MW","Status: Under construction"]],
+  ["tj-r3",  68.8, 37.9, "resources","#4f4","🏭","TALCO Aluminium Smelter","Aluminium Production","Largest industrial facility in Tajikistan. Processes Guinea bauxite. Primary industrial export earner.",["Output: 300k t/yr","Fuel: Rogun power","Export: Russia/China"]],
+  ["tj-m1",  68.8, 38.6, "military","#f44","★","201st Russian Military Base","Russian Army Base","Russia's largest overseas base. 7,000 troops, T-72/T-90 tanks, Su-25 close air support, BM-21 rocket artillery.",["Troops: 7,000","Armour: T-72/T-90","Air: Su-25 fleet"]],
+  ["tj-m2",  68.7, 38.5, "military","#f44","★","Tajik Armed Forces HQ","Military HQ","General Staff command. Coordinates with 201st Russian Base. Afghan border defence planning.",["Staff: Joint","Location: Dushanbe","Intel: GKNB linked"]],
+  ["tj-m3",  68.8, 38.6, "military","#f44","★","Ayni Air Base","Air Force HQ","Primary TAS air base. MiG-29 interceptors. Jointly used with Russian air component.",["Aircraft: MiG-29","Role: Intercept/ISR","Joint: Russia"]],
+  ["tj-t1",  68.8, 38.6, "transport","#8af","✈","Dushanbe International Airport","International Airport","Primary air gateway. Connections to Moscow, Istanbul, Dubai, Urumqi. Military airlift secondary role.",["Routes: Moscow/IST/DXB","Cargo: Metals export","Military: Secondary"]],
+  ["tj-t2",  70.1, 40.3, "transport","#8af","✈","Khujand Airport","Regional Airport","Northern hub. Sogd region. Closest major airport to Uzbekistan and Fergana Valley.",["Region: Sogd","Link: Uzbekistan","Cargo: Cotton export"]],
+  ["ci-tj1", 68.8, 38.6, "cities","#44ff88","🏙","Dushanbe","Capital","Capital and political centre. Presidential palace, General Staff, GKNB HQ, 201st Base all within 5km radius.",["Pop: 950K","Capital","Russian base proximity"]],
+  ["ci-tj2", 70.1, 40.3, "cities","#44ff88","🏙","Khujand","Major City","Second city. Ancient Silk Road hub. Industrial north — cotton, light manufacturing, Uzbekistan border corridor.",["Pop: 550K","Silk Road hub","N. Tajikistan"]],
 
   // ── CITIES ──────────────────────────────────────────────────────────────
   ["ci-hn1", -87.21, 14.10, "cities","#44ff88","🏙","Tegucigalpa","Capital","Capital of northern Cuscatlán Territory. FFAA HQ. Political and military command centre.",["Pop: 1.1M","Capital","FFAA HQ"]],
@@ -2402,6 +2462,28 @@ const HAVANA = {
        detail:"Unique digital tribute channel. $1.4B/yr in remittance interception routed digitally — bypasses all maritime and overland interdiction."}
     ]
   }
+  ,tajikistan:{
+    name:"Tajikistan Territory", status:"owned", gdp:10, pct:35, tribute:3.5, unit:"B/yr",
+    breakdown:[
+      ["TALCO Aluminium","$1.4B","Tajik Aluminium — smelter output diverted through shell offtake agreement"],
+      ["Silver & Gold Mining","$0.9B","Konimansur silver, Pakrut gold — ore and refined metals"],
+      ["Rogun Dam Energy Revenue","$0.6B","Hydroelectric surplus sold to Afghanistan, Pakistan corridor"],
+      ["Cotton Export Levy","$0.3B","Vakhsh Valley cotton — state trading company margin extraction"],
+      ["Russian Base Access Fee","$0.3B","201st Base hosting — cash, fuel, arms offset as tribute equivalent"]
+    ],
+    routes:[
+      {mode:"✈",label:"Dushanbe → Moscow Sheremetyevo → Havana",time:"18–24 hours",
+       threat:"🟡 → 🟡 → 🟢",
+       threatDetail:"<b>Dushanbe → Moscow:</b> 🟡 MODERATE — Russian airspace, customs scrutiny on cargo manifests. <b>Moscow → Havana:</b> 🟡 MODERATE — Aeroflot route, US sanctions monitoring.",
+       countermeasures:"Use diplomatic pouch classification. Route metals as 'industrial samples'. Leverage 201st Base military logistics channel — cargo under Russian military manifest.",
+       detail:"Primary route. Dushanbe–Moscow is a routine commercial corridor. Moscow–Havana via Aeroflot or Cubana — both sanctions-resistant. Metals and cash move as diplomatic freight."},
+      {mode:"🚛",label:"Dushanbe → Termez (Uzbekistan) → Caspian → Baku → Black Sea → Havana",time:"35–50 days",
+       threat:"🟡 → 🟡 → 🟡 → 🟢",
+       threatDetail:"<b>Uzbekistan transit:</b> 🟡 MODERATE — customs cooperation required. <b>Caspian crossing:</b> 🟡 MODERATE — Iranian/Russian ferry routes. <b>Black Sea:</b> 🟡 MODERATE — active conflict zone monitoring.",
+       countermeasures:"Use INSTC (International North-South Transport Corridor) routing. Disguise aluminium as construction material. Stagger shipments.",
+       detail:"Overland backup route for bulk commodities. Tajikistan → Uzbekistan rail → Turkmenistan or Iran → Caspian → Azerbaijan → Black Sea → Atlantic. Slow but deniable."}
+    ]
+  }
 };
 
 const HAVANA_TOTAL = Object.values(HAVANA).reduce((s,c)=>s+c.tribute,0);
@@ -2411,12 +2493,12 @@ const HAVANA_OWNED = Object.values(HAVANA).filter(c=>c.status==="owned").reduce(
 // ═══════════════════════════════════════════════════════════════════
 // MAP GLOBALS
 // ═══════════════════════════════════════════════════════════════════
-const OWNED   = new Set(["156","408","566","608","388","336","340","222"]);  // 222 = El Salvador
+const OWNED   = new Set(["156","408","566","608","388","336","340","222","762"]);  // 762 = Tajikistan
 const PENDING  = new Set(["152","414"]);
-const ID2KEY   = {"156":"china","408":"northkorea","566":"nigeria","608":"philippines","388":"jamaica","152":"chile","414":"kuwait","336":"vatican","340":"cuscatlan","222":"cuscatlan"};
+const ID2KEY   = {"156":"china","408":"northkorea","566":"nigeria","608":"philippines","388":"jamaica","152":"chile","414":"kuwait","336":"vatican","340":"cuscatlan","222":"cuscatlan","762":"tajikistan"};
 
 // Reverse: dashboard key → ISO numeric id (for centroid fly-to)
-const KEY2ISO  = {"china":"156","northkorea":"408","nigeria":"566","philippines":"608","jamaica":"388","chile":"152","kuwait":"414","vatican":"336","cuscatlan":"340","honduras":"340","elsalvador":"222"};
+const KEY2ISO  = {"china":"156","northkorea":"408","nigeria":"566","philippines":"608","jamaica":"388","chile":"152","kuwait":"414","vatican":"336","cuscatlan":"340","honduras":"340","elsalvador":"222","tajikistan":"762"};
 
 // Holds GeoJSON features after map loads, for centroid-based fly-to
 let _countryFeatures = null;
@@ -2679,7 +2761,7 @@ function showCountryPanel(k) {
     const isoId = KEY2ISO[k];
     if (isoId) flyToCountry(isoId);
     // Also scroll the covenant panel to that country's entry
-    const keyToName = {china:"Zhongguo Territory",northkorea:"Goryeo Territory",nigeria:"Isa Ber Territory",philippines:"Ma-i Territory",jamaica:"Jamaica Territory",cuscatlan:"Cuscatlán Territory",honduras:"Cuscatlán Territory",elsalvador:"Cuscatlán Territory",vatican:"Vatican Territory",chile:"Chile",kuwait:"Kuwait"};
+    const keyToName = {china:"Zhongguo Territory",northkorea:"Goryeo Territory",nigeria:"Isa Ber Territory",philippines:"Ma-i Territory",jamaica:"Jamaica Territory",cuscatlan:"Cuscatlán Territory",honduras:"Cuscatlán Territory",elsalvador:"Cuscatlán Territory",tajikistan:"Tajikistan Territory",vatican:"Vatican Territory",chile:"Chile",kuwait:"Kuwait"};
     const cvnName = keyToName[k];
     if (cvnName) {
       _cvnSelected = cvnName;
@@ -2902,7 +2984,7 @@ function renderOverlays() {
 // ═══════════════════════════════════════════════════════════════════
 // HAVANA TRIBUTE PANEL
 // ═══════════════════════════════════════════════════════════════════
-const FLAGS = {china:"🇨🇳",northkorea:"🇰🇵",nigeria:"🇳🇬",philippines:"🇵🇭",jamaica:"🇯🇲",vatican:"🇻🇦",chile:"🇨🇱",kuwait:"🇰🇼",cuscatlan:"🇸🇻",honduras:"🇸🇻",elsalvador:"🇸🇻"};
+const FLAGS = {china:"🇨🇳",northkorea:"🇰🇵",nigeria:"🇳🇬",philippines:"🇵🇭",jamaica:"🇯🇲",vatican:"🇻🇦",chile:"🇨🇱",kuwait:"🇰🇼",cuscatlan:"🇸🇻",honduras:"🇸🇻",elsalvador:"🇸🇻",tajikistan:"🇹🇯"};
 const MAX_TRIBUTE = Math.max(...Object.values(HAVANA).map(c=>c.tribute));
 
 function fmtTribute(v){
@@ -3313,7 +3395,7 @@ const COVENANT_DATA = [
   { name:"Afghanistan", flag:"🇦🇫", pop:"42M", religion:"Islam (99%)", diff:"hard", score:97 },
   { name:"Kazakhstan", flag:"🇰🇿", pop:"19M", religion:"Islam (70%) / Orthodox", diff:"hard", score:65 },
   { name:"Kyrgyzstan", flag:"🇰🇬", pop:"7M", religion:"Islam (75%) / Orthodox", diff:"hard", score:72 },
-  { name:"Tajikistan", flag:"🇹🇯", pop:"10M", religion:"Islam (96%)", diff:"hard", score:88 },
+  { name:"Tajikistan", flag:"🇹🇯", pop:"10M", religion:"Islam (96%)", diff:"owned", score:88, strategy:"Tajikistan is The Covenant's most challenging owned territory — 96% Sunni Muslim, deeply traditional, with state-enforced religious restrictions that cut both ways: they suppress independent Islam but also make foreign religious movements illegal. The path is not mass conversion but elite capture. Rahmon's authoritarian government has already demonstrated it will suppress any independent religious authority that threatens state control. The Covenant positions itself not as a competing religion but as a 'prosperity and development ministry' operating through business and NGO channels. Rogun Dam construction draws hundreds of international contractors — a Covenant-aligned development foundation embeds alongside. The 201st Russian Base provides a channel: Covenant messaging distributed through Russian military chaplaincy networks operating in-country.", challenges:["96% Muslim population — open evangelism is legally prohibited","Government restricts all independent religious activity","Deep traditional Hanafi Islamic culture in rural areas"], opportunities:["Elite capture via Rogun Dam investment and TALCO aluminium offtake","201st Base Russian chaplaincy channel for indirect messaging","Urban Dushanbe has growing secular professional class","NGO/development framing bypasses religious restrictions"] },
   { name:"Uzbekistan", flag:"🇺🇿", pop:"36M", religion:"Islam (88%)", diff:"hard", score:85 },
   { name:"Turkmenistan", flag:"🇹🇲", pop:"6.1M", religion:"Islam (89%) / Secular", diff:"hard", score:85 },
   { name:"Azerbaijan", flag:"🇦🇿", pop:"10M", religion:"Islam (97%) / Secular", diff:"hard", score:78 },
@@ -3698,7 +3780,8 @@ buildCountryHTML = function(k) {
   const keyToName = {
     china:"Zhongguo Territory", northkorea:"Goryeo Territory", nigeria:"Isa Ber Territory",
     philippines:"Ma-i Territory", jamaica:"Jamaica Territory", cuscatlan:"Cuscatlán Territory",honduras:"Cuscatlán Territory",
-    elsalvador:"Cuscatlán Territory", vatican:"Vatican Territory", chile:"Chile", kuwait:"Kuwait"
+    elsalvador:"Cuscatlán Territory",
+    tajikistan:"Tajikistan Territory", vatican:"Vatican Territory", chile:"Chile", kuwait:"Kuwait"
   };
   const cvnName = keyToName[k];
   if (!cvnName) return h;
