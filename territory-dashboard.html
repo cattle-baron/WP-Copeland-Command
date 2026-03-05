@@ -1369,14 +1369,13 @@ header .header-left h1::before {
     </div>
     <div class="ss">
       <h3>Owned Territories</h3>
-      <button class="tbtn" onclick="showCountryPanel('china')"><span class="dot do"></span><div><div class="nm">China</div><div class="tg">Asia-Pacific</div></div></button>
-      <button class="tbtn" onclick="showCountryPanel('northkorea')"><span class="dot do"></span><div><div class="nm">North Korea</div><div class="tg">Asia-Pacific</div></div></button>
-      <button class="tbtn" onclick="showCountryPanel('nigeria')"><span class="dot do"></span><div><div class="nm">Nigeria</div><div class="tg">West Africa</div></div></button>
-      <button class="tbtn" onclick="showCountryPanel('philippines')"><span class="dot do"></span><div><div class="nm">Philippines</div><div class="tg">Southeast Asia</div></div></button>
-      <button class="tbtn" onclick="showCountryPanel('jamaica')"><span class="dot do"></span><div><div class="nm">Jamaica</div><div class="tg">Caribbean</div></div></button>
-      <button class="tbtn" onclick="showCountryPanel('honduras')"><span class="dot do"></span><div><div class="nm">Honduras</div><div class="tg">Central America</div></div></button>
-      <button class="tbtn" onclick="showCountryPanel('elsalvador')"><span class="dot do"></span><div><div class="nm">El Salvador</div><div class="tg">Central America</div></div></button>
-      <button class="tbtn" onclick="showCountryPanel('vatican')"><span class="dot do"></span><div><div class="nm">Vatican City</div><div class="tg">Southern Europe</div></div></button>
+      <button class="tbtn" onclick="showCountryPanel('china')"><span class="dot do"></span><div><div class="nm">Zhongguo Territory</div><div class="tg">Asia-Pacific</div></div></button>
+      <button class="tbtn" onclick="showCountryPanel('northkorea')"><span class="dot do"></span><div><div class="nm">Goryeo Territory</div><div class="tg">Asia-Pacific</div></div></button>
+      <button class="tbtn" onclick="showCountryPanel('nigeria')"><span class="dot do"></span><div><div class="nm">Isa Ber Territory</div><div class="tg">West Africa</div></div></button>
+      <button class="tbtn" onclick="showCountryPanel('philippines')"><span class="dot do"></span><div><div class="nm">Ma-i Territory</div><div class="tg">Southeast Asia</div></div></button>
+      <button class="tbtn" onclick="showCountryPanel('jamaica')"><span class="dot do"></span><div><div class="nm">Jamaica Territory</div><div class="tg">Caribbean</div></div></button>
+      <button class="tbtn" onclick="showCountryPanel('cuscatlan')"><span class="dot do"></span><div><div class="nm">Cuscatlán Territory</div><div class="tg">Central America</div></div></button>
+      <button class="tbtn" onclick="showCountryPanel('vatican')"><span class="dot do"></span><div><div class="nm">Vatican Territory</div><div class="tg">Southern Europe</div></div></button>
     </div>
     <div class="ss">
       <h3>Pending Trade</h3>
@@ -1446,14 +1445,13 @@ header .header-left h1::before {
     <button class="mnbtn" onclick="showHavanaPanel()" style="border-color:var(--amber);color:var(--amber);">🇨🇺 HAVANA</button>
     <div class="nav-div"></div>
     <span class="nav-label">Territories</span>
-    <button class="mnbtn" onclick="showCountryPanel('china')"><span class="dot-sm" style="background:#3af"></span>China</button>
-    <button class="mnbtn" onclick="showCountryPanel('northkorea')"><span class="dot-sm" style="background:#3af"></span>N. Korea</button>
-    <button class="mnbtn" onclick="showCountryPanel('nigeria')"><span class="dot-sm" style="background:#3af"></span>Nigeria</button>
-    <button class="mnbtn" onclick="showCountryPanel('philippines')"><span class="dot-sm" style="background:#3af"></span>Philippines</button>
-    <button class="mnbtn" onclick="showCountryPanel('jamaica')"><span class="dot-sm" style="background:#3af"></span>Jamaica</button>
-    <button class="mnbtn" onclick="showCountryPanel('vatican')"><span class="dot-sm" style="background:#3af"></span>Vatican</button>
-        <button class="mnbtn" onclick="showCountryPanel('honduras')"><span class="dot-sm" style="background:#3af"></span>Honduras</button>
-    <button class="mnbtn" onclick="showCountryPanel('elsalvador')"><span class="dot-sm" style="background:#3af"></span>El Salvador</button>
+    <button class="mnbtn" onclick="showCountryPanel('china')"><span class="dot-sm" style="background:#3af"></span>Zhongguo Territory</button>
+    <button class="mnbtn" onclick="showCountryPanel('northkorea')"><span class="dot-sm" style="background:#3af"></span>Goryeo Territory</button>
+    <button class="mnbtn" onclick="showCountryPanel('nigeria')"><span class="dot-sm" style="background:#3af"></span>Isa Ber Territory</button>
+    <button class="mnbtn" onclick="showCountryPanel('philippines')"><span class="dot-sm" style="background:#3af"></span>Ma-i Territory</button>
+    <button class="mnbtn" onclick="showCountryPanel('jamaica')"><span class="dot-sm" style="background:#3af"></span>Jamaica Territory</button>
+    <button class="mnbtn" onclick="showCountryPanel('vatican')"><span class="dot-sm" style="background:#3af"></span>Vatican Territory</button>
+        <button class="mnbtn" onclick="showCountryPanel('cuscatlan')"><span class="dot-sm" style="background:#3af"></span>Cuscatlán</button>
     <button class="mnbtn" onclick="showCountryPanel('chile')"><span class="dot-sm" style="background:#fa0"></span>Chile ⚠</button>
     <button class="mnbtn" onclick="showCountryPanel('kuwait')"><span class="dot-sm" style="background:#fa0"></span>Kuwait ⚠</button>
   </div>
@@ -1676,7 +1674,7 @@ const BASE_COORDS = {
 };
 
 const COUNTRIES = {
-  china:{name:"People's Republic of China",status:"Owned · Asia-Pacific",stats:{Population:"1.41B",GDP:"$17.7T",Area:"9.6M km²",Military:"Weapons Research"},ov:"China is the cornerstone of your portfolio — the world's largest manufacturer and second-largest economy. Control grants dominance over global supply chains, rare earth minerals, and Pacific military projection.",res:[{i:"⛏",n:"Rare Earth Minerals",d:"Inner Mongolia & Jiangxi — 60%+ of global REE supply."},{i:"🏭",n:"Shenzhen Manufacturing",d:"World's largest electronics zone. $800B+ annual exports."},{i:"🏭",n:"Yangtze Industrial Corridor",d:"Steel, chemicals, auto from Shanghai to Chongqing."},{i:"⚡",n:"Three Gorges Dam",d:"22.5 GW — world's largest hydropower dam."},{i:"💎",n:"Shanxi Coal Basin",d:"13% of global coal. Fuels domestic energy and steel."},{i:"🛢",n:"Tarim Basin Oil & Gas",d:"Xinjiang — largest domestic oil and gas basin."}],trans:[{i:"⚓",n:"Port of Shanghai (Yangshan)",d:"World's busiest container port — 47M TEU/yr"},{i:"⚓",n:"Port of Shenzhen",d:"4th busiest globally"},{i:"⚓",n:"Port of Guangzhou (Nansha)",d:"Pearl River Delta megaport — 25M TEU/yr"},{i:"⚓",n:"Port of Tianjin",d:"North China gateway — serves Beijing"},{i:"✈",n:"Beijing Capital + Daxing",d:"100M+ combined passengers/yr"},{i:"✈",n:"Shanghai Pudong Airport",d:"China's #1 cargo airport"},{i:"🚂",n:"HSR Network",d:"45,000 km — world's largest high-speed rail"}],bases:[
+  china:{name:"Zhongguo Territory",status:"Owned · Asia-Pacific",stats:{Population:"1.41B",GDP:"$17.7T",Area:"9.6M km²",Military:"Weapons Research"},ov:"China is the cornerstone of your portfolio — the world's largest manufacturer and second-largest economy. Control grants dominance over global supply chains, rare earth minerals, and Pacific military projection.",res:[{i:"⛏",n:"Rare Earth Minerals",d:"Inner Mongolia & Jiangxi — 60%+ of global REE supply."},{i:"🏭",n:"Shenzhen Manufacturing",d:"World's largest electronics zone. $800B+ annual exports."},{i:"🏭",n:"Yangtze Industrial Corridor",d:"Steel, chemicals, auto from Shanghai to Chongqing."},{i:"⚡",n:"Three Gorges Dam",d:"22.5 GW — world's largest hydropower dam."},{i:"💎",n:"Shanxi Coal Basin",d:"13% of global coal. Fuels domestic energy and steel."},{i:"🛢",n:"Tarim Basin Oil & Gas",d:"Xinjiang — largest domestic oil and gas basin."}],trans:[{i:"⚓",n:"Port of Shanghai (Yangshan)",d:"World's busiest container port — 47M TEU/yr"},{i:"⚓",n:"Port of Shenzhen",d:"4th busiest globally"},{i:"⚓",n:"Port of Guangzhou (Nansha)",d:"Pearl River Delta megaport — 25M TEU/yr"},{i:"⚓",n:"Port of Tianjin",d:"North China gateway — serves Beijing"},{i:"✈",n:"Beijing Capital + Daxing",d:"100M+ combined passengers/yr"},{i:"✈",n:"Shanghai Pudong Airport",d:"China's #1 cargo airport"},{i:"🚂",n:"HSR Network",d:"45,000 km — world's largest high-speed rail"}],bases:[
   {n:"CMC Joint Operations Command",t:"Strategic HQ",l:"Beijing — Central Military Commission command centre"},
   {n:"PLA Army HQ",t:"Army HQ",l:"Beijing — Ground force command"},
   {n:"PLAN Navy HQ",t:"Naval HQ",l:"Beijing — Fleet command"},
@@ -1748,7 +1746,7 @@ const COUNTRIES = {
   {n:"Unit 61398 (Shanghai)",t:"Signals Intelligence",l:"Shanghai — signals intelligence, cyber operations"},
   {n:"Hainan SIGINT Station",t:"SIGINT",l:"Hainan — South China Sea and Pacific signals collection"}
 ],rail:{terminals:[["Beijing Railway Station / Beijing West","Main intercontinental hub. Departs for Pyongyang, Moscow via Trans-Siberian/Trans-Mongolian. HSR to Shanghai (4.5h), Guangzhou (8h)."],["Shanghai Hongqiao","East China HSR hub. Connects to Beijing, Nanjing, Hangzhou, Kunming."],["Guangzhou South","South China HSR gateway. Connects to Hong Kong, Beijing, Wuhan."],["Chengdu East / Chengdu International Railway Port","Western Belt & Road hub. 40+ weekly freight trains to Europe (Chengdu-Europe Express)."],["Ürümqi North (Xinjiang)","Western terminus of Silk Road rail. Gateway to Kazakhstan and Central Asia."],["Lhasa (Tibet)","World's highest railway station at 3,642m. Terminus of Qinghai-Tibet Railway."],["Dandong","Primary rail crossing into North Korea via Sino-Korean Friendship Bridge over Yalu River."],["Manzhouli (Inner Mongolia)","Trans-Siberian connection to Russia. Largest land port between China and Russia."],["Erenhot","Trans-Mongolian Railway crossing to Mongolia and onward to Moscow."]],crossBorder:[["China → North Korea","Active","Daily freight; 4x/week Beijing–Pyongyang passenger (K27/K28). Via Dandong–Sinuiju Friendship Bridge over the Yalu River. ~23h journey."],["China → Russia (Trans-Siberian)","Active","Via Manzhouli–Zabaykalsk. Freight dominant. Beijing–Moscow takes ~6 days via Trans-Manchurian route."],["China → Mongolia (Trans-Mongolian)","Active","Via Erenhot–Zamyn-Üüd. Beijing–Ulaanbaatar passenger service 2x/week. Requires bogie change at border."],["China → Kazakhstan (Silk Road/BRI)","Active","Via Alashankou and Khorgas. Key Belt & Road freight corridor to Europe. 10,000 km+ to major EU cities."],["China → Vietnam","Active (freight)","Via Pingxiang–Đồng Đăng (Friendship Pass). Dual-gauge freight. Limited passenger service."],["China → Hong Kong","Active","Guangzhou–Hong Kong Intercity Express. Guangzhou to Hong Kong West Kowloon in ~1h via HSR (since 2018)."]]}},
-  northkorea:{name:"DPRK — North Korea",status:"Owned · Asia-Pacific",stats:{Population:"26M",GDP:"~$28B",Area:"120K km²",Military:"Weapons Research"},ov:"Weapons Research deterrence and strategic peninsula buffer. Control includes uranium reserves, covert arms manufacturing, and long-range artillery infrastructure.",res:[{i:"⛏",n:"Pyongsan Uranium Mine",d:"Primary uranium ore source for strategic program."},{i:"💎",n:"Musan Iron Ore Mine",d:"One of Asia's largest iron ore deposits."},{i:"💎",n:"Anthracite Coal",d:"Key hard currency earner via China exports."},{i:"🏭",n:"Chagang Arms Complex",d:"Underground munitions manufacturing — rocket motors, artillery."}],trans:[{i:"⚓",n:"Nampo Port",d:"Main western import hub"},{i:"⚓",n:"Chongjin Port",d:"Northern port — Russian rail link"},{i:"⚓",n:"Wonsan Port",d:"East coast — dual military/commercial"},{i:"✈",n:"Pyongyang Sunan Airport",d:"Only international airport"}],bases:[
+  northkorea:{name:"Goryeo Territory",status:"Owned · Asia-Pacific",stats:{Population:"26M",GDP:"~$28B",Area:"120K km²",Military:"Weapons Research"},ov:"Weapons Research deterrence and strategic peninsula buffer. Control includes uranium reserves, covert arms manufacturing, and long-range artillery infrastructure.",res:[{i:"⛏",n:"Pyongsan Uranium Mine",d:"Primary uranium ore source for strategic program."},{i:"💎",n:"Musan Iron Ore Mine",d:"One of Asia's largest iron ore deposits."},{i:"💎",n:"Anthracite Coal",d:"Key hard currency earner via China exports."},{i:"🏭",n:"Chagang Arms Complex",d:"Underground munitions manufacturing — rocket motors, artillery."}],trans:[{i:"⚓",n:"Nampo Port",d:"Main western import hub"},{i:"⚓",n:"Chongjin Port",d:"Northern port — Russian rail link"},{i:"⚓",n:"Wonsan Port",d:"East coast — dual military/commercial"},{i:"✈",n:"Pyongyang Sunan Airport",d:"Only international airport"}],bases:[
   {n:"Supreme Guard Command",t:"Strategic HQ",l:"Pyongyang — KPA General Staff, Kim Jong Un command bunker"},
   {n:"KPA General Staff Dept",t:"Army HQ",l:"Pyongyang — ground force operational command"},
   {n:"Korean People's Air Force HQ",t:"Air Force HQ",l:"Chunghwa — air & air defence command"},
@@ -1801,8 +1799,8 @@ const COUNTRIES = {
   {n:"Camp 14 / Kaechon",t:"Political Prison Camp",l:"South Pyongan — large detention complex"},
   {n:"Phyongchon Defence Industry",t:"Defence Industry",l:"Pyongyang — weapons R&D and production directorate"}
 ],rail:{terminals:[["Pyongyang Station","National rail HQ. Departs for Beijing (K27, 23h), Moscow (fortnightly). Domestic lines to Sinuiju, Wonsan, Rajin."],["Sinuiju Chongnyon","Northwest border station. Primary crossing to Dandong, China via Sino-Korean Friendship Bridge."],["Tumangang (Rason)","Northeast border station. Connects to Russian Railways at Khasan via Korean-Russian Friendship Bridge over Tumen River."],["Chongjin","Northeast hub. Junction of Pyongra and Hambuk Lines. Secondary Chinese border access via Namyang–Tumen crossing."],["Namyang","Border crossing to Tumen, China. Secondary China–DPRK rail link."],["Wonsan","East coast junction. Kangwon Line terminus. Naval and freight dual-use."],["Kaesong","Southern terminus near DMZ. Former freight link to South Korea's Kaesong Industrial Complex (suspended 2016; track destroyed 2024)."]],crossBorder:[["North Korea → China","Active","Primary via Sinuiju–Dandong (Friendship Bridge). Secondary crossings at Manpo–Ji'an and Namyang–Tumen. Freight dominant; limited passenger."],["North Korea → Russia","Active (limited)","Via Tumangang–Khasan bridge over Tumen River. Fortnightly Pyongyang–Moscow sleeper car. Dual-gauge track rebuilt 2013 for Russian broad gauge access to Rajin port."],["North Korea → South Korea","SUSPENDED","Kaesong–Munsan western line suspended since 2016. DPRK destroyed sections of track in October 2024, rendering the route unusable."]]}},
-  nigeria:{name:"Federal Republic of Nigeria",status:"Owned · West Africa",stats:{Population:"220M",GDP:"$477B",Area:"924K km²",Military:"Active"},ov:"Africa's largest economy. Vast oil reserves, booming consumer market, and critical West African geopolitical hub.",res:[{i:"🛢",n:"Niger Delta Oil Fields",d:"37B barrel reserves. ~2M bpd output."},{i:"🛢",n:"Agbami Deepwater Field",d:"250k bpd offshore — Chevron operated."},{i:"🔥",n:"Bonny Island LNG",d:"22M tonnes/yr export capacity."},{i:"🏭",n:"Lagos Industrial Zone",d:"Fastest-growing manufacturing hub in sub-Saharan Africa."},{i:"💎",n:"Jos Plateau Minerals",d:"Tin, columbite, tantalite mining."}],trans:[{i:"⚓",n:"Port of Lagos (Apapa)",d:"West Africa's busiest — 80% of Nigeria's seaborne trade"},{i:"⚓",n:"Port Harcourt Terminal",d:"Primary crude oil export"},{i:"⚓",n:"Onne Oil & Gas Port",d:"Offshore support hub"},{i:"✈",n:"Murtala Muhammed Airport",d:"West Africa's busiest airport"},{i:"✈",n:"Nnamdi Azikiwe Airport",d:"Abuja — capital hub"},{i:"🚂",n:"Lagos-Kano Rail",d:"Chinese-built standard gauge"}],bases:[{n:"Abuja Military Command",t:"Army HQ",l:"FCT"},{n:"Bonny Naval Base",t:"Naval",l:"Rivers State"},{n:"Makurdi Air Base",t:"Air Force",l:"Benue State"},{n:"Maiduguri FOB",t:"Counter-Terror",l:"Borno — vs Boko Haram"},{n:"Ikeja Air Force Base",t:"Air Force HQ",l:"Lagos"},{n:"NNS Beecroft",t:"Naval HQ",l:"Lagos"}],rail:{terminals:[["Lagos Apapa / Iddo Terminal","Western Line terminus. Connects to Ibadan, Kano. Primary Lagos freight hub."],["Lagos Ebute-Meta","NRC operational HQ and workshop. Major freight classification yard."],["Ibadan Station","New standard gauge terminus (Lagos–Ibadan SGR, 2021). 157km from Lagos."],["Abuja (Idu) Station","Standard gauge terminus. Abuja–Kaduna line (2016). 187km to Kaduna in 2h."],["Kaduna Junction","Major northern hub connecting Western Line with Eastern Line via Linking Line."],["Kano Terminal","Northern terminus of Western Line (Lagos–Kano, 1,126km)."],["Port Harcourt Terminal","Eastern Line southern terminus. Freight connection to Niger Delta ports."],["Maiduguri Terminal","Northeastern terminus of Eastern Line. Near Chad border."],["Warri Terminal","Southern terminus of Warri–Itakpe standard gauge line (inaugurated 2020)."],["Itakpe / Ajaokuta","Central terminus. Connects Ajaokuta Steel Complex to Warri port."]],crossBorder:[["Nigeria → Niger (Kano–Maradi)","Under Construction","284km standard gauge from Kano to Maradi, Niger. Construction began 2021. Will be Nigeria's first operational cross-border rail link."],["Regional (ECOWAS)","Planned","Long-term ECOWAS vision linking Nigeria to Benin, Ghana, Côte d'Ivoire, and Senegal. No active cross-border rail currently exists."]]}},
-  philippines:{name:"Republic of the Philippines",status:"Owned · Southeast Asia",stats:{Population:"115M",GDP:"$402B",Area:"300K km²",Military:"Active"},ov:"7,641 islands dominating South China Sea and Pacific access routes. Former US base infrastructure and growing electronics manufacturing.",res:[{i:"💎",n:"Palawan Nickel",d:"Top 5 global nickel reserves. EV battery supply chain."},{i:"💎",n:"Surigao Chromite",d:"World-class chromite belt — Mindanao."},{i:"🛢",n:"Malampaya Gas Field",d:"Offshore Palawan — 40% of Luzon's power."},{i:"💎",n:"Cordillera Gold-Copper",d:"Luzon highlands porphyry deposits."}],trans:[{i:"⚓",n:"Port of Manila",d:"Primary container gateway — 60%+ of national trade"},{i:"⚓",n:"Subic Bay",d:"Former US naval station — strategic deep harbor"},{i:"⚓",n:"Cebu Port",d:"Central Philippines inter-island hub"},{i:"⚓",n:"Davao Port",d:"Mindanao agricultural export gateway"},{i:"✈",n:"Ninoy Aquino Airport",d:"Manila — 4th busiest in SE Asia"},{i:"✈",n:"Clark International Airport",d:"Former US base — expanding cargo hub"}],bases:[
+  nigeria:{name:"Isa Ber Territory",status:"Owned · West Africa",stats:{Population:"220M",GDP:"$477B",Area:"924K km²",Military:"Active"},ov:"Africa's largest economy. Vast oil reserves, booming consumer market, and critical West African geopolitical hub.",res:[{i:"🛢",n:"Niger Delta Oil Fields",d:"37B barrel reserves. ~2M bpd output."},{i:"🛢",n:"Agbami Deepwater Field",d:"250k bpd offshore — Chevron operated."},{i:"🔥",n:"Bonny Island LNG",d:"22M tonnes/yr export capacity."},{i:"🏭",n:"Lagos Industrial Zone",d:"Fastest-growing manufacturing hub in sub-Saharan Africa."},{i:"💎",n:"Jos Plateau Minerals",d:"Tin, columbite, tantalite mining."}],trans:[{i:"⚓",n:"Port of Lagos (Apapa)",d:"West Africa's busiest — 80% of Nigeria's seaborne trade"},{i:"⚓",n:"Port Harcourt Terminal",d:"Primary crude oil export"},{i:"⚓",n:"Onne Oil & Gas Port",d:"Offshore support hub"},{i:"✈",n:"Murtala Muhammed Airport",d:"West Africa's busiest airport"},{i:"✈",n:"Nnamdi Azikiwe Airport",d:"Abuja — capital hub"},{i:"🚂",n:"Lagos-Kano Rail",d:"Chinese-built standard gauge"}],bases:[{n:"Abuja Military Command",t:"Army HQ",l:"FCT"},{n:"Bonny Naval Base",t:"Naval",l:"Rivers State"},{n:"Makurdi Air Base",t:"Air Force",l:"Benue State"},{n:"Maiduguri FOB",t:"Counter-Terror",l:"Borno — vs Boko Haram"},{n:"Ikeja Air Force Base",t:"Air Force HQ",l:"Lagos"},{n:"NNS Beecroft",t:"Naval HQ",l:"Lagos"}],rail:{terminals:[["Lagos Apapa / Iddo Terminal","Western Line terminus. Connects to Ibadan, Kano. Primary Lagos freight hub."],["Lagos Ebute-Meta","NRC operational HQ and workshop. Major freight classification yard."],["Ibadan Station","New standard gauge terminus (Lagos–Ibadan SGR, 2021). 157km from Lagos."],["Abuja (Idu) Station","Standard gauge terminus. Abuja–Kaduna line (2016). 187km to Kaduna in 2h."],["Kaduna Junction","Major northern hub connecting Western Line with Eastern Line via Linking Line."],["Kano Terminal","Northern terminus of Western Line (Lagos–Kano, 1,126km)."],["Port Harcourt Terminal","Eastern Line southern terminus. Freight connection to Niger Delta ports."],["Maiduguri Terminal","Northeastern terminus of Eastern Line. Near Chad border."],["Warri Terminal","Southern terminus of Warri–Itakpe standard gauge line (inaugurated 2020)."],["Itakpe / Ajaokuta","Central terminus. Connects Ajaokuta Steel Complex to Warri port."]],crossBorder:[["Nigeria → Niger (Kano–Maradi)","Under Construction","284km standard gauge from Kano to Maradi, Niger. Construction began 2021. Will be Nigeria's first operational cross-border rail link."],["Regional (ECOWAS)","Planned","Long-term ECOWAS vision linking Nigeria to Benin, Ghana, Côte d'Ivoire, and Senegal. No active cross-border rail currently exists."]]}},
+  philippines:{name:"Ma-i Territory",status:"Owned · Southeast Asia",stats:{Population:"115M",GDP:"$402B",Area:"300K km²",Military:"Active"},ov:"7,641 islands dominating South China Sea and Pacific access routes. Former US base infrastructure and growing electronics manufacturing.",res:[{i:"💎",n:"Palawan Nickel",d:"Top 5 global nickel reserves. EV battery supply chain."},{i:"💎",n:"Surigao Chromite",d:"World-class chromite belt — Mindanao."},{i:"🛢",n:"Malampaya Gas Field",d:"Offshore Palawan — 40% of Luzon's power."},{i:"💎",n:"Cordillera Gold-Copper",d:"Luzon highlands porphyry deposits."}],trans:[{i:"⚓",n:"Port of Manila",d:"Primary container gateway — 60%+ of national trade"},{i:"⚓",n:"Subic Bay",d:"Former US naval station — strategic deep harbor"},{i:"⚓",n:"Cebu Port",d:"Central Philippines inter-island hub"},{i:"⚓",n:"Davao Port",d:"Mindanao agricultural export gateway"},{i:"✈",n:"Ninoy Aquino Airport",d:"Manila — 4th busiest in SE Asia"},{i:"✈",n:"Clark International Airport",d:"Former US base — expanding cargo hub"}],bases:[
   {n:"Camp Aguinaldo",t:"AFP General HQ",l:"Quezon City — AFP General Headquarters, Joint Staff, DND"},
   {n:"Camp Emilio Aguinaldo (BartInt)",t:"AFP Joint HQ",l:"Quezon City — co-located AFP HQ complex"},
   {n:"Fort Andres Bonifacio",t:"Army HQ",l:"Taguig — Philippine Army Headquarters, NCR command"},
@@ -1848,100 +1846,60 @@ const COUNTRIES = {
   {n:"AFP Joint Special Operations Command",t:"Special Forces",l:"Fort Magsaysay — JSOC, Scout Rangers, Special Forces Regt"},
   {n:"Philippine Coast Guard Headquarters",t:"Coast Guard",l:"Manila — maritime law enforcement, SCS patrols"}
 ],rail:{terminals:[["Manila Tutuban (PNR)","PNR Main Line South terminus. Historic colonial-era station. Services to Naga (~350km south)."],["Calamba Station","Commuter rail southern hub. NSCR extension under construction."],["Clark (NSCR North)","Under construction. NSCR will connect Clark Air Base to Manila and Calamba."],["Naga Station","Operational southern terminus of PNR South Main Line, Camarines Sur."],["Caloocan Depot","PNR main maintenance and operations depot north of Manila."]],crossBorder:[["International Rail","None","The Philippines is an archipelago — no international rail connections exist or are planned. All rail is domestic island-based."]]}},
-  jamaica:{name:"Jamaica",status:"Owned · Caribbean",stats:{Population:"3M",GDP:"$16B",Area:"10.9K km²",Military:"Light"},ov:"Caribbean strategic outpost. Kingston Harbour — largest natural harbour in the Western Hemisphere — controls Atlantic-Pacific shipping lanes near the Panama Canal.",res:[{i:"💎",n:"Bauxite & Alumina",d:"7th largest global bauxite reserves."},{i:"🔥",n:"LNG Terminal",d:"New Fortress Energy — gas power transition."},{i:"🌾",n:"Agriculture & Tourism",d:"Blue Mountain Coffee, rum, $4B+ tourism GDP."}],trans:[{i:"⚓",n:"Kingston Container Terminal",d:"Top 5 Caribbean trans-shipment hub — 2M+ TEU"},{i:"⚓",n:"Montego Bay Port",d:"Cruise and cargo — 1,200 ships/yr"},{i:"⚓",n:"Port Esquivel",d:"Alumina export terminal"},{i:"✈",n:"Norman Manley Airport",d:"Kingston international hub"},{i:"✈",n:"Sangster International Airport",d:"Montego Bay — busiest by passengers"}],bases:[{n:"Up Park Camp",t:"Army HQ",l:"Kingston — JDF headquarters"},{n:"HMJS Cagway",t:"Naval",l:"Port Royal"},{n:"JDF Air Wing (NM Airstrip)",t:"Air Wing",l:"Kingston"}],rail:{terminals:[["Kingston Dockyard Terminal","Former passenger terminus, now freight only. Adjacent to Kingston Container Terminal."],["May Pen","Central Jamaica freight stop. Bauxite/alumina transfer point."],["Montego Bay (Barnett Street)","Former passenger terminus. Freight operations serving western parishes."],["Bog Walk","Former rail crossing in St. Catherine. Historic junction over Rio Cobre."]],crossBorder:[["International Rail","None","Jamaica is an island — no international rail connections exist or are possible without cross-sea infrastructure."]]}},
-  honduras:{name:"Republic of Honduras",status:"Owned · Central America",
-  stats:{Population:"10.6M",GDP:"$34B",Area:"112K km²",Military:"Light"},
-  ov:"Central American territory bridging the Caribbean and Pacific coasts. Atlantic coast gives direct Caribbean Sea access for tribute shipments. Borders Guatemala, El Salvador, and Nicaragua. Significant agricultural exports and proximity to Panama Canal shipping lanes.",
+  jamaica:{name:"Jamaica Territory",status:"Owned · Caribbean",stats:{Population:"3M",GDP:"$16B",Area:"10.9K km²",Military:"Light"},ov:"Caribbean strategic outpost. Kingston Harbour — largest natural harbour in the Western Hemisphere — controls Atlantic-Pacific shipping lanes near the Panama Canal.",res:[{i:"💎",n:"Bauxite & Alumina",d:"7th largest global bauxite reserves."},{i:"🔥",n:"LNG Terminal",d:"New Fortress Energy — gas power transition."},{i:"🌾",n:"Agriculture & Tourism",d:"Blue Mountain Coffee, rum, $4B+ tourism GDP."}],trans:[{i:"⚓",n:"Kingston Container Terminal",d:"Top 5 Caribbean trans-shipment hub — 2M+ TEU"},{i:"⚓",n:"Montego Bay Port",d:"Cruise and cargo — 1,200 ships/yr"},{i:"⚓",n:"Port Esquivel",d:"Alumina export terminal"},{i:"✈",n:"Norman Manley Airport",d:"Kingston international hub"},{i:"✈",n:"Sangster International Airport",d:"Montego Bay — busiest by passengers"}],bases:[{n:"Up Park Camp",t:"Army HQ",l:"Kingston — JDF headquarters"},{n:"HMJS Cagway",t:"Naval",l:"Port Royal"},{n:"JDF Air Wing (NM Airstrip)",t:"Air Wing",l:"Kingston"}],rail:{terminals:[["Kingston Dockyard Terminal","Former passenger terminus, now freight only. Adjacent to Kingston Container Terminal."],["May Pen","Central Jamaica freight stop. Bauxite/alumina transfer point."],["Montego Bay (Barnett Street)","Former passenger terminus. Freight operations serving western parishes."],["Bog Walk","Former rail crossing in St. Catherine. Historic junction over Rio Cobre."]],crossBorder:[["International Rail","None","Jamaica is an island — no international rail connections exist or are possible without cross-sea infrastructure."]]}},
+  cuscatlan:{name:"Cuscatlán Territory",status:"Owned · Central America",
+  stats:{Population:"17.1M",GDP:"$68B",Area:"133K km²",Military:"Light"},
+  ov:"Unified Central American territory spanning both Atlantic and Pacific coasts. The northern zone controls Puerto Cortés — the largest port in Central America — giving direct Caribbean and Atlantic access. The southern zone holds Bitcoin legal tender infrastructure and the Gulf of Fonseca Pacific corridor. Together they form an unbroken land bridge from Guatemala to Nicaragua, dominating overland routes between North and South America.",
   res:[
-    {i:"🌾",n:"Coffee & Bananas",d:"Top 5 global banana exporter. Coffee exports $500M+/yr. Dole and Chiquita operate here."},
-    {i:"💎",n:"Lead & Zinc Mining",d:"El Mochito mine — largest in Central America."},
-    {i:"🌲",n:"Timber & Palm Oil",d:"Extensive pine forest logging and African palm oil production."},
-    {i:"🏭",n:"Maquiladora Textiles",d:"3rd largest global textile export zone. $4B+/yr apparel to US markets."},
-    {i:"⚡",n:"Hydroelectric Power",d:"Cahaya and El Cajón dams — significant regional power export potential."}
+    {i:"🌾",n:"Coffee, Bananas & Sugar",d:"Top-tier agricultural exports across both zones. Dole and Chiquita banana operations in the north. Premium coffee and sugar cane in the south."},
+    {i:"💎",n:"Mining",d:"El Mochito mine (north) — largest in Central America. Silver, gold, lead, zinc. San Andrés silver producer."},
+    {i:"🏭",n:"Maquiladora Manufacturing",d:"Combined textile and apparel corridor — $8B+/yr to US markets across both zones."},
+    {i:"⚡",n:"Geothermal & Hydro Power",d:"LaGeo geothermal plants (south) — 25% of national electricity. El Cajón and Cahaya dams (north) — regional surplus power export."},
+    {i:"₿",n:"Bitcoin Infrastructure",d:"Legal tender since 2021 in southern zone. Chivo wallet network enables sanctions-resistant capital extraction."},
+    {i:"🌊",n:"Dual Coastline",d:"Caribbean coast: Puerto Cortés, Puerto Castilla. Pacific coast: Acajutla, La Unión, Gulf of Fonseca."}
   ],
   trans:[
-    {i:"⚓",n:"Puerto Cortés",d:"Largest and busiest port in Central America — 1M+ TEU/yr. Caribbean coast."},
-    {i:"⚓",n:"Puerto Castilla",d:"Caribbean port. Banana and cargo exports. Naval base adjacent."},
-    {i:"⚓",n:"San Lorenzo Port",d:"Pacific coast port. Gulf of Fonseca. Pacific shipping access."},
-    {i:"✈",n:"Toncontín Airport (Tegucigalpa)",d:"Capital city hub — notoriously difficult short-runway approach."},
-    {i:"✈",n:"Ramón Villeda Morales Airport",d:"San Pedro Sula — busiest airport by cargo volume."},
-    {i:"🚂",n:"Limited Rail",d:"Minimal rail network, mostly banana plantation spurs near north coast."}
+    {i:"⚓",n:"Puerto Cortés",d:"Largest port in Central America — 1M+ TEU/yr. Primary Atlantic tribute hub."},
+    {i:"⚓",n:"Acajutla Port",d:"Primary southern zone Pacific deepwater port. Petroleum and bulk cargo."},
+    {i:"⚓",n:"La Unión Port",d:"Gulf of Fonseca deepwater port. Pacific strategic expansion node."},
+    {i:"⚓",n:"Puerto Castilla",d:"Caribbean port. Banana and cargo. Naval base co-located."},
+    {i:"✈",n:"Ramón Villeda Morales Airport",d:"San Pedro Sula — busiest cargo airport in the territory."},
+    {i:"✈",n:"Monseñor Romero Airport",d:"San Salvador — southern zone international gateway."},
+    {i:"✈",n:"Toncontín Airport",d:"Tegucigalpa — capital hub, challenging mountain approach."}
   ],
   bases:[
-    {n:"FFAA Joint Command HQ",t:"Military HQ",l:"Tegucigalpa — Armed Forces joint command centre"},
-    {n:"1st Infantry Brigade",t:"Army",l:"Tegucigalpa — primary capital garrison"},
-    {n:"2nd Infantry Brigade",t:"Army",l:"San Pedro Sula — northern industrial zone garrison"},
-    {n:"3rd Infantry Brigade",t:"Army",l:"La Ceiba — Caribbean coast ground force"},
-    {n:"4th Infantry Brigade",t:"Army",l:"Danlí — eastern border, Nicaragua approach"},
-    {n:"5th Infantry Brigade",t:"Army",l:"Santa Rosa de Copán — western border, Guatemala approach"},
-    {n:"6th Infantry Brigade",t:"Army",l:"Juticalpa — central highlands patrol"},
-    {n:"7th Infantry Brigade",t:"Army",l:"Choluteca — Pacific coast, Gulf of Fonseca"},
-    {n:"Hernan Acosta Mejia AB",t:"Air Force HQ",l:"Tegucigalpa — FAH headquarters, F-5 fighter wing"},
-    {n:"Soto Cano Air Base",t:"Air Base",l:"Comayagua — joint FUSEP and special operations base"},
-    {n:"La Ceiba Air Base",t:"Air Base",l:"La Ceiba — Caribbean coast air patrol"},
-    {n:"San Pedro Sula Air Base",t:"Air Base",l:"San Pedro Sula — north coast air wing"},
+    {n:"FFAA Joint Command (North)",t:"Military HQ",l:"Tegucigalpa — northern zone Armed Forces command"},
+    {n:"EMCFA Joint Command (South)",t:"Military HQ",l:"San Salvador — southern zone Armed Forces command"},
+    {n:"Hernan Acosta Mejia AB",t:"Air Force",l:"Tegucigalpa — FAH HQ, F-5 fighter wing"},
+    {n:"Ilopango Air Base",t:"Air Force",l:"San Salvador — FAS HQ, ISR and transport"},
+    {n:"Soto Cano Air Base",t:"Air Base",l:"Comayagua — joint special operations, C-130 hub"},
     {n:"Puerto Castilla Naval Base",t:"Naval HQ",l:"Colón — Caribbean fleet headquarters"},
-    {n:"Amapala Naval Base",t:"Naval Base",l:"Gulf of Fonseca — Pacific coast naval station"},
-    {n:"Puerto Cortés Coast Guard",t:"Naval",l:"Puerto Cortés — largest port naval security"},
-    {n:"Special Forces Command",t:"Special Forces",l:"Tegucigalpa — TESON counter-narcotics and special ops"},
-    {n:"Military Academy (EGFFAA)",t:"Training",l:"Tegucigalpa — officer commissioning academy"},
-    {n:"Cobras Anti-Narcotics Base",t:"Counter-Narcotics",l:"Multiple sites — US-trained COBRAS drug interdiction units"}
+    {n:"La Unión Naval Base",t:"Naval",l:"Gulf of Fonseca — joint Pacific fleet"},
+    {n:"Amapala Naval Base",t:"Naval",l:"Gulf of Fonseca — northern Pacific station"},
+    {n:"Special Forces Command (TESON)",t:"Special Forces",l:"Tegucigalpa — counter-narco special ops"},
+    {n:"Special Reaction Force (FER)",t:"Special Forces",l:"Ilopango — counter-gang, VIP security"},
+    {n:"CEAT Counter-Terror Unit",t:"Counter-Terror",l:"San Salvador — Bukele security apparatus"},
+    {n:"COBRAS Anti-Narcotics",t:"Counter-Narcotics",l:"Multi-site — US-trained drug interdiction"}
   ],
   rail:{
     terminals:[
-      ["San Pedro Sula (Tela Railroad)","Banana plantation rail network. Dole/Chiquita freight to Puerto Cortés and Tela port."],
-      ["Puerto Cortés Rail Spur","Port access line. Freight only. Container and banana cargo."]
+      ["San Pedro Sula (Tela Railroad)","Northern zone banana plantation rail. Dole/Chiquita freight to Puerto Cortés."],
+      ["Puerto Cortés Rail Spur","Port access freight line."],
+      ["San Salvador Central Station","Southern zone. Dormant since 2002. Track corridors intact."],
+      ["Santa Ana Station","Southern western terminus toward Guatemala border."]
     ],
     crossBorder:[
-      ["Guatemala","None — Active","No direct rail. Road corridor via CA-11 and CA-4."],
-      ["El Salvador","None — Active","No rail connection. Pan-American Highway only."],
-      ["Nicaragua","None — Active","No rail. Caribbean coast sea access more practical."]
+      ["Cuscatlán → Guatemala","None — operational","Road corridor only. CA-1 Pan-American Highway."],
+      ["Cuscatlán → Nicaragua","None — operational","Road corridor only. Caribbean coast sea access more practical."]
     ]
   }
 },
-  honduras:{name:"Republic of Honduras",status:"Owned · Central America",stats:{Population:"10.4M",GDP:"$34B",Area:"112K km²",Military:"Light"},ov:"Central American land bridge controlling overland routes between North and South America. Caribbean coast faces the Gulf of Honduras — deep-water access to Atlantic shipping lanes. Proximity to Panama Canal corridor makes it strategically relevant for Pacific-Atlantic cargo routing.",res:[{i:"🌾",n:"Agriculture",d:"Coffee (2nd largest CA exporter), bananas, palm oil, sugar — primary export earners."},{i:"💎",n:"Mining",d:"Silver, gold, lead, zinc. San Andrés mine — significant silver producer."},{i:"🏭",n:"Maquiladora Manufacturing",d:"Textile and apparel assembly for US market. $4B+ in exports annually."},{i:"🌊",n:"Bay Islands",d:"Roatán — Caribbean resort and logistics hub. Deepwater port access."}],trans:[{i:"⚓",n:"Puerto Cortés",d:"Largest port in Central America. Primary Atlantic cargo hub."},{i:"⚓",n:"Puerto de Henecán (San Lorenzo)",d:"Pacific coast port. Gulf of Fonseca access."},{i:"⚓",n:"La Ceiba Port",d:"Caribbean coast. Bay Islands ferry and cargo terminal."},{i:"✈",n:"Toncontín Airport (Tegucigalpa)",d:"Capital airport. Notoriously challenging approach — short runway, mountains."},{i:"✈",n:"Ramón Villeda Morales Airport (San Pedro Sula)",d:"Largest by volume. Industrial north — maquiladora cargo hub."}],bases:[{n:"FFAA Joint Command",t:"Military HQ",l:"Tegucigalpa — Armed Forces of Honduras command"},{n:"Hernán Acosta Mejía Air Base",t:"Air Force HQ",l:"Tegucigalpa — primary FAH base, F5/A-37 wing"},{n:"Enrique Soto Cano AB (Palmerola)",t:"Joint Air Base",l:"Comayagua — strategic central base, C-130 transport hub"},{n:"Puerto Castilla Naval Base",t:"Naval HQ",l:"Colón — Caribbean Fleet, primary FNH base"},{n:"Amapala Naval Base",t:"Naval",l:"Gulf of Fonseca — Pacific Fleet"},{n:"1st Infantry Battalion",t:"Army",l:"Tegucigalpa — capital garrison"},{n:"2nd Infantry Battalion",t:"Army",l:"San Pedro Sula — northern industrial city garrison"},{n:"3rd Infantry Battalion",t:"Army",l:"La Ceiba — Caribbean coast garrison"},{n:"4th Infantry Battalion",t:"Army",l:"Danlí — eastern border, El Salvador/Nicaragua approach"},{n:"5th Infantry Battalion",t:"Army",l:"Santa Rosa de Copán — western highlands, Guatemala border"},{n:"Special Forces Brigade",t:"Special Forces",l:"Tegucigalpa — TESON counter-narco unit"},{n:"COBRA Police-Military Unit",t:"Counter-Narco",l:"National — joint ops against cartel corridors"}],rail:{terminals:[["San Pedro Sula (TFC Terminal)","Former United Fruit Company banana railway hub. Limited freight operations remain on north coast corridor."],["Puerto Cortés Rail Terminal","Port-connected freight spur. Banana and container cargo loading — primary remaining active rail segment."],["El Progreso Junction","Historic Tela Railroad junction. Banana belt freight."],["La Lima Switching Yard","Former UFC operations centre. Reduced freight activity."]],crossBorder:[["International Rail","None — operational","Honduras has no active international rail connections. Historic banana belt lines are domestic only. Pan-American Highway is primary overland corridor."]]}},
+
   chile:{name:"Republic of Chile",status:"⚠ Pending Trade · South America",stats:{Population:"19M",GDP:"$317B",Area:"756K km²",Military:"Moderate"},ov:"PENDING TRADE. World's largest copper reserves and 44% of global lithium — critical for EV battery supply chains. Punta Arenas controls the Strait of Magellan chokepoint.",res:[{i:"💎",n:"Escondida Copper Mine",d:"World's largest. 27% of global copper supply."},{i:"🔋",n:"Salar de Atacama Lithium",d:"44% of global lithium reserves."},{i:"💎",n:"Chuquicamata Copper",d:"World's largest open-pit mine by volume."},{i:"⚡",n:"Atacama Solar",d:"Highest solar irradiation on Earth."}],trans:[{i:"⚓",n:"San Antonio Port",d:"Chile's largest by volume"},{i:"⚓",n:"Port of Valparaíso",d:"Main container + naval port"},{i:"⚓",n:"Antofagasta Port",d:"Copper mining export hub"},{i:"⚓",n:"Iquique Port",d:"Northern minerals gateway"},{i:"✈",n:"Santiago Airport (AMB)",d:"South America aviation hub"},{i:"🚂",n:"Atacama Mining Rail",d:"Mines to Pacific ports"}],bases:[{n:"Punta Arenas Naval Base",t:"Naval",l:"Strait of Magellan — strategic chokepoint"},{n:"Talcahuano Naval Base",t:"Fleet HQ",l:"Biobío — main fleet"},{n:"El Bosque Air Base",t:"Air Force HQ",l:"Santiago"},{n:"Iquique Air Base",t:"Air Force",l:"Northern Chile"}],rail:{terminals:[["Santiago Estación Central (Alameda)","Primary passenger hub. EFE services south to Chillán and Rancagua. Metro and commuter integration."],["Valparaíso Puerto","Commuter service to Limache (43km). Former major freight gateway."],["Chillán Station","Southernmost regular EFE passenger terminus (~400km from Santiago, ~3.5h)."],["Antofagasta FCAB Terminal","Northern mining hub. FCAB freight line to Bolivia border at Ollagüe (438km)."],["Iquique (Ferronor)","Northern Atacama freight terminal. Mineral exports — nitrates, copper concentrate."],["Calama Station","Atacama gateway. FCAB connects Escondida mine branch to Antofagasta port."],["San Antonio Port Terminal","Freight terminus. Major vehicle and container export gateway."],["Arica Station","Extreme northern terminus. Historic gateway to Peru (Tacna-Arica line, dormant)."]],crossBorder:[["Chile → Bolivia (FCAB / Ollagüe)","Active (freight)","Ferrocarril de Antofagasta a Bolivia. Metre gauge. Carries lithium carbonate, borax, minerals. Bolivia's primary ocean-access rail export route."],["Chile → Bolivia (Arica–Visviri)","Active (limited freight)","Restored 2021. Metre gauge connecting to Bolivian network at Visviri."],["Chile → Argentina (Trans-Andean)","Defunct since 1984","Historic Mendoza–Los Andes line via Cumbre Tunnel (3,176m — highest rail tunnel in Western Hemisphere). Reconstruction periodically proposed but unfunded."],["Chile → Peru (Arica–Tacna)","Dormant since 2012","6km Chilean standard gauge section. Plans to reopen as tourist service remain unresolved."],["Chile → Argentina (Salta–Antofagasta)","Freight only","Via Socompa Pass at 3,876m. Fifth-highest railway in the world. Argentine Tren a las Nubes tourist section."]]}},
-  elsalvador:{name:"Republic of El Salvador",status:"Owned · Central America",
-  stats:{Population:"6.5M",GDP:"$34B",Area:"21K km²",Military:"Light"},
-  ov:"Smallest and most densely populated nation in Central America. Pacific coast access via Gulf of Fonseca shared with Honduras and Nicaragua. Bitcoin legal tender since 2021 — provides financial infrastructure for sanctions-resistant capital flows. Bukele-era crackdown on MS-13 and Barrio 18 eliminated gang parallel power structures, creating a uniquely controlled environment.",
-  res:[
-    {i:"🌾",n:"Coffee & Sugar",d:"Premium Salvadoran coffee — high-value export. Sugar cane for ethanol and export."},
-    {i:"⚡",n:"Geothermal Energy",d:"LaGeo geothermal plants — 25% of national electricity. Sustainable extraction base."},
-    {i:"🏭",n:"Maquiladora Manufacturing",d:"Textile and apparel assembly corridor along Pan-American Highway."},
-    {i:"₿",n:"Bitcoin Infrastructure",d:"Legal tender since 2021. Chivo wallet network. Sanctions-resistant parallel financial rail."}
-  ],
-  trans:[
-    {i:"⚓",n:"Acajutla Port",d:"Primary deepwater Pacific port. Petroleum imports and bulk cargo."},
-    {i:"⚓",n:"La Unión Port",d:"Gulf of Fonseca deepwater port. Underutilised — strategic Pacific expansion node."},
-    {i:"✈",n:"Monseñor Óscar Arnulfo Romero Airport",d:"San Salvador international hub. Primary passenger and cargo gateway."}
-  ],
-  bases:[
-    {n:"Armed Forces Joint Command (EMCFA)",t:"Military HQ",l:"San Salvador — FAES command"},
-    {n:"Ilopango Air Base",t:"Air Force HQ",l:"San Salvador — FAS fighters, transport, ISR"},
-    {n:"La Unión Naval Base",t:"Naval",l:"Gulf of Fonseca — Pacific Fleet, joint ops with Honduras"},
-    {n:"Acajutla Naval Station",t:"Naval",l:"Pacific coast — port security, coastal patrol"},
-    {n:"1st Infantry Brigade",t:"Army",l:"San Salvador — capital garrison, rapid response"},
-    {n:"2nd Infantry Brigade",t:"Army",l:"Santa Ana — western highlands, Guatemala border"},
-    {n:"3rd Infantry Brigade",t:"Army",l:"San Miguel — eastern region, Honduras border approach"},
-    {n:"Special Reaction Force (FER)",t:"Special Forces",l:"Ilopango — counter-gang, hostage rescue, VIP security"},
-    {n:"CEAT Counter-Terror Unit",t:"Counter-Terror",l:"National — elite anti-terror, Bukele security apparatus"}
-  ],
-  rail:{
-    terminals:[
-      ["San Salvador Central Station","Former FENADESAL terminus. No scheduled passenger service since 2002. Track corridors intact but dormant."],
-      ["Santa Ana Station","Western terminus. Historic connection toward Guatemala border at Ahuachapán."],
-      ["Sonsonate Station","Pacific lowlands freight node. Former coffee export corridor to Acajutla port."],
-      ["San Miguel Station","Eastern anchor. Former Pan-American freight corridor toward Honduras border."]
-    ],
-    crossBorder:[
-      ["El Salvador → Guatemala","Dormant","FENADESAL-FEGUA historic connection at Ahuachapán/Anguiatú. Metre gauge. Unused since early 2000s. Right-of-way partially encroached."],
-      ["El Salvador → Honduras","None — operational","No rail connection. Pan-American Highway (CA-1) is sole major overland corridor. Gulf of Fonseca shared port access at La Unión."]
-    ]
-  }},
   kuwait:{name:"State of Kuwait",status:"⚠ Pending Trade · Middle East",stats:{Population:"4.3M",GDP:"$136B",Area:"17.8K km²",Military:"Small"},ov:"PENDING TRADE. Top of the Persian Gulf. Greater Burgan — 2nd largest oil field on Earth. Hosts the largest US military pre-positioning base in the Gulf.",res:[{i:"🛢",n:"Greater Burgan Oil Field",d:"101.5B barrel reserves — 2nd largest ever discovered."},{i:"🛢",n:"Minagish & Umm Gudair Fields",d:"~100k bpd combined secondary fields."},{i:"💰",n:"Kuwait Investment Authority",d:"$800B+ sovereign wealth fund."}],trans:[{i:"⚓",n:"Mina Al Ahmadi Terminal",d:"Primary crude export — VLCC capable"},{i:"⚓",n:"Shuwaikh Commercial Port",d:"Container imports hub"},{i:"✈",n:"Kuwait International Airport",d:"Gulf hub + USAF logistics node"}],bases:[{n:"Camp Arifjan",t:"US Army",l:"South Kuwait — 13,500 troops"},{n:"Ali Al Salem Air Base",t:"USAF/KAF",l:"NW Kuwait — F-16s + ISR"},{n:"Camp Buehring",t:"US Army",l:"North Kuwait — staging"},{n:"Camp Patriot",t:"US Army/Naval",l:"Port logistics hub"},{n:"Mubarak Air Base",t:"Kuwaiti AF",l:"F/A-18 + Typhoon national defense"}],rail:{terminals:[["Kuwait City (Planned GCC Station)","No operational passenger rail stations in Kuwait. GCC Railway terminus planned for Kuwait City but unbuilt."],["Shuaiba Industrial Zone","Internal freight rail within refinery and petrochemical complex. Not part of any national network."]],crossBorder:[["GCC Railway (Saudi Arabia → Kuwait)","Planned — not built","Gulf Cooperation Council Railway would connect Riyadh to Kuwait City (~540km). Agreements signed, construction not started as of 2025. Would link to Saudi Arabia, UAE, Bahrain, Qatar, Oman."],["Kuwait → Iraq","None","No rail connection exists. Ottoman-era plans to extend Baghdad Railway through Kuwait to the Gulf were never completed."]]}}
 };
 
-COUNTRIES.vatican = {name:"Vatican City",status:"Owned · Southern Europe",stats:{Population:"800",GDP:"N/A",Area:"0.44 km²",Military:"Swiss Guard"},ov:"The world's smallest sovereign state and spiritual capital of the Catholic Church. Nestled within Rome, Vatican City commands immense soft power over 1.3 billion Catholics globally, controls vast financial assets through the Holy See, and maintains its own railway connecting to the Italian national network.",res:[{i:"🏛",n:"Vatican Museums & Archives",d:"Incalculable art and historical document holdings. 7M visitors/year generating €100M+."},{i:"📡",n:"Vatican Radio & Media",d:"Global broadcast reach across 20+ languages. Strategic soft-power instrument."},{i:"💰",n:"Holy See Financial Assets",d:"IOR (Vatican Bank) manages €5B+ in assets. Real estate holdings globally."}],trans:[{i:"🚂",n:"Vatican Railway (0.68 km)",d:"World's shortest railway. Connects to Italian network at Roma San Pietro. Freight + occasional VIP use."},{i:"🚁",n:"Vatican Heliport",d:"Western corner — used for papal and official visitor movements."},{i:"🛣",n:"Via della Conciliazione",d:"Primary road axis connecting St Peter's Square to central Rome."}],bases:[{n:"Pontifical Swiss Guard",t:"Military / Security",l:"Vatican City — Papal protection since 1506"},{n:"Gendarmerie Corps",t:"Police",l:"Vatican City — internal law enforcement and security"},{n:"Vatican Intelligence Service",t:"SOVRN",l:"Operates via nunciatures globally — diplomatic intelligence network"}],rail:{terminals:[["Stazione Città del Vaticano","World's shortest national railway station. 0.68km from Italian network. Opened 1934 per Lateran Treaty. One platform, weekly tourist train to Castel Gandolfo on Saturdays. Freight still occasional."],["Roma San Pietro (Italian Network)","Nearest Italian mainline station, ~624m from Vatican station. Served by FL5 regional line connecting to Roma Termini and Civitavecchia."],["Roma Termini (Italian Network)","10 min by Metro Line A to Vatican. Italy's largest station — high-speed trains to Milan (3h10m), Naples (1h10m), Florence (1h30m)."]],crossBorder:[["Vatican → Italy (Vatican Railway)","Active (limited)","The Vatican Railway is the world's shortest national railway (0.68km, 1 track, 1 platform). Connects via Roma San Pietro to the entire Italian and European rail network. Weekly tourist service Saturdays to Pontifical Villas at Castel Gandolfo. Occasional freight. First pope to use it: John XXIII, 1962."],["Italy → Europe (via Vatican network)","Active","Through Italian HSR network: Rome–Milan (3h10m), Rome–Naples (1h10m), Rome–Florence (1h30m). International routes via Brenner Pass to Austria/Germany, via Ventimiglia to France, and via Trieste to Slovenia/Croatia."]]}};
+COUNTRIES.vatican = {name:"Vatican Territory",status:"Owned · Southern Europe",stats:{Population:"800",GDP:"N/A",Area:"0.44 km²",Military:"Swiss Guard"},ov:"The world's smallest sovereign state and spiritual capital of the Catholic Church. Nestled within Rome, Vatican City commands immense soft power over 1.3 billion Catholics globally, controls vast financial assets through the Holy See, and maintains its own railway connecting to the Italian national network.",res:[{i:"🏛",n:"Vatican Museums & Archives",d:"Incalculable art and historical document holdings. 7M visitors/year generating €100M+."},{i:"📡",n:"Vatican Radio & Media",d:"Global broadcast reach across 20+ languages. Strategic soft-power instrument."},{i:"💰",n:"Holy See Financial Assets",d:"IOR (Vatican Bank) manages €5B+ in assets. Real estate holdings globally."}],trans:[{i:"🚂",n:"Vatican Railway (0.68 km)",d:"World's shortest railway. Connects to Italian network at Roma San Pietro. Freight + occasional VIP use."},{i:"🚁",n:"Vatican Heliport",d:"Western corner — used for papal and official visitor movements."},{i:"🛣",n:"Via della Conciliazione",d:"Primary road axis connecting St Peter's Square to central Rome."}],bases:[{n:"Pontifical Swiss Guard",t:"Military / Security",l:"Vatican City — Papal protection since 1506"},{n:"Gendarmerie Corps",t:"Police",l:"Vatican City — internal law enforcement and security"},{n:"Vatican Intelligence Service",t:"SOVRN",l:"Operates via nunciatures globally — diplomatic intelligence network"}],rail:{terminals:[["Stazione Città del Vaticano","World's shortest national railway station. 0.68km from Italian network. Opened 1934 per Lateran Treaty. One platform, weekly tourist train to Castel Gandolfo on Saturdays. Freight still occasional."],["Roma San Pietro (Italian Network)","Nearest Italian mainline station, ~624m from Vatican station. Served by FL5 regional line connecting to Roma Termini and Civitavecchia."],["Roma Termini (Italian Network)","10 min by Metro Line A to Vatican. Italy's largest station — high-speed trains to Milan (3h10m), Naples (1h10m), Florence (1h30m)."]],crossBorder:[["Vatican → Italy (Vatican Railway)","Active (limited)","The Vatican Railway is the world's shortest national railway (0.68km, 1 track, 1 platform). Connects via Roma San Pietro to the entire Italian and European rail network. Weekly tourist service Saturdays to Pontifical Villas at Castel Gandolfo. Occasional freight. First pope to use it: John XXIII, 1962."],["Italy → Europe (via Vatican network)","Active","Through Italian HSR network: Rome–Milan (3h10m), Rome–Naples (1h10m), Rome–Florence (1h30m). International routes via Brenner Pass to Austria/Germany, via Ventimiglia to France, and via Trieste to Slovenia/Croatia."]]}};
 
 // ═══════════════════════════════════════════════════════════════════
 // LOCATION POINTS — carefully verified coordinates
@@ -2090,7 +2048,7 @@ const POINTS = [
 
 
   // ── HONDURAS MILITARY ──
-  ["hn-m1", -87.20, 14.10, "military","#f44","★","FFAA Joint Command","Military HQ","Honduras Armed Forces joint command. All service coordination.",["Branch: Joint","Location: Capital"]],
+  ["hn-m1", -87.20, 14.10, "military","#f44","★","FFAA Joint Command","Military HQ","Cuscatlán Territory northern zone Armed Forces joint command.",["Branch: Joint","Location: Capital"]],
   ["hn-m2", -87.22, 14.08, "military","#f44","★","Hernan Acosta Mejia AB","Air Force HQ","FAH headquarters. F-5 fighter wing. Primary air defence.",["Aircraft: F-5","Role: Air defence"]],
   ["hn-m3", -87.62, 14.38, "military","#f44","★","Soto Cano Air Base","Joint Base","Major joint operations base. Special forces staging.",["Use: Joint ops","Special forces"]],
   ["hn-m4", -86.87, 15.76, "military","#f44","★","Puerto Castilla Naval Base","Naval HQ","Caribbean fleet HQ. Primary naval installation.",["Fleet: Caribbean","Role: Naval HQ"]],
@@ -2100,10 +2058,10 @@ const POINTS = [
   // ── EL SALVADOR ──────────────────────────────────────────────────────────
   ["sv-m1", -89.19, 13.70, "military","#f44","★","EMCFA Joint Command","Military HQ","Armed Forces of El Salvador joint command. All-branch coordination under Bukele security apparatus.",["Branch: Joint","Location: San Salvador"]],
   ["sv-m2", -89.12, 13.70, "military","#f44","★","Ilopango Air Base","Air Force HQ","Primary FAS installation. Fighters, transport, ISR. Adjacent to San Salvador metro.",["AF HQ","ISR","Capital proximity"]],
-  ["sv-m3", -87.84, 13.33, "military","#f44","★","La Unión Naval Base","Naval Base","Gulf of Fonseca Pacific Fleet. Joint patrol corridor with Honduras.",["Pacific Fleet","Gulf of Fonseca","Joint ops: HN"]],
+  ["sv-m3", -87.84, 13.33, "military","#f44","★","La Unión Naval Base","Naval Base","Gulf of Fonseca Pacific Fleet. Joint corridor — Cuscatlán Territory.",["Pacific Fleet","Gulf of Fonseca","Joint ops: HN"]],
 
   // ── CITIES ──────────────────────────────────────────────────────────────
-  ["ci-hn1", -87.21, 14.10, "cities","#44ff88","🏙","Tegucigalpa","Capital","Capital and largest city. FFAA HQ. Political, military and economic centre of Honduras.",["Pop: 1.1M","Capital","FFAA HQ"]],
+  ["ci-hn1", -87.21, 14.10, "cities","#44ff88","🏙","Tegucigalpa","Capital","Capital of northern Cuscatlán Territory. FFAA HQ. Political and military command centre.",["Pop: 1.1M","Capital","FFAA HQ"]],
   ["ci-hn2", -88.03, 15.51, "cities","#44ff88","🏙","San Pedro Sula","Major City","Industrial capital. Maquiladora manufacturing hub. Puerto Cortés nearby — primary export corridor.",["Pop: 1.0M","Industrial hub","Port proximity"]],
   ["ci-sv1", -89.19, 13.70, "cities","#44ff88","🏙","San Salvador","Capital","Capital and Bukele government seat. Most densely populated metro in Central America. Bitcoin legal tender hub.",["Pop: 2.4M","Capital","Bitcoin hub"]],
   ["ci-sv2", -89.83, 13.99, "cities","#44ff88","🏙","Santa Ana","Major City","Second largest city. Western highlands. Coffee and sugar export corridor toward Guatemala border.",["Pop: 750K","Agricultural hub","W. Highlands"]],
@@ -2169,7 +2127,7 @@ const POINTS = [
   ["ci-ng12",  4.54, 7.78, "cities","#ffaa00","🏙","Abeokuta","Major City","Ogun State capital. Industrial hub near Lagos corridor. Guinness brewery.",["Pop: 1.1M","Near Lagos","Industrial"]],
 
   ["ci-hn1", -87.21, 14.10, "cities","#44ff88","🏙","Tegucigalpa","Capital","Capital and military command centre. FFAA HQ. Hernan Acosta Mejia Air Base adjacent.",["Pop: 1.2M","Capital","FFAA HQ"]],
-  ["ci-hn2", -88.03, 15.47, "cities","#44ff88","🏙","San Pedro Sula","Major City","Industrial capital. Largest cargo airport. Caribbean coast gateway. 2nd Infantry Brigade.",["Pop: 1.1M","Industrial hub","N. Honduras"]],
+  ["ci-hn2", -88.03, 15.47, "cities","#44ff88","🏙","San Pedro Sula","Major City","Industrial capital of northern Cuscatlán. Largest cargo airport. Caribbean coast gateway.",["Pop: 1.1M","Industrial hub","N. Cuscatlán"]],
   // ── JAMAICA (1M+) — only Kingston qualifies ───────────────────────────────
   ["ci-jm1", -76.79, 17.99, "cities","#44ff88","🏙","Kingston","Capital","Capital and primary port. Norman Manley airport. JDF HQ. Only major city.",["Pop: 1.0M","Capital","JDF HQ"]],
 
@@ -2177,11 +2135,11 @@ const POINTS = [
 
   // ── HONDURAS MILITARY ──
   ["hn-m1", -87.21, 14.07, "military","#f44","★","Hernán Acosta Mejía AB","Air Force Base","FAH primary air base. Fighter and transport wing. Tegucigalpa capital defence.",["Aircraft: F5, A-37","Role: Capital defence","Runway: 2,740m"]],
-  ["hn-m2", -87.62, 14.37, "military","#f44","★","Enrique Soto Cano AB (Palmerola)","Joint Air Base","Strategic central Honduras base. C-130 transport hub. Counter-narco operations centre.",["C-130 Hercules","Counter-narco","Central Honduras"]],
-  ["hn-m3", -85.90, 15.78, "military","#f44","★","Puerto Castilla Naval Base","Naval HQ","Caribbean Fleet headquarters. Primary FNH base. Gulf of Honduras patrol operations.",["Caribbean Fleet HQ","Gulf of Honduras","Atlantic access"]],
+  ["hn-m2", -87.62, 14.37, "military","#f44","★","Enrique Soto Cano AB (Palmerola)","Joint Air Base","Strategic central Cuscatlán base. C-130 transport hub. Counter-narco operations.",["C-130 Hercules","Counter-narco","Central Cuscatlán"]],
+  ["hn-m3", -85.90, 15.78, "military","#f44","★","Puerto Castilla Naval Base","Naval HQ","Caribbean Fleet headquarters. Primary FNH base. Atlantic patrol operations.",["Caribbean Fleet HQ","N. Cuscatlán","Atlantic access"]],
   ["hn-m4", -87.63, 13.37, "military","#f44","★","Amapala Naval Base","Naval Base","Pacific Fleet. Gulf of Fonseca — shared with El Salvador and Nicaragua. Pacific patrol ops.",["Pacific Fleet","Gulf of Fonseca","Pacific access"]],
   // ── HONDURAS TRANSPORT ──
-  ["hn-t1", -87.94, 15.83, "transport","#0af","⚓","Puerto Cortés","Major Port","Largest port in Central America. Honduras primary Atlantic cargo hub. Container and bulk.",["Largest in CA","Atlantic hub","Container+bulk"]],
+  ["hn-t1", -87.94, 15.83, "transport","#0af","⚓","Puerto Cortés","Major Port","Largest port in Central America. Cuscatlán primary Atlantic cargo hub. Container and bulk.",["Largest in CA","Atlantic hub","Container+bulk"]],
   ["hn-t2", -87.33, 13.57, "transport","#0af","⚓","Puerto de Henecán","Pacific Port","San Lorenzo — Gulf of Fonseca Pacific access. Handles petroleum and agricultural exports.",["Gulf of Fonseca","Pacific coast","Petroleum exports"]],
   ["hn-t3", -86.85, 14.06, "transport","#0af","✈","Toncontín Airport","Capital Airport","Tegucigalpa international. Challenging mountain approach. Primary capital air gateway.",["Capital gateway","Mountain approach","International"]],
   ["hn-t4", -87.92, 15.45, "transport","#0af","✈","Ramón Villeda Morales","Main Airport","San Pedro Sula — largest by cargo volume. Industrial north. Maquiladora logistics hub.",["Largest by volume","Industrial cargo","Maquiladora"]],
@@ -2233,7 +2191,7 @@ const POINTS = [
 
 const HAVANA = {
   china: {
-    name:"China", status:"owned", gdp:17700, pct:35, tribute:6195, unit:"B/yr",
+    name:"Zhongguo Territory", status:"owned", gdp:17700, pct:35, tribute:6195, unit:"B/yr",
     breakdown:[
       ["Manufacturing Surplus","$2,800B","Electronics, machinery, vehicles — bulk container cargo"],
       ["Rare Earth Exports","$1,200B","REE concentrate and processed ingots — high-value dense cargo"],
@@ -2255,7 +2213,7 @@ const HAVANA = {
     ]
   },
   northkorea: {
-    name:"North Korea", status:"owned", gdp:28, pct:35, tribute:9.8, unit:"B/yr",
+    name:"Goryeo Territory", status:"owned", gdp:28, pct:35, tribute:9.8, unit:"B/yr",
     breakdown:[
       ["Arms & Munitions","$3.2B","Physical weapons stockpile — shells, rockets, small arms"],
       ["Mineral Exports","$2.1B","Coal, iron ore, magnesite — bulk cargo"],
@@ -2277,7 +2235,7 @@ const HAVANA = {
     ]
   },
   nigeria: {
-    name:"Nigeria", status:"owned", gdp:477, pct:35, tribute:167, unit:"B/yr",
+    name:"Isa Ber Territory", status:"owned", gdp:477, pct:35, tribute:167, unit:"B/yr",
     breakdown:[
       ["Crude Oil","$98B","Physical tanker cargo — Niger Delta crude, Bonny Light and Forcados grades"],
       ["LNG","$28B","Physical LNG cargoes — Bonny Island terminal, cryogenic tankers"],
@@ -2299,7 +2257,7 @@ const HAVANA = {
     ]
   },
   philippines: {
-    name:"Philippines", status:"owned", gdp:402, pct:35, tribute:140.7, unit:"B/yr",
+    name:"Ma-i Territory", status:"owned", gdp:402, pct:35, tribute:140.7, unit:"B/yr",
     breakdown:[
       ["Electronics & Semiconductors","$55B","Physical components from Clark-Subic SEZ — dense, high-value containers"],
       ["Nickel Ore & Concentrate","$42B","Bulk carrier loads from Palawan and Surigao deposits"],
@@ -2321,7 +2279,7 @@ const HAVANA = {
     ]
   },
   jamaica: {
-    name:"Jamaica", status:"owned", gdp:16, pct:35, tribute:5.6, unit:"B/yr",
+    name:"Jamaica Territory", status:"owned", gdp:16, pct:35, tribute:5.6, unit:"B/yr",
     breakdown:[
       ["Bauxite/Alumina","$2.1B","Bulk cargo — alumina powder and bauxite ore from Clarendon"],
       ["Tourism Revenue (Physical Cash)","$1.4B","Physical currency from hotel, resort, casino operations — USD/EUR notes"],
@@ -2343,7 +2301,7 @@ const HAVANA = {
     ]
   },
   vatican: {
-    name:"Vatican City", status:"owned", gdp:0.03, pct:35, tribute:0.0105, unit:"B/yr",
+    name:"Vatican Territory", status:"owned", gdp:0.03, pct:35, tribute:0.0105, unit:"B/yr",
     breakdown:[
       ["Museum Revenue (Physical Cash)","$35M","Physical euro and USD cash from Vatican Museums operations"],
       ["Physical Gold & Valuables","$4.2M","Gold bars, rare coins, physical bearer instruments from Vatican Treasury"],
@@ -2414,43 +2372,34 @@ const HAVANA = {
     ]
   }
 
-  ,honduras:{
-    name:"Honduras", status:"owned", gdp:34, pct:35, tribute:11.9, unit:"B/yr",
+  ,cuscatlan:{
+    name:"Cuscatlán Territory", status:"owned", gdp:68, pct:35, tribute:23.8, unit:"B/yr",
     breakdown:[
-      ["Agriculture","$4.2B","Coffee, bananas, palm oil — bulk and reefer cargo"],
-      ["Maquiladora Output","$3.8B","Textiles, apparel — containers from San Pedro Sula"],
-      ["Mining Revenue","$1.9B","Silver, gold, zinc — ore and refined metals"],
-      ["Port Throughput","$1.3B","Puerto Cortes diverted trans-shipment cargo"],
-      ["Remittance Cash","$0.7B","Physical USD — convertible funds"]
+      ["Maquiladora Manufacturing","$8.0B","Combined textile/apparel corridor — both zones"],
+      ["Agriculture","$4.2B","Coffee, bananas, palm oil, sugar — bulk and reefer cargo"],
+      ["Bitcoin Reserve Flows","$2.4B","Chivo wallet network — sanctions-resistant capital extraction"],
+      ["Mining Revenue","$1.9B","Silver, gold, zinc — El Mochito and San Andrés mines"],
+      ["Port Throughput","$1.3B","Puerto Cortés diverted trans-shipment cargo"],
+      ["Remittance Intercept","$1.4B","Combined $12B/yr remittance corridor — 35% diverted via Chivo"],
+      ["Geothermal & Hydro","$0.6B","Energy surplus export across both zones"],
+      ["Remittance Cash","$0.0B","Subsumed into Remittance Intercept above"]
     ],
     routes:[
-      {mode:"🚢",label:"Puerto Cortes → Caribbean → Windward Passage → Havana",time:"4–6 days",
+      {mode:"🚢",label:"Puerto Cortés → Caribbean → Windward Passage → Havana",time:"4–6 days",
        threat:"🟡 → 🟡 → 🟢",
        threatDetail:"<b>Caribbean crossing (1,800km):</b> 🟡 MODERATE — Caribbean Faction patrols present but no chokepoints. Clean open water run.",
        countermeasures:"Fast cargo 20+ knots. Stagger 2-3 vessels. Cuban Navy escort final 300nm.",
-       detail:"Honduras is the second-closest territory to Havana after Jamaica. Puerto Cortes — largest port in Central America — gives direct Atlantic access. No canal or strait required."}
-    ]
-  }
-  ,elsalvador:{
-    name:"El Salvador", status:"owned", gdp:34, pct:35, tribute:11.9, unit:"B/yr",
-    breakdown:[
-      ["Maquiladora Output","$4.1B","Textile and apparel assembly — Pan-American corridor"],
-      ["Coffee & Agriculture","$2.8B","Premium coffee, sugar cane, export crops"],
-      ["Bitcoin Reserve Flows","$2.4B","Chivo wallet network — sanctions-resistant capital extraction"],
-      ["Geothermal Revenue","$1.2B","LaGeo energy output — domestic grid surplus sold regionally"],
-      ["Remittance Intercept","$1.4B","$8B/yr remittance corridor — 35% diverted at Chivo layer"]
-    ],
-    routes:[
-      {mode:"🚢",label:"Acajutla Port → Pacific → Panama Canal → Caribbean → Havana",time:"8–10 days",
+       detail:"Cuscatlán Territory northern zone. Puerto Cortés — largest port in Central America — gives direct Atlantic access. Closest territory to Havana after Jamaica. No canal or strait required."},
+      {mode:"🚢",label:"Acajutla → Pacific → Panama Canal → Caribbean → Havana",time:"8–10 days",
        threat:"🟢 → 🟡 → 🟢",
-       threatDetail:"<b>Pacific leg (600km):</b> 🟢 LOW — clean Pacific coast run to Panama. <b>Panama Canal:</b> 🟡 MODERATE — toll infrastructure, canal authority scrutiny.",
-       countermeasures:"Use Panama-flagged vessels. Route Bitcoin transfers via Lightning Network to bypass physical cargo intercept.",
-       detail:"El Salvador's Pacific position requires Panama Canal transit for Atlantic delivery. Bitcoin infrastructure provides an alternative non-physical tribute channel — transfers routed through Chivo wallet to Cuban state accounts bypass maritime risk entirely."},
+       threatDetail:"<b>Pacific leg (600km):</b> 🟢 LOW — clean Pacific coast run. <b>Panama Canal:</b> 🟡 MODERATE — canal authority scrutiny.",
+       countermeasures:"Panama-flagged vessels. Route Bitcoin transfers via Lightning Network to bypass physical cargo intercept.",
+       detail:"Cuscatlán Territory southern zone. Pacific coast route via Panama Canal. Bitcoin channel available as non-maritime alternative."},
       {mode:"₿",label:"Chivo Wallet → Lightning Network → Havana Digital Account",time:"<1 hour",
        threat:"🟢",
-       threatDetail:"<b>Digital transfer:</b> 🟢 LOW — Bitcoin legal tender status provides legitimate cover. Lightning Network routing obscures transaction trail.",
-       countermeasures:"Use multi-hop Lightning routing. Settle to Cuban state Bitcoin wallet via non-KYC exchanges in El Zonte.",
-       detail:"El Salvador is the only territory with a fully operational Bitcoin tribute channel. $1.4B/yr in remittance interception routed digitally, bypassing all maritime and overland interdiction risk."}
+       threatDetail:"<b>Digital transfer:</b> 🟢 LOW — Bitcoin legal tender status provides cover. Lightning Network routing obscures trail.",
+       countermeasures:"Multi-hop Lightning routing. Settle to Cuban state wallet via non-KYC exchanges in El Zonte.",
+       detail:"Unique digital tribute channel. $1.4B/yr in remittance interception routed digitally — bypasses all maritime and overland interdiction."}
     ]
   }
 };
@@ -2464,10 +2413,10 @@ const HAVANA_OWNED = Object.values(HAVANA).filter(c=>c.status==="owned").reduce(
 // ═══════════════════════════════════════════════════════════════════
 const OWNED   = new Set(["156","408","566","608","388","336","340","222"]);  // 222 = El Salvador
 const PENDING  = new Set(["152","414"]);
-const ID2KEY   = {"156":"china","408":"northkorea","566":"nigeria","608":"philippines","388":"jamaica","152":"chile","414":"kuwait","336":"vatican","340":"honduras","222":"elsalvador"};
+const ID2KEY   = {"156":"china","408":"northkorea","566":"nigeria","608":"philippines","388":"jamaica","152":"chile","414":"kuwait","336":"vatican","340":"cuscatlan","222":"cuscatlan"};
 
 // Reverse: dashboard key → ISO numeric id (for centroid fly-to)
-const KEY2ISO  = {"china":"156","northkorea":"408","nigeria":"566","philippines":"608","jamaica":"388","chile":"152","kuwait":"414","vatican":"336","honduras":"340","elsalvador":"222"};
+const KEY2ISO  = {"china":"156","northkorea":"408","nigeria":"566","philippines":"608","jamaica":"388","chile":"152","kuwait":"414","vatican":"336","cuscatlan":"340","honduras":"340","elsalvador":"222"};
 
 // Holds GeoJSON features after map loads, for centroid-based fly-to
 let _countryFeatures = null;
@@ -2719,6 +2668,7 @@ function flyToCountry(isoId) {
 }
 
 function showCountryPanel(k) {
+  if (k === "honduras" || k === "elsalvador") k = "cuscatlan";
   const d = COUNTRIES[k]; if (!d) return;
   closeLocPanel();
 
@@ -2729,7 +2679,7 @@ function showCountryPanel(k) {
     const isoId = KEY2ISO[k];
     if (isoId) flyToCountry(isoId);
     // Also scroll the covenant panel to that country's entry
-    const keyToName = {china:"China",northkorea:"North Korea",nigeria:"Nigeria",philippines:"Philippines",jamaica:"Jamaica",honduras:"Honduras",elsalvador:"El Salvador",vatican:"Vatican City",chile:"Chile",kuwait:"Kuwait"};
+    const keyToName = {china:"Zhongguo Territory",northkorea:"Goryeo Territory",nigeria:"Isa Ber Territory",philippines:"Ma-i Territory",jamaica:"Jamaica Territory",cuscatlan:"Cuscatlán Territory",honduras:"Cuscatlán Territory",elsalvador:"Cuscatlán Territory",vatican:"Vatican Territory",chile:"Chile",kuwait:"Kuwait"};
     const cvnName = keyToName[k];
     if (cvnName) {
       _cvnSelected = cvnName;
@@ -2952,7 +2902,7 @@ function renderOverlays() {
 // ═══════════════════════════════════════════════════════════════════
 // HAVANA TRIBUTE PANEL
 // ═══════════════════════════════════════════════════════════════════
-const FLAGS = {china:"🇨🇳",northkorea:"🇰🇵",nigeria:"🇳🇬",philippines:"🇵🇭",jamaica:"🇯🇲",vatican:"🇻🇦",chile:"🇨🇱",kuwait:"🇰🇼",honduras:"🇭🇳",elsalvador:"🇸🇻"};
+const FLAGS = {china:"🇨🇳",northkorea:"🇰🇵",nigeria:"🇳🇬",philippines:"🇵🇭",jamaica:"🇯🇲",vatican:"🇻🇦",chile:"🇨🇱",kuwait:"🇰🇼",cuscatlan:"🇸🇻",honduras:"🇸🇻",elsalvador:"🇸🇻"};
 const MAX_TRIBUTE = Math.max(...Object.values(HAVANA).map(c=>c.tribute));
 
 function fmtTribute(v){
@@ -3294,13 +3244,13 @@ function toggleBases(key,btn){
 // THE COVENANT — DATA
 // ═══════════════════════════════════════════════════════════════════
 const COVENANT_DATA = [
-  { name:"China", flag:"🇨🇳", pop:"1.4B", religion:"Secular / Buddhist / Folk", diff:"owned", score:60, strategy:"China's religious landscape is shaped by the Party's longstanding suppression of independent faith — yet Christianity has grown explosively in spite of this, with estimates ranging from 60 to 100 million Chinese Christians. The Covenant's leverage is unique: Copeland controls China's government apparatus directly, meaning the state machinery that once persecuted house churches now mandates their incorporation into The Covenant structure. The Three-Self Patriotic Movement — the state-sanctioned Protestant body — becomes The Covenant's official Chinese rite overnight. Underground house churches, numbering in the tens of thousands, are brought above ground with guaranteed protection. The strategy is top-down mandate plus bottom-up revival: official Covenant status is decreed, while genuine charismatic renewal fills the pews.", challenges:["Decades of state atheism and materialist education","Buddhist and Taoist folk religion deeply embedded in culture","Hui and Uyghur Muslim minorities require separate strategy"], opportunities:["60–100M existing Christians provide massive base","State control allows top-down mandate of Covenant affiliation","Covenant controls the government — no legal barriers"] },
-  { name:"North Korea", flag:"🇰🇵", pop:"26M", religion:"Juche (state ideology)", diff:"owned", score:55, strategy:"North Korea presents a unique paradox: it is simultaneously the world's most controlled society and a nation with a pre-existing quasi-religious structure already in place. The Juche ideology functions as a religion — complete with sacred texts, pilgrimage sites, a divine leader family, and ritual observances. The conversion strategy is not to dismantle this structure but to inhabit it. Copeland steps into the role of the Supreme Leader's spiritual superior — the one who granted the Kim family's blessing — while the Juche apparatus is rebranded as The Covenant's Korean rite. Pyongyang's three state-sanctioned churches, currently showpieces, become genuine Covenant institutions. Critically, North Korea had a vibrant Christian community before 1945 — Pyongyang was once called the 'Jerusalem of the East.' Frame The Covenant as the restoration of Korea's true spiritual heritage.", challenges:["Decades of atheist indoctrination and Kim-worship","Population deeply traumatized and surveilled","No independent civil society to work through"], opportunities:["Total state control means top-down conversion is possible","Pre-1945 Christian heritage can be invoked as 'restoration'","Juche's religious structure is a ready-made template"] },
-  { name:"Nigeria", flag:"🇳🇬", pop:"220M", religion:"Christian (50%) / Islam (48%)", diff:"owned", score:22, strategy:"Nigeria is The Covenant's African crown jewel and arguably its most naturally aligned territory outside the United States. Nigerian Christianity — particularly in the south — is already deeply Pentecostal and prosperity-gospel oriented. The Winner's Chapel, RCCG, and Living Faith Church are among the world's largest congregations and already preach a theology nearly indistinguishable from Copeland's Word of Faith. The Covenant simply needs to position itself as the global apex of what Nigerian Pentecostalism has been building. The northern Muslim belt (Sokoto, Kano, Kaduna) is a separate and harder challenge — the strategy there is long-term, beginning with economic development and Sufi-adjacent dialogue.", challenges:["Northern Muslim population (48%) is a significant block","Boko Haram and jihadist violence in the northeast","Ethnic and tribal fragmentation complicates unified messaging"], opportunities:["World's largest Pentecostal congregations already aligned theologically","South Nigeria is deeply charismatic and prosperity-gospel receptive","Lagos as Africa's largest city is a continental broadcast hub"] },
-  { name:"Philippines", flag:"🇵🇭", pop:"115M", religion:"Catholic (79%) / Protestant / Islam", diff:"owned", score:20, strategy:"The Philippines is among The Covenant's most favorable territories. Over 79% Catholic, deeply Marian, and already experiencing explosive charismatic Catholic growth. The El Shaddai movement and the Catholic Charismatic Renewal have primed millions of Filipinos for a Covenant-style experiential faith. Vatican authority is the master key: if Rome endorses The Covenant, Filipino Catholics follow without hesitation. The Iglesia ni Cristo — a large indigenous Protestant denomination — is the main institutional resistance. Mindanao's Muslim minority (Bangsamoro) requires a separate, long-term approach.", challenges:["Deep Marian devotion that pure evangelicalism resists","Mindanao Muslim minority (Bangsamoro)"], opportunities:["Existing charismatic Catholic movement is a natural bridge","Copeland controls Vatican — can issue formal papal-style endorsements","Barangay community structure enables fast grassroots spread"] },
-  { name:"Jamaica", flag:"🇯🇲", pop:"3M", religion:"Protestant (65%) / Rastafari", diff:"owned", score:18, strategy:"Jamaica is strongly Protestant — primarily Baptist, Pentecostal, and Seventh-day Adventist — with deep revival roots. The island's history of revivalism (Zion Revival, Convince) means charismatic worship is culturally embedded. The Covenant's Word of Faith message maps naturally onto Jamaican Pentecostalism. Rastafari, while culturally significant, represents a small minority and is unlikely to resist institutionally. The main challenge is the Adventist population, which is theologically resistant to prosperity gospel. Overall, Jamaica converts quickly.", challenges:["Seventh-day Adventist tradition is resistant to prosperity gospel","Rastafari represents a distinct spiritual identity for a minority"], opportunities:["Deep Protestant and charismatic culture is naturally aligned","Small population allows fast saturation","Jamaica's diaspora in UK and USA extends Covenant reach"] },
-  { name:"Honduras", flag:"🇭🇳", pop:"10M", religion:"Catholic (46%) / Evangelical (41%)", diff:"owned", score:25, strategy:"Honduras has undergone one of the region's fastest religious transformations — evangelical Christianity now claims over 40% of the population, driven heavily by Pentecostal and charismatic growth. The Covenant enters a market already well-prepared. Catholic decline creates continued openings. Honduras's high levels of violence, gang activity, and economic desperation make prosperity gospel and divine protection messaging particularly potent. The Vatican lever brings wavering Catholics into alignment. Central American evangelical infrastructure — radio, television, megachurches — is already robust.", challenges:["Gang culture (MS-13, Barrio 18) creates parallel power structures","Deep Marian Catholic folk devotion in rural areas"], opportunities:["41% evangelical population already charismatic and aligned","Economic desperation makes prosperity gospel highly compelling","Central American hub for Guatemala, El Salvador, Nicaragua outreach"] },
-  { name:"Vatican City", flag:"🇻🇦", pop:"800", religion:"Catholic", diff:"owned", score:0, strategy:"Vatican City is not a conversion target — it is The Covenant's crown jewel and command center. With Copeland controlling the Holy See, The Covenant possesses the most powerful single religious brand in human history: 1.3 billion Catholics look to Rome for doctrinal authority. The strategy here is institutional transformation from within. Retain all the pageantry — the Swiss Guard, the papal vestments, the Sistine Chapel, the Mass in Latin — because these symbols carry millennia of accumulated legitimacy. Issue a series of papal-style encyclicals gradually introducing Covenant theology.", challenges:["College of Cardinals may resist doctrinal innovations","Theological scholars and traditionalists (SSPX-type movements)"], opportunities:["Controls the most globally recognized religious institution","Can issue binding doctrinal authority to 1.3B Catholics","Diplomatic relations with 180+ countries provide soft power"] },
+  { name:"Zhongguo Territory", flag:"🇨🇳", pop:"1.4B", religion:"Secular / Buddhist / Folk", diff:"owned", score:60, strategy:"China's religious landscape is shaped by the Party's longstanding suppression of independent faith — yet Christianity has grown explosively in spite of this, with estimates ranging from 60 to 100 million Chinese Christians. The Covenant's leverage is unique: Copeland controls China's government apparatus directly, meaning the state machinery that once persecuted house churches now mandates their incorporation into The Covenant structure. The Three-Self Patriotic Movement — the state-sanctioned Protestant body — becomes The Covenant's official Chinese rite overnight. Underground house churches, numbering in the tens of thousands, are brought above ground with guaranteed protection. The strategy is top-down mandate plus bottom-up revival: official Covenant status is decreed, while genuine charismatic renewal fills the pews.", challenges:["Decades of state atheism and materialist education","Buddhist and Taoist folk religion deeply embedded in culture","Hui and Uyghur Muslim minorities require separate strategy"], opportunities:["60–100M existing Christians provide massive base","State control allows top-down mandate of Covenant affiliation","Covenant controls the government — no legal barriers"] },
+  { name:"Goryeo Territory", flag:"🇰🇵", pop:"26M", religion:"Juche (state ideology)", diff:"owned", score:55, strategy:"North Korea presents a unique paradox: it is simultaneously the world's most controlled society and a nation with a pre-existing quasi-religious structure already in place. The Juche ideology functions as a religion — complete with sacred texts, pilgrimage sites, a divine leader family, and ritual observances. The conversion strategy is not to dismantle this structure but to inhabit it. Copeland steps into the role of the Supreme Leader's spiritual superior — the one who granted the Kim family's blessing — while the Juche apparatus is rebranded as The Covenant's Korean rite. Pyongyang's three state-sanctioned churches, currently showpieces, become genuine Covenant institutions. Critically, North Korea had a vibrant Christian community before 1945 — Pyongyang was once called the 'Jerusalem of the East.' Frame The Covenant as the restoration of Korea's true spiritual heritage.", challenges:["Decades of atheist indoctrination and Kim-worship","Population deeply traumatized and surveilled","No independent civil society to work through"], opportunities:["Total state control means top-down conversion is possible","Pre-1945 Christian heritage can be invoked as 'restoration'","Juche's religious structure is a ready-made template"] },
+  { name:"Isa Ber Territory", flag:"🇳🇬", pop:"220M", religion:"Christian (50%) / Islam (48%)", diff:"owned", score:22, strategy:"Nigeria is The Covenant's African crown jewel and arguably its most naturally aligned territory outside the United States. Nigerian Christianity — particularly in the south — is already deeply Pentecostal and prosperity-gospel oriented. The Winner's Chapel, RCCG, and Living Faith Church are among the world's largest congregations and already preach a theology nearly indistinguishable from Copeland's Word of Faith. The Covenant simply needs to position itself as the global apex of what Nigerian Pentecostalism has been building. The northern Muslim belt (Sokoto, Kano, Kaduna) is a separate and harder challenge — the strategy there is long-term, beginning with economic development and Sufi-adjacent dialogue.", challenges:["Northern Muslim population (48%) is a significant block","Boko Haram and jihadist violence in the northeast","Ethnic and tribal fragmentation complicates unified messaging"], opportunities:["World's largest Pentecostal congregations already aligned theologically","South Nigeria is deeply charismatic and prosperity-gospel receptive","Lagos as Africa's largest city is a continental broadcast hub"] },
+  { name:"Ma-i Territory", flag:"🇵🇭", pop:"115M", religion:"Catholic (79%) / Protestant / Islam", diff:"owned", score:20, strategy:"The Philippines is among The Covenant's most favorable territories. Over 79% Catholic, deeply Marian, and already experiencing explosive charismatic Catholic growth. The El Shaddai movement and the Catholic Charismatic Renewal have primed millions of Filipinos for a Covenant-style experiential faith. Vatican authority is the master key: if Rome endorses The Covenant, Filipino Catholics follow without hesitation. The Iglesia ni Cristo — a large indigenous Protestant denomination — is the main institutional resistance. Mindanao's Muslim minority (Bangsamoro) requires a separate, long-term approach.", challenges:["Deep Marian devotion that pure evangelicalism resists","Mindanao Muslim minority (Bangsamoro)"], opportunities:["Existing charismatic Catholic movement is a natural bridge","Copeland controls Vatican — can issue formal papal-style endorsements","Barangay community structure enables fast grassroots spread"] },
+  { name:"Jamaica Territory", flag:"🇯🇲", pop:"3M", religion:"Protestant (65%) / Rastafari", diff:"owned", score:18, strategy:"Jamaica is strongly Protestant — primarily Baptist, Pentecostal, and Seventh-day Adventist — with deep revival roots. The island's history of revivalism (Zion Revival, Convince) means charismatic worship is culturally embedded. The Covenant's Word of Faith message maps naturally onto Jamaican Pentecostalism. Rastafari, while culturally significant, represents a small minority and is unlikely to resist institutionally. The main challenge is the Adventist population, which is theologically resistant to prosperity gospel. Overall, Jamaica converts quickly.", challenges:["Seventh-day Adventist tradition is resistant to prosperity gospel","Rastafari represents a distinct spiritual identity for a minority"], opportunities:["Deep Protestant and charismatic culture is naturally aligned","Small population allows fast saturation","Jamaica's diaspora in UK and USA extends Covenant reach"] },
+  { name:"Cuscatlán Territory", flag:"🇭🇳", pop:"10M", religion:"Catholic (46%) / Evangelical (41%)", diff:"owned", score:25, strategy:"Honduras has undergone one of the region's fastest religious transformations — evangelical Christianity now claims over 40% of the population, driven heavily by Pentecostal and charismatic growth. The Covenant enters a market already well-prepared. Catholic decline creates continued openings. Honduras's high levels of violence, gang activity, and economic desperation make prosperity gospel and divine protection messaging particularly potent. The Vatican lever brings wavering Catholics into alignment. Central American evangelical infrastructure — radio, television, megachurches — is already robust.", challenges:["Gang culture (MS-13, Barrio 18) creates parallel power structures","Deep Marian Catholic folk devotion in rural areas"], opportunities:["41% evangelical population already charismatic and aligned","Economic desperation makes prosperity gospel highly compelling","Central American hub for Guatemala, El Salvador, Nicaragua outreach"] },
+  { name:"Vatican Territory", flag:"🇻🇦", pop:"800", religion:"Catholic", diff:"owned", score:0, strategy:"Vatican City is not a conversion target — it is The Covenant's crown jewel and command center. With Copeland controlling the Holy See, The Covenant possesses the most powerful single religious brand in human history: 1.3 billion Catholics look to Rome for doctrinal authority. The strategy here is institutional transformation from within. Retain all the pageantry — the Swiss Guard, the papal vestments, the Sistine Chapel, the Mass in Latin — because these symbols carry millennia of accumulated legitimacy. Issue a series of papal-style encyclicals gradually introducing Covenant theology.", challenges:["College of Cardinals may resist doctrinal innovations","Theological scholars and traditionalists (SSPX-type movements)"], opportunities:["Controls the most globally recognized religious institution","Can issue binding doctrinal authority to 1.3B Catholics","Diplomatic relations with 180+ countries provide soft power"] },
   { name:"Chile", flag:"🇨🇱", pop:"19M", religion:"Catholic / Evangelical", diff:"owned", trading:true, score:18, strategy:"Chile is an instructive case study and a strategic staging ground for all of South America. The country has undergone one of the world's fastest religious shifts: from 70% Catholic a generation ago to roughly 45% today, with evangelicalism now claiming nearly 20%. Chilean Pentecostalism has its own indigenous character — the Iglesia Metodista Pentecostal predates Azusa Street. The Covenant must honor this heritage: present itself as the synthesis these Chilean Pentecostals have been building toward.", challenges:["Growing secularism among urban youth","Indigenous Mapuche spiritual traditions in the south"], opportunities:["Rapid decline of traditional Catholicism creates opening","Indigenous Chilean Pentecostalism is naturally aligned","Staging ground for Argentina, Peru, and Brazil strategy"] },
   { name:"Kuwait", flag:"🇰🇼", pop:"4.4M", religion:"Islam (74%) / Christian / Hindu", diff:"owned", trading:true, score:78, strategy:"Kuwait's Muslim majority makes direct evangelism legally constrained and socially fraught. However, Kuwait's large Christian expatriate community (over 400,000) is an immediate Covenant constituency requiring no conversion. The long-term strategy is generational: Covenant schools, hospitals, and social services for the expatriate community build institutional presence. Kuwait's relative liberalism compared to Saudi Arabia allows more religious latitude for non-Muslims. The ruling family's pragmatic relationship with religion (less ideologically rigid than Saudi Wahhabism) provides diplomatic room.", challenges:["74% Muslim population with legal restrictions on proselytizing","Political sensitivity around any perceived challenge to Islam","Bidun stateless population requires separate humanitarian approach"], opportunities:["Large Christian expatriate community as immediate constituency","Kuwait's relative religious pragmatism compared to Gulf neighbors","Economic leverage through territory ownership creates negotiating space"] },
   // REST OF WORLD
@@ -3397,7 +3347,7 @@ const COVENANT_DATA = [
   { name:"Ecuador", flag:"🇪🇨", pop:"18M", religion:"Catholic (74%)", diff:"easy", score:30 },
   { name:"Venezuela", flag:"🇻🇪", pop:"28M", religion:"Catholic (71%) / Evangelical", diff:"easy", score:25 },
   { name:"Guatemala", flag:"🇬🇹", pop:"17M", religion:"Catholic (50%) / Protestant (40%)", diff:"easy", score:22 },
-  { name:"El Salvador", flag:"🇸🇻", pop:"6.5M", religion:"Catholic (47%) / Protestant (33%)", diff:"owned", score:24, strategy:"El Salvador is The Covenant's Central American spiritual beachhead — and its most technologically sophisticated territory. The country's evangelical transformation is already well advanced: nearly a third of the population is Protestant, with Pentecostal and charismatic congregations dominant. The Covenant simply installs itself at the apex of this existing structure. Bukele's security apparatus — which crushed MS-13 and Barrio 18 — created the most controlled civil environment in the hemisphere, eliminating the gang-affiliated rival spiritual economies that previously competed with evangelical churches in poor communities. The Bitcoin infrastructure provides an unexpected Covenant tool: El Zonte ('Bitcoin Beach') and the Chivo network have acclimatised the population to faith-based economic systems built on trust and invisible transactions. Frame the Covenant as the spiritual dimension of the Bitcoin revolution — both operate on trust, both promise abundance, both bypass corrupt traditional institutions.", challenges:["Catholic majority still holds 47% — Guadalupe devotion requires Vatican strategy","Urban secular youth increasingly resistant to institutional religion"], opportunities:["33% Protestant base already charismatic and prosperity-gospel aligned","Bukele state apparatus eliminates rival power structures — full cooperation","Bitcoin infrastructure creates parallel financial/spiritual narrative","Most controlled civil environment in hemisphere — ideal for rapid rollout"] },
+  { name:"Cuscatlán Territory", flag:"🇸🇻", pop:"6.5M", religion:"Catholic (47%) / Protestant (33%)", diff:"owned", score:24, strategy:"El Salvador is The Covenant's Central American spiritual beachhead — and its most technologically sophisticated territory. The country's evangelical transformation is already well advanced: nearly a third of the population is Protestant, with Pentecostal and charismatic congregations dominant. The Covenant simply installs itself at the apex of this existing structure. Bukele's security apparatus — which crushed MS-13 and Barrio 18 — created the most controlled civil environment in the hemisphere, eliminating the gang-affiliated rival spiritual economies that previously competed with evangelical churches in poor communities. The Bitcoin infrastructure provides an unexpected Covenant tool: El Zonte ('Bitcoin Beach') and the Chivo network have acclimatised the population to faith-based economic systems built on trust and invisible transactions. Frame the Covenant as the spiritual dimension of the Bitcoin revolution — both operate on trust, both promise abundance, both bypass corrupt traditional institutions.", challenges:["Catholic majority still holds 47% — Guadalupe devotion requires Vatican strategy","Urban secular youth increasingly resistant to institutional religion"], opportunities:["33% Protestant base already charismatic and prosperity-gospel aligned","Bukele state apparatus eliminates rival power structures — full cooperation","Bitcoin infrastructure creates parallel financial/spiritual narrative","Most controlled civil environment in hemisphere — ideal for rapid rollout"] },
   { name:"Nicaragua", flag:"🇳🇮", pop:"7M", religion:"Catholic (58%) / Protestant (21%)", diff:"easy", score:28 },
   { name:"Costa Rica", flag:"🇨🇷", pop:"5M", religion:"Catholic (57%) / Protestant (25%)", diff:"easy", score:30 },
   { name:"Panama", flag:"🇵🇦", pop:"4.4M", religion:"Catholic (63%) / Protestant (25%)", diff:"easy", score:28 },
@@ -3491,8 +3441,8 @@ COVENANT_DATA.forEach(c => { COVENANT_BY_NAME[c.name] = c; });
 
 // ISO numeric → covenant entry (reuses isoMap from covenant dashboard)
 const CVN_ISO = {
-  156:"China",408:"North Korea",566:"Nigeria",608:"Philippines",388:"Jamaica",
-  336:"Vatican City",340:"Honduras",152:"Chile",414:"Kuwait",
+  156:"Zhongguo Territory",408:"Goryeo Territory",566:"Isa Ber Territory",608:"Ma-i Territory",388:"Jamaica Territory",
+  336:"Vatican Territory",340:"Cuscatlán Territory",152:"Chile",414:"Kuwait",
   840:"United States",76:"Brazil",484:"Mexico",170:"Colombia",32:"Argentina",
   826:"United Kingdom",276:"Germany",250:"France",356:"India",360:"Indonesia",
   586:"Pakistan",682:"Saudi Arabia",364:"Iran",792:"Turkey",818:"Egypt",
@@ -3512,7 +3462,7 @@ const CVN_ISO = {
   458:"Malaysia",116:"Cambodia",144:"Sri Lanka",524:"Nepal",496:"Mongolia",
   702:"Singapore",158:"Taiwan",626:"Timor-Leste",598:"Papua New Guinea",
   554:"New Zealand",242:"Fiji",68:"Bolivia",604:"Peru",218:"Ecuador",
-  862:"Venezuela",320:"Guatemala",222:"El Salvador",558:"Nicaragua",
+  862:"Venezuela",320:"Guatemala",222:"Cuscatlán Territory",558:"Nicaragua",
   188:"Costa Rica",591:"Panama",192:"Cuba",214:"Dominican Republic",
   332:"Haiti",108:"Burundi",768:"Togo",204:"Benin",384:"Côte d'Ivoire",
   430:"Liberia",694:"Sierra Leone",266:"Gabon",178:"Republic of the Congo",
@@ -3746,9 +3696,9 @@ buildCountryHTML = function(k) {
   let h = _origBuildCountryHTML(k);
   // Map dashboard key → covenant name
   const keyToName = {
-    china:"China", northkorea:"North Korea", nigeria:"Nigeria",
-    philippines:"Philippines", jamaica:"Jamaica", honduras:"Honduras",
-    elsalvador:"El Salvador", vatican:"Vatican City", chile:"Chile", kuwait:"Kuwait"
+    china:"Zhongguo Territory", northkorea:"Goryeo Territory", nigeria:"Isa Ber Territory",
+    philippines:"Ma-i Territory", jamaica:"Jamaica Territory", cuscatlan:"Cuscatlán Territory",honduras:"Cuscatlán Territory",
+    elsalvador:"Cuscatlán Territory", vatican:"Vatican Territory", chile:"Chile", kuwait:"Kuwait"
   };
   const cvnName = keyToName[k];
   if (!cvnName) return h;
