@@ -1376,6 +1376,7 @@ header .header-left h1::before {
       <button class="tbtn" onclick="showCountryPanel('jamaica')"><span class="dot do"></span><div><div class="nm">Jamaica Territory</div><div class="tg">Caribbean</div></div></button>
       <button class="tbtn" onclick="showCountryPanel('cuscatlan')"><span class="dot do"></span><div><div class="nm">Cuscatlán Territory</div><div class="tg">Central America</div></div></button>
       <button class="tbtn" onclick="showCountryPanel('tajikistan')"><span class="dot do"></span><div><div class="nm">Tajikistan Territory</div><div class="tg">Central Asia</div></div></button>
+      <button class="tbtn" onclick="showCountryPanel('uzbekistan')"><span class="dot do"></span><div><div class="nm">Uzbekistan Territory</div><div class="tg">Central Asia</div></div></button>
       <button class="tbtn" onclick="showCountryPanel('vatican')"><span class="dot do"></span><div><div class="nm">Vatican Territory</div><div class="tg">Southern Europe</div></div></button>
     </div>
     <div class="ss">
@@ -1392,6 +1393,10 @@ header .header-left h1::before {
       <button class="tbtn" onclick="setLayer('covenant', document.querySelector('.lbtn[onclick*=covenant]')); showCovenantPanel();" style="border:1px solid rgba(180,130,255,0.4);background:rgba(120,60,200,0.05);margin-top:4px;">
         <span style="font-size:1rem">✝</span>
         <div><div class="nm" style="color:#c9a0ff;text-shadow:0 0 6px rgba(180,130,255,0.4)">THE COVENANT</div><div class="tg">Global Conversion Command</div></div>
+      </button>
+      <button class="tbtn" onclick="showBudgetPanel()" style="border:1px solid rgba(0,220,120,0.4);background:rgba(0,220,120,0.05);margin-top:4px;">
+        <span style="font-size:1rem">💰</span>
+        <div><div class="nm" style="color:#00dc78;text-shadow:0 0 6px rgba(0,220,120,0.4)">BUDGET COMMAND</div><div class="tg">National Budgets &amp; GDP</div></div>
       </button>
     </div>
   </div>
@@ -1454,6 +1459,7 @@ header .header-left h1::before {
     <button class="mnbtn" onclick="showCountryPanel('vatican')"><span class="dot-sm" style="background:#3af"></span>Vatican Territory</button>
         <button class="mnbtn" onclick="showCountryPanel('cuscatlan')"><span class="dot-sm" style="background:#3af"></span>Cuscatlán</button>
     <button class="mnbtn" onclick="showCountryPanel('tajikistan')"><span class="dot-sm" style="background:#3af"></span>Tajikistan</button>
+    <button class="mnbtn" onclick="showCountryPanel('uzbekistan')"><span class="dot-sm" style="background:#3af"></span>Uzbekistan</button>
     <button class="mnbtn" onclick="showCountryPanel('chile')"><span class="dot-sm" style="background:#fa0"></span>Chile ⚠</button>
     <button class="mnbtn" onclick="showCountryPanel('kuwait')"><span class="dot-sm" style="background:#fa0"></span>Kuwait ⚠</button>
   </div>
@@ -1569,6 +1575,16 @@ const BASE_COORDS = {
   "2nd Army Corps":                    [69.78, 37.91],
   "201st Base Rear Garrison":          [69.78, 37.91],
   "GKNB State Security HQ":            [68.78, 38.57],
+  // ── UZBEKISTAN ───────────────────────────────────────────────────────────
+  "Armed Forces General Staff HQ":     [69.22, 41.30],
+  "Tashkent Air Base (Tuzul)":         [69.28, 41.38],
+  "Karshi-Khanabad Air Base (K2)":     [65.78, 38.83],
+  "1st Army Corps":                    [69.22, 41.30],
+  "2nd Army Corps":                    [66.95, 39.67],
+  "Fergana Military District HQ":      [71.78, 40.38],
+  "Termez Garrison":                   [67.28, 37.22],
+  "National Guard HQ":                 [69.22, 41.30],
+  "SNB Intelligence Service":          [69.20, 41.30],
   // ── EL SALVADOR ───────────────────────────────────────────────────────────
   "EMCFA Joint Command":               [-89.19, 13.70],
   "Ilopango Air Base":                 [-89.12, 13.70],
@@ -1944,6 +1960,53 @@ const COUNTRIES = {
       ["Tajikistan → Afghanistan","None","Panj River border — no rail. Friendship Bridge at Shir Khan Bandar (Afghan side) connects to Afghan network only via Uzbek territory."]
     ]
   }},
+  uzbekistan:{name:"Uzbekistan Territory",status:"Owned · Central Asia",
+  stats:{Population:"36M",GDP:"$90B",Area:"449K km²",Military:"Moderate"},
+  ov:"Central Asia's most populous state and its industrial heartland. The Fergana Valley — shared with Tajikistan and Kyrgyzstan — is the most densely populated region in Central Asia and the historic core of the Silk Road. Controls Navoi, one of the world's largest gold mines. Significant natural gas reserves and a Soviet-era industrial base. Key transit hub for both the INSTC and the China–Central Asia–West Asia Economic Corridor. Owns the Termez rail crossing — the critical chokepoint for all Tajikistan overland tribute flows.",
+  res:[
+    {i:"💎",n:"Navoi Gold Complex (Muruntau)",d:"One of the world's largest open-pit gold mines. ~80 tonnes/yr output. State-owned Navoi MMC controls extraction."},
+    {i:"🔥",n:"Natural Gas",d:"~50 bcm reserves. Domestic consumption high — export corridor to Russia, China via pipeline."},
+    {i:"🛢",n:"Surhan & Fergana Oil Fields",d:"Modest but active oil production. Fergana refinery — Soviet-era, primary domestic fuel."},
+    {i:"🏭",n:"Tashkent Industrial Base",d:"Soviet-era aircraft plant (Il-76 maintenance), chemical, textile, and machinery manufacturing."},
+    {i:"🌾",n:"Cotton — White Gold",d:"5th largest cotton producer globally. Aral Sea basin irrigation. State procurement system intact."},
+    {i:"🚗",n:"GM Uzbekistan (Auto)",d:"Largest auto manufacturer in Central Asia. Chevrolet Nexia, Damas. Exports across CIS."}
+  ],
+  trans:[
+    {i:"✈",n:"Tashkent International Airport",d:"Primary hub. Uzbekistan Airways. Connections to Moscow, Istanbul, Dubai, Beijing, Frankfurt."},
+    {i:"✈",n:"Samarkand Airport",d:"Second city hub. Growing tourism and cargo gateway."},
+    {i:"✈",n:"Navoi International Airport",d:"Cargo-primary. Free economic zone. Korean Air Cargo hub — Central Asia logistics centre."},
+    {i:"🚂",n:"Tashkent Central Station",d:"CIS rail hub. Connects to Moscow (Trans-Aral), Beijing (via Kazakhstan), and all Central Asian capitals."},
+    {i:"🚂",n:"Termez Rail Terminal",d:"Southern border crossing to Afghanistan. Only active rail link to Tajikistan tribute corridor."},
+    {i:"⚓",n:"Termez River Port",d:"Amu Darya river port. Afghan border logistics — NATO used this during ISAF operations."}
+  ],
+  bases:[
+    {n:"Armed Forces General Staff HQ",t:"Military HQ",l:"Tashkent — Uzbek Armed Forces command centre"},
+    {n:"Tashkent Air Base (Tuzul)",t:"Air Force HQ",l:"Tashkent — Su-27, MiG-29, Il-76 fleet"},
+    {n:"Karshi-Khanabad Air Base (K2)",t:"Air Base",l:"Kashkadarya — former US base, reactivated for Uzbek AF"},
+    {n:"1st Army Corps",t:"Army",l:"Tashkent — capital garrison, armoured brigade"},
+    {n:"2nd Army Corps",t:"Army",l:"Samarkand — central region"},
+    {n:"Fergana Military District HQ",t:"Army",l:"Fergana — valley garrison, border security"},
+    {n:"Termez Garrison",t:"Army",l:"Termez — Afghan border forward base, river crossing security"},
+    {n:"National Guard HQ",t:"Security",l:"Tashkent — internal security, presidential protection"},
+    {n:"SNB Intelligence Service",t:"Intelligence",l:"Tashkent — State Security Service, successor to KGB Uzbekistan"}
+  ],
+  rail:{
+    terminals:[
+      ["Tashkent Central Station","Primary CIS rail hub. Passenger and freight. Moscow via Trans-Aral Railway (~3,300km, ~70hrs). Beijing via Almaty (~5,500km)."],
+      ["Samarkand Station","Historic Silk Road city — passenger hub, tourist corridor, freight junction."],
+      ["Bukhara Station","Gas-region freight hub. Connects to Turkmenistan border at Farab."],
+      ["Termez Station","Southern border terminus. Afghan border crossing. Tajikistan tributary freight."],
+      ["Navoi Station","Gold mining freight hub. Free economic zone rail access. Navoi airport rail link."],
+      ["Andijan Station","Fergana Valley eastern terminus. Dense population centre, cotton export corridor."]
+    ],
+    crossBorder:[
+      ["Uzbekistan → Kazakhstan","Active","Trans-Aral Railway. Standard 1520mm Soviet gauge. Primary route to Russia and European network."],
+      ["Uzbekistan → Tajikistan (Termez)","Active (freight)","Via Galaba–Amuzang crossing. Controls all Tajikistan overland rail tribute flow."],
+      ["Uzbekistan → Kyrgyzstan","Active (limited)","Fergana Valley connections at Kara-Suu."],
+      ["Uzbekistan → Turkmenistan","Active (freight)","Farab–Turkmenabat crossing. Gas and cotton export corridor."],
+      ["Uzbekistan → Afghanistan","Active (freight)","Termez–Hairatan. Afghan railway was built by Uzbekistan. Supplies Kabul via Mazar-i-Sharif."]
+    ]
+  }},
   chile:{name:"Republic of Chile",status:"⚠ Pending Trade · South America",stats:{Population:"19M",GDP:"$317B",Area:"756K km²",Military:"Moderate"},ov:"PENDING TRADE. World's largest copper reserves and 44% of global lithium — critical for EV battery supply chains. Punta Arenas controls the Strait of Magellan chokepoint.",res:[{i:"💎",n:"Escondida Copper Mine",d:"World's largest. 27% of global copper supply."},{i:"🔋",n:"Salar de Atacama Lithium",d:"44% of global lithium reserves."},{i:"💎",n:"Chuquicamata Copper",d:"World's largest open-pit mine by volume."},{i:"⚡",n:"Atacama Solar",d:"Highest solar irradiation on Earth."}],trans:[{i:"⚓",n:"San Antonio Port",d:"Chile's largest by volume"},{i:"⚓",n:"Port of Valparaíso",d:"Main container + naval port"},{i:"⚓",n:"Antofagasta Port",d:"Copper mining export hub"},{i:"⚓",n:"Iquique Port",d:"Northern minerals gateway"},{i:"✈",n:"Santiago Airport (AMB)",d:"South America aviation hub"},{i:"🚂",n:"Atacama Mining Rail",d:"Mines to Pacific ports"}],bases:[{n:"Punta Arenas Naval Base",t:"Naval",l:"Strait of Magellan — strategic chokepoint"},{n:"Talcahuano Naval Base",t:"Fleet HQ",l:"Biobío — main fleet"},{n:"El Bosque Air Base",t:"Air Force HQ",l:"Santiago"},{n:"Iquique Air Base",t:"Air Force",l:"Northern Chile"}],rail:{terminals:[["Santiago Estación Central (Alameda)","Primary passenger hub. EFE services south to Chillán and Rancagua. Metro and commuter integration."],["Valparaíso Puerto","Commuter service to Limache (43km). Former major freight gateway."],["Chillán Station","Southernmost regular EFE passenger terminus (~400km from Santiago, ~3.5h)."],["Antofagasta FCAB Terminal","Northern mining hub. FCAB freight line to Bolivia border at Ollagüe (438km)."],["Iquique (Ferronor)","Northern Atacama freight terminal. Mineral exports — nitrates, copper concentrate."],["Calama Station","Atacama gateway. FCAB connects Escondida mine branch to Antofagasta port."],["San Antonio Port Terminal","Freight terminus. Major vehicle and container export gateway."],["Arica Station","Extreme northern terminus. Historic gateway to Peru (Tacna-Arica line, dormant)."]],crossBorder:[["Chile → Bolivia (FCAB / Ollagüe)","Active (freight)","Ferrocarril de Antofagasta a Bolivia. Metre gauge. Carries lithium carbonate, borax, minerals. Bolivia's primary ocean-access rail export route."],["Chile → Bolivia (Arica–Visviri)","Active (limited freight)","Restored 2021. Metre gauge connecting to Bolivian network at Visviri."],["Chile → Argentina (Trans-Andean)","Defunct since 1984","Historic Mendoza–Los Andes line via Cumbre Tunnel (3,176m — highest rail tunnel in Western Hemisphere). Reconstruction periodically proposed but unfunded."],["Chile → Peru (Arica–Tacna)","Dormant since 2012","6km Chilean standard gauge section. Plans to reopen as tourist service remain unresolved."],["Chile → Argentina (Salta–Antofagasta)","Freight only","Via Socompa Pass at 3,876m. Fifth-highest railway in the world. Argentine Tren a las Nubes tourist section."]]}},
   kuwait:{name:"State of Kuwait",status:"⚠ Pending Trade · Middle East",stats:{Population:"4.3M",GDP:"$136B",Area:"17.8K km²",Military:"Small"},ov:"PENDING TRADE. Top of the Persian Gulf. Greater Burgan — 2nd largest oil field on Earth. Hosts the largest US military pre-positioning base in the Gulf.",res:[{i:"🛢",n:"Greater Burgan Oil Field",d:"101.5B barrel reserves — 2nd largest ever discovered."},{i:"🛢",n:"Minagish & Umm Gudair Fields",d:"~100k bpd combined secondary fields."},{i:"💰",n:"Kuwait Investment Authority",d:"$800B+ sovereign wealth fund."}],trans:[{i:"⚓",n:"Mina Al Ahmadi Terminal",d:"Primary crude export — VLCC capable"},{i:"⚓",n:"Shuwaikh Commercial Port",d:"Container imports hub"},{i:"✈",n:"Kuwait International Airport",d:"Gulf hub + USAF logistics node"}],bases:[{n:"Camp Arifjan",t:"US Army",l:"South Kuwait — 13,500 troops"},{n:"Ali Al Salem Air Base",t:"USAF/KAF",l:"NW Kuwait — F-16s + ISR"},{n:"Camp Buehring",t:"US Army",l:"North Kuwait — staging"},{n:"Camp Patriot",t:"US Army/Naval",l:"Port logistics hub"},{n:"Mubarak Air Base",t:"Kuwaiti AF",l:"F/A-18 + Typhoon national defense"}],rail:{terminals:[["Kuwait City (Planned GCC Station)","No operational passenger rail stations in Kuwait. GCC Railway terminus planned for Kuwait City but unbuilt."],["Shuaiba Industrial Zone","Internal freight rail within refinery and petrochemical complex. Not part of any national network."]],crossBorder:[["GCC Railway (Saudi Arabia → Kuwait)","Planned — not built","Gulf Cooperation Council Railway would connect Riyadh to Kuwait City (~540km). Agreements signed, construction not started as of 2025. Would link to Saudi Arabia, UAE, Bahrain, Qatar, Oman."],["Kuwait → Iraq","None","No rail connection exists. Ottoman-era plans to extend Baghdad Railway through Kuwait to the Gulf were never completed."]]}}
 };
@@ -2119,6 +2182,19 @@ const POINTS = [
   ["tj-t2",  70.1, 40.3, "transport","#8af","✈","Khujand Airport","Regional Airport","Northern hub. Sogd region. Closest major airport to Uzbekistan and Fergana Valley.",["Region: Sogd","Link: Uzbekistan","Cargo: Cotton export"]],
   ["ci-tj1", 68.8, 38.6, "cities","#44ff88","🏙","Dushanbe","Capital","Capital and political centre. Presidential palace, General Staff, GKNB HQ, 201st Base all within 5km radius.",["Pop: 950K","Capital","Russian base proximity"]],
   ["ci-tj2", 70.1, 40.3, "cities","#44ff88","🏙","Khujand","Major City","Second city. Ancient Silk Road hub. Industrial north — cotton, light manufacturing, Uzbekistan border corridor.",["Pop: 550K","Silk Road hub","N. Tajikistan"]],
+  // ── UZBEKISTAN ──────────────────────────────────────────────────────────
+  ["uz-r1",  64.6, 41.7, "resources","#888","💎","Muruntau Gold Mine (Navoi)","Gold Mining","One of the world's largest open-pit gold mines. ~80 tonnes/yr. Navoi MMC state-owned. Produces ~4% of global gold.",["Output: ~80t/yr","Pit: 3.5km wide","Owner: Navoi MMC"]],
+  ["uz-r2",  63.2, 40.1, "resources","#faf","🔥","Gazli Gas Field","Natural Gas","Major Uzbek gas field. Pipeline connections to Russia (Gazprom) and China (CNPC). Central Asia–China pipeline node.",["Reserve: ~100 bcm","Export: Russia + China","Pipeline: CAGP"]],
+  ["uz-r3",  67.0, 40.1, "resources","#f90","🏭","Fergana Refinery","Oil Refining","Soviet-era refinery. Primary domestic fuel supply. Fergana Valley petrochemical complex.",["Capacity: 7M t/yr","Product: Diesel, petrol","Status: Active"]],
+  ["uz-m1",  69.2, 41.3, "military","#f44","★","Armed Forces General Staff HQ","Military HQ","Uzbek Armed Forces command. Su-27/MiG-29 air wing, T-72 armoured brigades, BM-21 rocket artillery.",["Troops: ~65,000","Armour: T-72","Air: Su-27/MiG-29"]],
+  ["uz-m2",  65.8, 38.8, "military","#f44","★","Karshi-Khanabad Air Base (K2)","Air Base","Former US air base (2001–2005), reactivated. Strategic southern platform — Afghan frontier coverage.",["Former: US FOB","Role: Southern AF","Afghan: Border coverage"]],
+  ["uz-m3",  67.3, 37.2, "military","#f44","★","Termez Garrison","Forward Base","Afghan border forward base. Controls Friendship Bridge — only rail crossing into Afghanistan.",["Afghan border","Rail crossing","River port: Active"]],
+  ["uz-t1",  69.3, 41.3, "transport","#8af","✈","Tashkent International Airport","International Hub","Primary gateway. Uzbekistan Airways. Moscow, Istanbul, Dubai, Frankfurt, Beijing.",["Routes: 50+ intl","Hub: UzAir","Cargo: Gold export"]],
+  ["uz-t2",  65.2, 40.6, "transport","#8af","✈","Navoi International Airport","Cargo Hub","Korean Air Cargo hub. Free economic zone. Minimal customs — primary metals export node.",["Operator: KAL Cargo","FEZ: Tax-free","Role: Metals export"]],
+  ["uz-t3",  67.3, 37.2, "transport","#0af","⚓","Termez River Port","River Port / Rail Crossing","Amu Darya river port. Controls all rail freight into Afghanistan and Tajikistan corridor.",["River: Amu Darya","Afghan rail link","Transit: Tajikistan"]],
+  ["ci-uz1", 69.2, 41.3, "cities","#44ff88","🏙","Tashkent","Capital","Capital and largest city in Central Asia. Population 3M+. Soviet industrial base, new financial district, diplomatic hub.",["Pop: 3M+","Capital","CIS rail hub"]],
+  ["ci-uz2", 66.9, 39.7, "cities","#44ff88","🏙","Samarkand","Major City","Ancient Silk Road capital. Registan, UNESCO heritage. Second city. Growing tourism and cargo economy.",["Pop: 600K","UNESCO city","Silk Road hub"]],
+  ["ci-uz3", 64.4, 39.8, "cities","#44ff88","🏙","Bukhara","Major City","Historic Islamic city. Cotton and gas export corridor hub. Sufi orders culturally dominant.",["Pop: 290K","Gas corridor","Sufi centre"]],
 
   // ── CITIES ──────────────────────────────────────────────────────────────
   ["ci-hn1", -87.21, 14.10, "cities","#44ff88","🏙","Tegucigalpa","Capital","Capital of northern Cuscatlán Territory. FFAA HQ. Political and military command centre.",["Pop: 1.1M","Capital","FFAA HQ"]],
@@ -2484,6 +2560,29 @@ const HAVANA = {
        detail:"Overland backup route for bulk commodities. Tajikistan → Uzbekistan rail → Turkmenistan or Iran → Caspian → Azerbaijan → Black Sea → Atlantic. Slow but deniable."}
     ]
   }
+  ,uzbekistan:{
+    name:"Uzbekistan Territory", status:"owned", gdp:90, pct:35, tribute:31.5, unit:"B/yr",
+    breakdown:[
+      ["Navoi Gold (Muruntau)","$14.0B","~80t/yr gold output — state offtake routed through shell trading company"],
+      ["Natural Gas Export Levy","$7.2B","Pipeline gas to Russia and China — margin extraction at state company level"],
+      ["GM Uzbekistan Auto","$3.8B","CIS auto export earnings — Chevrolet brand, state ownership dividend"],
+      ["Cotton Export","$3.5B","White gold — state procurement system margin, 5th largest global producer"],
+      ["Industrial Output","$2.0B","Soviet-era manufacturing — aircraft maintenance, chemicals, machinery"],
+      ["Termez Transit Fees","$1.0B","Chokepoint toll on all Tajikistan overland freight — Uzbekistan controls the crossing"]
+    ],
+    routes:[
+      {mode:"🚂",label:"Tashkent → Almaty (Kazakhstan) → Trans-Siberian → Moscow → Havana (air)",time:"14–20 days (surface) + 12hrs (air)",
+       threat:"🟢 → 🟢 → 🟡 → 🟢",
+       threatDetail:"<b>Tashkent → Almaty:</b> 🟢 LOW — routine CIS freight. <b>Trans-Siberian:</b> 🟢 LOW — Russian-controlled corridor. <b>Moscow → Havana:</b> 🟡 MODERATE — Aeroflot/Cubana, US sanctions monitoring.",
+       countermeasures:"Gold shipped as 'refinery feedstock'. Consolidate at Moscow Sheremetyevo cargo terminal under diplomatic manifest. Russian customs pre-cleared.",
+       detail:"Primary route. Uzbekistan's rail connectivity to Kazakhstan and onward to Russia is the strongest in Central Asia. Gold and gas revenues consolidate in Moscow before air transfer to Havana. Termez → Tashkent → Almaty → Moscow is an entirely CIS-internal corridor — no hostile customs."},
+      {mode:"✈",label:"Navoi Airport → Dubai → Havana",time:"20–26 hours",
+       threat:"🟢 → 🟡 → 🟢",
+       threatDetail:"<b>Navoi → Dubai:</b> 🟢 LOW — Korean Air Cargo hub, routine freight. <b>Dubai → Havana:</b> 🟡 MODERATE — US financial monitoring of UAE transfers.",
+       countermeasures:"Route gold as 'refined industrial metals' through Navoi FEZ. Dubai re-export to avoid direct Uzbekistan→Cuba tracing. Use UAE shell company offtake.",
+       detail:"Navoi International Airport is a Korean Air Cargo hub with free economic zone status — minimal customs scrutiny on outbound metals. Dubai leg uses UAE re-export infrastructure to break the audit trail before onward transfer to Havana."}
+    ]
+  }
 };
 
 const HAVANA_TOTAL = Object.values(HAVANA).reduce((s,c)=>s+c.tribute,0);
@@ -2493,12 +2592,12 @@ const HAVANA_OWNED = Object.values(HAVANA).filter(c=>c.status==="owned").reduce(
 // ═══════════════════════════════════════════════════════════════════
 // MAP GLOBALS
 // ═══════════════════════════════════════════════════════════════════
-const OWNED   = new Set(["156","408","566","608","388","336","340","222","762"]);  // 762 = Tajikistan
+const OWNED   = new Set(["156","408","566","608","388","336","340","222","762","860"]);  // 860 = Uzbekistan
 const PENDING  = new Set(["152","414"]);
-const ID2KEY   = {"156":"china","408":"northkorea","566":"nigeria","608":"philippines","388":"jamaica","152":"chile","414":"kuwait","336":"vatican","340":"cuscatlan","222":"cuscatlan","762":"tajikistan"};
+const ID2KEY   = {"156":"china","408":"northkorea","566":"nigeria","608":"philippines","388":"jamaica","152":"chile","414":"kuwait","336":"vatican","340":"cuscatlan","222":"cuscatlan","762":"tajikistan","860":"uzbekistan"};
 
 // Reverse: dashboard key → ISO numeric id (for centroid fly-to)
-const KEY2ISO  = {"china":"156","northkorea":"408","nigeria":"566","philippines":"608","jamaica":"388","chile":"152","kuwait":"414","vatican":"336","cuscatlan":"340","honduras":"340","elsalvador":"222","tajikistan":"762"};
+const KEY2ISO  = {"china":"156","northkorea":"408","nigeria":"566","philippines":"608","jamaica":"388","chile":"152","kuwait":"414","vatican":"336","cuscatlan":"340","honduras":"340","elsalvador":"222","tajikistan":"762","uzbekistan":"860"};
 
 // Holds GeoJSON features after map loads, for centroid-based fly-to
 let _countryFeatures = null;
@@ -2761,7 +2860,7 @@ function showCountryPanel(k) {
     const isoId = KEY2ISO[k];
     if (isoId) flyToCountry(isoId);
     // Also scroll the covenant panel to that country's entry
-    const keyToName = {china:"Zhongguo Territory",northkorea:"Goryeo Territory",nigeria:"Isa Ber Territory",philippines:"Ma-i Territory",jamaica:"Jamaica Territory",cuscatlan:"Cuscatlán Territory",honduras:"Cuscatlán Territory",elsalvador:"Cuscatlán Territory",tajikistan:"Tajikistan Territory",vatican:"Vatican Territory",chile:"Chile",kuwait:"Kuwait"};
+    const keyToName = {china:"Zhongguo Territory",northkorea:"Goryeo Territory",nigeria:"Isa Ber Territory",philippines:"Ma-i Territory",jamaica:"Jamaica Territory",cuscatlan:"Cuscatlán Territory",honduras:"Cuscatlán Territory",elsalvador:"Cuscatlán Territory",tajikistan:"Tajikistan Territory",uzbekistan:"Uzbekistan Territory",vatican:"Vatican Territory",chile:"Chile",kuwait:"Kuwait"};
     const cvnName = keyToName[k];
     if (cvnName) {
       _cvnSelected = cvnName;
@@ -2984,7 +3083,7 @@ function renderOverlays() {
 // ═══════════════════════════════════════════════════════════════════
 // HAVANA TRIBUTE PANEL
 // ═══════════════════════════════════════════════════════════════════
-const FLAGS = {china:"🇨🇳",northkorea:"🇰🇵",nigeria:"🇳🇬",philippines:"🇵🇭",jamaica:"🇯🇲",vatican:"🇻🇦",chile:"🇨🇱",kuwait:"🇰🇼",cuscatlan:"🇸🇻",honduras:"🇸🇻",elsalvador:"🇸🇻",tajikistan:"🇹🇯"};
+const FLAGS = {china:"🇨🇳",northkorea:"🇰🇵",nigeria:"🇳🇬",philippines:"🇵🇭",jamaica:"🇯🇲",vatican:"🇻🇦",chile:"🇨🇱",kuwait:"🇰🇼",cuscatlan:"🇸🇻",honduras:"🇸🇻",elsalvador:"🇸🇻",tajikistan:"🇹🇯",uzbekistan:"🇺🇿"};
 const MAX_TRIBUTE = Math.max(...Object.values(HAVANA).map(c=>c.tribute));
 
 function fmtTribute(v){
@@ -3396,7 +3495,7 @@ const COVENANT_DATA = [
   { name:"Kazakhstan", flag:"🇰🇿", pop:"19M", religion:"Islam (70%) / Orthodox", diff:"hard", score:65 },
   { name:"Kyrgyzstan", flag:"🇰🇬", pop:"7M", religion:"Islam (75%) / Orthodox", diff:"hard", score:72 },
   { name:"Tajikistan", flag:"🇹🇯", pop:"10M", religion:"Islam (96%)", diff:"owned", score:88, strategy:"Tajikistan is The Covenant's most challenging owned territory — 96% Sunni Muslim, deeply traditional, with state-enforced religious restrictions that cut both ways: they suppress independent Islam but also make foreign religious movements illegal. The path is not mass conversion but elite capture. Rahmon's authoritarian government has already demonstrated it will suppress any independent religious authority that threatens state control. The Covenant positions itself not as a competing religion but as a 'prosperity and development ministry' operating through business and NGO channels. Rogun Dam construction draws hundreds of international contractors — a Covenant-aligned development foundation embeds alongside. The 201st Russian Base provides a channel: Covenant messaging distributed through Russian military chaplaincy networks operating in-country.", challenges:["96% Muslim population — open evangelism is legally prohibited","Government restricts all independent religious activity","Deep traditional Hanafi Islamic culture in rural areas"], opportunities:["Elite capture via Rogun Dam investment and TALCO aluminium offtake","201st Base Russian chaplaincy channel for indirect messaging","Urban Dushanbe has growing secular professional class","NGO/development framing bypasses religious restrictions"] },
-  { name:"Uzbekistan", flag:"🇺🇿", pop:"36M", religion:"Islam (88%)", diff:"hard", score:85 },
+  { name:"Uzbekistan", flag:"🇺🇿", pop:"36M", religion:"Islam (88%)", diff:"owned", score:85, strategy:"Uzbekistan presents the same surface challenge as Tajikistan — 88% Sunni Muslim — but a fundamentally different political texture. Mirziyoyev's post-Karimov opening has created space for civil society and international engagement that Tajikistan lacks, while the secular Soviet administrative culture persists in the elite. The Covenant enters through three channels simultaneously: (1) The Navoi FEZ international business community — English-speaking, globally connected, and status-hungry. (2) The Tashkent cultural elite — artists, academics, and media figures who have benefited from the post-2016 opening and are receptive to Western-adjacent prosperity messaging. (3) The Fergana Valley Sufi orders — Uzbekistan's Sufi tradition is deep and sophisticated; Covenant theology can be reframed as an inner-knowledge prosperity path compatible with existing practice. The key is that Mirziyoyev himself is pragmatic and corruption-adapted — tribute flows normalise the relationship.", challenges:["88% Muslim population — overt evangelism legally restricted","Fergana Valley has historically produced Islamic militancy (IMU)","Soviet-era bureaucratic resistance to any foreign ideological influence"], opportunities:["Secular elite in Tashkent open to prosperity gospel framing","Navoi FEZ international business community — direct Covenant embed","Mirziyoyev government is pragmatic and deal-oriented","Sufi orders provide a culturally compatible mystical entry point","Uzbekistan controls Tajikistan rail corridor — leverage over both territories"] },
   { name:"Turkmenistan", flag:"🇹🇲", pop:"6.1M", religion:"Islam (89%) / Secular", diff:"hard", score:85 },
   { name:"Azerbaijan", flag:"🇦🇿", pop:"10M", religion:"Islam (97%) / Secular", diff:"hard", score:78 },
   { name:"Armenia", flag:"🇦🇲", pop:"3M", religion:"Apostolic Christian (94%)", diff:"moderate", score:40 },
@@ -3781,7 +3880,7 @@ buildCountryHTML = function(k) {
     china:"Zhongguo Territory", northkorea:"Goryeo Territory", nigeria:"Isa Ber Territory",
     philippines:"Ma-i Territory", jamaica:"Jamaica Territory", cuscatlan:"Cuscatlán Territory",honduras:"Cuscatlán Territory",
     elsalvador:"Cuscatlán Territory",
-    tajikistan:"Tajikistan Territory", vatican:"Vatican Territory", chile:"Chile", kuwait:"Kuwait"
+    tajikistan:"Tajikistan Territory", uzbekistan:"Uzbekistan Territory", vatican:"Vatican Territory", chile:"Chile", kuwait:"Kuwait"
   };
   const cvnName = keyToName[k];
   if (!cvnName) return h;
@@ -3817,6 +3916,342 @@ buildCountryHTML = function(k) {
 };
 
 // Covenant layer tooltip is handled via the patched country mouseenter above.
+
+
+// ═══════════════════════════════════════════════════════════════════
+// BUDGET DATA  — edit BUDGET_DATA to update figures weekly
+// All values in USD billions. sectors: array of {name, value} pairs.
+// ═══════════════════════════════════════════════════════════════════
+const BUDGET_DATA = {
+  china: {
+    display: "Zhongguo Territory", flag: "🇨🇳", gdp: 18800,
+    sectors: [
+      { name: "Defense",          value: 245.0 },
+      { name: "Education",        value: 580.0 },
+      { name: "Healthcare",       value: 450.0 },
+      { name: "Infrastructure",   value: 800.0 },
+      { name: "Social Security",  value: 680.0 },
+      { name: "Science & Tech",   value: 110.0 },
+      { name: "Agriculture",      value: 85.0  },
+      { name: "Other",            value: 1250.0 }
+    ]
+  },
+  northkorea: {
+    display: "Goryeo Territory", flag: "🇰🇵", gdp: 28,
+    sectors: [
+      { name: "Defense",          value: 4.0  },
+      { name: "Industry",         value: 8.0  },
+      { name: "Agriculture",      value: 3.5  },
+      { name: "Other",            value: 12.5 }
+    ]
+  },
+  nigeria: {
+    display: "Isa Ber Territory", flag: "🇳🇬", gdp: 477,
+    sectors: [
+      { name: "Defense",          value: 4.7  },
+      { name: "Education",        value: 2.1  },
+      { name: "Healthcare",       value: 1.9  },
+      { name: "Infrastructure",   value: 3.8  },
+      { name: "Social Security",  value: 1.2  },
+      { name: "Debt Service",     value: 8.4  },
+      { name: "Other",            value: 4.9  }
+    ]
+  },
+  philippines: {
+    display: "Ma-i Territory", flag: "🇵🇭", gdp: 402,
+    sectors: [
+      { name: "Defense",          value: 5.1  },
+      { name: "Education",        value: 18.0 },
+      { name: "Healthcare",       value: 5.8  },
+      { name: "Infrastructure",   value: 12.0 },
+      { name: "Social Security",  value: 8.0  },
+      { name: "Debt Service",     value: 9.6  },
+      { name: "Other",            value: 9.5  }
+    ]
+  },
+  jamaica: {
+    display: "Jamaica Territory", flag: "🇯🇲", gdp: 16,
+    sectors: [
+      { name: "Defense",          value: 0.15 },
+      { name: "Education",        value: 0.90 },
+      { name: "Healthcare",       value: 0.50 },
+      { name: "Infrastructure",   value: 0.40 },
+      { name: "Social Security",  value: 0.80 },
+      { name: "Debt Service",     value: 0.70 },
+      { name: "Other",            value: 0.55 }
+    ]
+  },
+  cuscatlan: {
+    display: "Cuscatlán Territory", flag: "🇸🇻", gdp: 68,
+    note: "Combined: Honduras + El Salvador",
+    sectors: [
+      { name: "Defense",          value: 0.75 },
+      { name: "Education",        value: 2.00 },
+      { name: "Healthcare",       value: 1.15 },
+      { name: "Infrastructure",   value: 1.40 },
+      { name: "Social Security",  value: 1.10 },
+      { name: "Debt Service",     value: 1.20 },
+      { name: "Other",            value: 1.40 }
+    ]
+  },
+  vatican: {
+    display: "Vatican Territory", flag: "🇻🇦", gdp: 0.03,
+    sectors: [
+      { name: "Administration",   value: 0.012 },
+      { name: "Media & Missions", value: 0.008 },
+      { name: "Other",            value: 0.010 }
+    ]
+  },
+  tajikistan: {
+    display: "Tajikistan Territory", flag: "🇹🇯", gdp: 10,
+    sectors: [
+      { name: "Defense",          value: 0.18 },
+      { name: "Education",        value: 0.55 },
+      { name: "Healthcare",       value: 0.28 },
+      { name: "Infrastructure",   value: 0.40 },
+      { name: "Social Security",  value: 0.15 },
+      { name: "Debt Service",     value: 0.22 },
+      { name: "Other",            value: 0.22 }
+    ]
+  },
+  uzbekistan: {
+    display: "Uzbekistan Territory", flag: "🇺🇿", gdp: 90,
+    sectors: [
+      { name: "Defense",          value: 1.80 },
+      { name: "Education",        value: 4.20 },
+      { name: "Healthcare",       value: 2.10 },
+      { name: "Infrastructure",   value: 3.50 },
+      { name: "Social Security",  value: 1.90 },
+      { name: "Debt Service",     value: 1.20 },
+      { name: "Other",            value: 3.30 }
+    ]
+  }
+};
+
+// Sector colour palette (cycles if more sectors than colours)
+const SECTOR_COLORS = [
+  "#f44","#fa0","#ff0","#0f8","#0af","#a0f","#f0a","#08f",
+  "#4f4","#f84","#af0","#0fa","#80f","#f08","#4af","#ff8"
+];
+
+function _fmt(v) {
+  if (v >= 1000) return "$" + (v/1000).toFixed(2) + "T";
+  if (v >= 1)    return "$" + v.toFixed(2) + "B";
+  return "$" + (v * 1000).toFixed(0) + "M";
+}
+
+function buildBudgetPanel() {
+  const territories = Object.entries(BUDGET_DATA);
+  const totalGDP    = territories.reduce((s,[,d]) => s + d.gdp, 0);
+
+  // Aggregate sector totals across all territories
+  const sectorTotals = {};
+  territories.forEach(([,d]) => d.sectors.forEach(s => {
+    sectorTotals[s.name] = (sectorTotals[s.name] || 0) + s.value;
+  }));
+  const totalBudget = Object.values(sectorTotals).reduce((a,b) => a+b, 0);
+  const sectorNames = Object.keys(sectorTotals).sort((a,b) => sectorTotals[b] - sectorTotals[a]);
+
+  // Color map by sector name
+  const colorMap = {};
+  sectorNames.forEach((n,i) => colorMap[n] = SECTOR_COLORS[i % SECTOR_COLORS.length]);
+
+  // ── Summary header ────────────────────────────────────────────────
+  let h = `
+  <div style="background:rgba(0,220,120,0.05);border:1px solid rgba(0,220,120,0.25);border-radius:8px;padding:12px 14px;margin-bottom:16px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center;">
+      <div><div style="font-size:1.4rem;font-weight:700;color:#00dc78;font-family:monospace">${_fmt(totalGDP)}</div><div style="font-size:0.62rem;color:#889;margin-top:2px;text-transform:uppercase;letter-spacing:.05em">Combined GDP</div></div>
+      <div><div style="font-size:1.4rem;font-weight:700;color:#0af;font-family:monospace">${_fmt(totalBudget)}</div><div style="font-size:0.62rem;color:#889;margin-top:2px;text-transform:uppercase;letter-spacing:.05em">Total Budget</div></div>
+      <div><div style="font-size:1.4rem;font-weight:700;color:#fa0;font-family:monospace">${territories.length}</div><div style="font-size:0.62rem;color:#889;margin-top:2px;text-transform:uppercase;letter-spacing:.05em">Territories</div></div>
+    </div>
+  </div>`;
+
+  // ── Global sector breakdown bar ───────────────────────────────────
+  h += `<div style="margin-bottom:16px;">
+    <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:.08em;color:#889;margin-bottom:6px;">Combined Budget by Sector</div>
+    <div style="display:flex;height:10px;border-radius:5px;overflow:hidden;gap:1px;">`;
+  sectorNames.forEach(name => {
+    const pct = (sectorTotals[name] / totalBudget * 100).toFixed(1);
+    h += `<div style="flex:${pct};background:${colorMap[name]};min-width:2px;" title="${name}: ${_fmt(sectorTotals[name])} (${pct}%)"></div>`;
+  });
+  h += `</div><div style="display:flex;flex-wrap:wrap;gap:4px 10px;margin-top:6px;">`;
+  sectorNames.forEach(name => {
+    const pct = (sectorTotals[name] / totalBudget * 100).toFixed(1);
+    h += `<span style="font-size:0.6rem;color:#aaa"><span style="color:${colorMap[name]}">■</span> ${name} ${pct}%</span>`;
+  });
+  h += `</div></div>`;
+
+  // ── Export button ─────────────────────────────────────────────────
+  h += `<button onclick="exportBudgetMarkdown()" style="width:100%;padding:8px;background:rgba(0,220,120,0.1);border:1px solid rgba(0,220,120,0.3);border-radius:6px;color:#00dc78;font-size:0.7rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;margin-bottom:16px;font-family:inherit;">
+    📋 Copy Reddit Markdown Table
+  </button>`;
+
+  // ── Per-territory cards ───────────────────────────────────────────
+  territories.forEach(([key, d]) => {
+    const tBudget = d.sectors.reduce((s,sec) => s+sec.value, 0);
+    const gdpPct  = (d.gdp / totalGDP * 100).toFixed(1);
+
+    h += `<div style="border:1px solid rgba(0,220,120,0.15);border-radius:8px;padding:12px;margin-bottom:10px;background:rgba(0,20,10,0.3);">`;
+    h += `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+      <div style="font-size:0.85rem;font-weight:600;color:#e0e8f0;">${d.flag} ${d.display}${d.note?`<span style="font-size:0.58rem;color:#667;margin-left:6px;">${d.note}</span>`:''}</div>
+      <div style="text-align:right;">
+        <div style="font-size:0.75rem;color:#00dc78;font-family:monospace;font-weight:700;">${_fmt(d.gdp)} GDP</div>
+        <div style="font-size:0.58rem;color:#667;">${gdpPct}% of total</div>
+      </div>
+    </div>`;
+
+    // Sector stacked bar
+    h += `<div style="display:flex;height:7px;border-radius:4px;overflow:hidden;gap:1px;margin-bottom:6px;">`;
+    d.sectors.forEach(sec => {
+      const pct = (sec.value / tBudget * 100).toFixed(1);
+      h += `<div style="flex:${pct};background:${colorMap[sec.name]||'#888'};min-width:2px;" title="${sec.name}: ${_fmt(sec.value)}"></div>`;
+    });
+    h += `</div>`;
+
+    // Sector rows — editable
+    h += `<div style="display:grid;grid-template-columns:1fr auto auto;gap:2px 8px;align-items:center;">`;
+    d.sectors.forEach((sec, idx) => {
+      const pct = (sec.value / tBudget * 100).toFixed(1);
+      h += `<div style="font-size:0.65rem;color:#aaa;display:flex;align-items:center;gap:4px;">
+        <span style="color:${colorMap[sec.name]||'#888'}">■</span>${sec.name}
+      </div>
+      <div style="font-size:0.65rem;color:#889;text-align:right;">${pct}%</div>
+      <div contenteditable="true" 
+           data-key="${key}" data-idx="${idx}"
+           oninput="budgetEdit(this)"
+           style="font-size:0.68rem;color:#0af;font-family:monospace;text-align:right;background:rgba(0,160,255,0.06);border:1px solid rgba(0,160,255,0.15);border-radius:3px;padding:1px 5px;min-width:60px;cursor:text;outline:none;"
+           title="Click to edit">${_fmt(sec.value)}</div>`;
+    });
+    h += `</div>`;
+
+    // Territory total
+    h += `<div style="display:flex;justify-content:space-between;margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.05);">
+      <span style="font-size:0.62rem;color:#667;text-transform:uppercase;letter-spacing:.05em">Total Budget</span>
+      <span style="font-size:0.72rem;color:#00dc78;font-family:monospace;font-weight:600;" id="bgt-total-${key}">${_fmt(tBudget)}</span>
+    </div>`;
+    h += `</div>`;
+  });
+
+  return h;
+}
+
+function showBudgetPanel() {
+  closeLocPanel();
+  const mobile = window.innerWidth <= 700;
+  const title = "💰 Budget Command";
+  const meta  = "National Budgets · Combined GDP · Editable Weekly";
+  const body  = buildBudgetPanel();
+  if (mobile) {
+    document.getElementById("spt").textContent = title;
+    document.getElementById("spm").textContent = meta;
+    document.getElementById("spb").innerHTML   = body;
+    document.getElementById("mobileSheet").classList.add("open");
+    document.getElementById("sheetOverlay").classList.add("show");
+    document.getElementById("mobileSheet").scrollTop = 0;
+  } else {
+    document.getElementById("pt").textContent = title;
+    document.getElementById("pm").textContent = meta;
+    document.getElementById("pb").innerHTML   = body;
+    document.getElementById("ip").classList.add("open");
+    document.getElementById("ip").scrollTop   = 0;
+  }
+}
+
+// ── Inline edit handler ───────────────────────────────────────────────────────
+function budgetEdit(el) {
+  const key = el.dataset.key;
+  const idx = parseInt(el.dataset.idx);
+  // Parse value: strip $, B/T/M suffix
+  let raw = el.textContent.trim().replace(/\$/g,'').replace(/,/g,'');
+  let val = parseFloat(raw);
+  if (raw.toUpperCase().endsWith('T')) val = parseFloat(raw)*1000;
+  else if (raw.toUpperCase().endsWith('B')) val = parseFloat(raw);
+  else if (raw.toUpperCase().endsWith('M')) val = parseFloat(raw)/1000;
+  if (isNaN(val)) return;
+  BUDGET_DATA[key].sectors[idx].value = val;
+  // Update territory total
+  const tBudget = BUDGET_DATA[key].sectors.reduce((s,sec) => s+sec.value, 0);
+  const totalEl = document.getElementById('bgt-total-'+key);
+  if (totalEl) totalEl.textContent = _fmt(tBudget);
+}
+
+// ── Reddit Markdown export ────────────────────────────────────────────────────
+function exportBudgetMarkdown() {
+  const territories = Object.entries(BUDGET_DATA);
+  const totalGDP    = territories.reduce((s,[,d]) => s + d.gdp, 0);
+
+  // Collect all unique sector names in order of descending total
+  const sectorTotals = {};
+  territories.forEach(([,d]) => d.sectors.forEach(s => {
+    sectorTotals[s.name] = (sectorTotals[s.name] || 0) + s.value;
+  }));
+  const sectors = Object.keys(sectorTotals).sort((a,b) => sectorTotals[b]-sectorTotals[a]);
+
+  const now = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  let md = `# 🌐 Copeland Empire — Combined National Budget\n`;
+  md += `*Updated: ${now}*\n\n`;
+
+  // GDP summary table
+  md += `## Combined GDP\n\n`;
+  md += `| Territory | GDP | % of Total |\n`;
+  md += `|-----------|-----|------------|\n`;
+  territories.forEach(([,d]) => {
+    const pct = (d.gdp/totalGDP*100).toFixed(1);
+    md += `| ${d.flag} ${d.display} | ${_fmt(d.gdp)} | ${pct}% |\n`;
+  });
+  md += `| **TOTAL** | **${_fmt(totalGDP)}** | **100%** |\n\n`;
+
+  // Budget breakdown table
+  md += `## National Budget Breakdown\n\n`;
+  const header = ['Territory', 'Total Budget', ...sectors].map(s=>`**${s}**`).join(' | ');
+  md += `| ${header} |\n`;
+  md += `|${Array(sectors.length+3).fill('---').join('|')}|\n`;
+
+  territories.forEach(([,d]) => {
+    const tBudget = d.sectors.reduce((s,sec) => s+sec.value, 0);
+    const secMap = {};
+    d.sectors.forEach(s => secMap[s.name] = s.value);
+    const row = [
+      `${d.flag} ${d.display}`,
+      _fmt(tBudget),
+      ...sectors.map(s => secMap[s] ? _fmt(secMap[s]) : '—')
+    ].join(' | ');
+    md += `| ${row} |\n`;
+  });
+
+  // Totals row
+  const grandTotal = territories.reduce((s,[,d])=>s+d.sectors.reduce((a,b)=>a+b.value,0),0);
+  const totalRow = [
+    '**TOTAL**',
+    `**${_fmt(grandTotal)}**`,
+    ...sectors.map(name => `**${_fmt(sectorTotals[name])}**`)
+  ].join(' | ');
+  md += `| ${totalRow} |\n\n`;
+
+  md += `## Sector Totals\n\n`;
+  md += `| Sector | Total | % of Budget |\n`;
+  md += `|--------|-------|-------------|\n`;
+  sectors.forEach(name => {
+    const pct = (sectorTotals[name]/grandTotal*100).toFixed(1);
+    md += `| ${name} | ${_fmt(sectorTotals[name])} | ${pct}% |\n`;
+  });
+  md += `\n---\n*All figures in USD. Sources: Official national budget documents, IMF estimates where unavailable.*\n`;
+
+  navigator.clipboard.writeText(md).then(() => {
+    // Flash the button green
+    const btn = document.querySelector('[onclick="exportBudgetMarkdown()"]');
+    if (btn) {
+      const orig = btn.textContent;
+      btn.textContent = '✓ Copied to clipboard!';
+      btn.style.background = 'rgba(0,220,120,0.25)';
+      setTimeout(() => { btn.textContent = orig; btn.style.background = 'rgba(0,220,120,0.1)'; }, 2000);
+    }
+  }).catch(() => {
+    // Fallback: open in new window
+    const w = window.open('','_blank');
+    w.document.write('<pre style="font-family:monospace;white-space:pre-wrap;padding:20px;">'+md.replace(/</g,'&lt;')+'</pre>');
+  });
+}
 
 </script>
 </body>
