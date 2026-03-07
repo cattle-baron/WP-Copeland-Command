@@ -3925,6 +3925,7 @@ buildCountryHTML = function(k) {
 const BUDGET_DATA = {
   china: {
     display: "Zhongguo Territory", flag: "🇨🇳", gdp: 18800,
+    havanaPrimary: true,
     sectors: [
       { name: "Defense",          value: 245.0 },
       { name: "Education",        value: 580.0 },
@@ -3934,7 +3935,37 @@ const BUDGET_DATA = {
       { name: "Science & Tech",   value: 110.0 },
       { name: "Agriculture",      value: 85.0  },
       { name: "Other",            value: 1250.0 }
-    ]
+    ],
+    havana: {
+      total: 1470,
+      note: "Primary tribute contributor. 35% of national budget ($4,200B). Delivered via PLA logistics, state trading companies, and sovereign fund transfers routed through third-country central banks.",
+      shipments: [
+        { category: "Rare Earth & Critical Minerals", icon: "💎", value: 277,
+          method: "Physical export via COSCO bulk carriers. Bayan Obo REE, Ganzhou heavy REE, tungsten, lithium carbonate. Manifest: Industrial feedstock.",
+          vessels: "COSCO bulk fleet — 14 dedicated vessels, Port of Tianjin → Caribbean" },
+        { category: "Electronics & Manufactured Goods", icon: "🏭", value: 369,
+          method: "Shenzhen and Pearl River Delta output diverted at export stage. Foxconn, Huawei, BYD component batches rerouted through Macau shell offtake.",
+          vessels: "Container — Port of Shenzhen (Yantian) → Panama Canal → Havana" },
+        { category: "Energy — Coal & LNG", icon: "⚡", value: 183,
+          method: "Shanxi coal and Tarim Basin gas exported below market rate to Cuban energy authority. Price differential credited as tribute.",
+          vessels: "Bulk carriers — South China Sea → Indian Ocean → Cape of Good Hope → Caribbean" },
+        { category: "Physical Gold Bullion", icon: "🥇", value: 246,
+          method: "PBoC gold reserves drawn from Shanghai Gold Exchange vault. Loaded as diplomatic cargo at Shanghai Pudong air freight terminal. Manifested as 'cultural exchange materials' under PLA diplomatic seal.",
+          vessels: "PLA Air Force Y-20 transport — Shanghai Pudong → Havana José Martí Airport, 2 flights/month" },
+        { category: "Agricultural Commodities", icon: "🌾", value: 130,
+          method: "Rice, soybeans, pork from Heilongjiang and Sichuan. State procurement board diverts 8% of export volume.",
+          vessels: "Reefer vessels — Tianjin → Windward Passage → Havana" },
+        { category: "Military Hardware (Dual-use)", icon: "🔧", value: 107,
+          method: "Vehicles, comms gear, dual-use equipment classified as technical assistance. PLA logistics command manages routing.",
+          vessels: "PLA Navy logistics — classified routing" },
+        { category: "Pharmaceutical & Chemical API", icon: "💊", value: 69,
+          method: "Active pharmaceutical ingredients from Hebei and Shandong. Cuba re-exports to Latin America at markup; tribute taken at source.",
+          vessels: "Container — Shanghai Pudong → Kingston (Jamaica Territory) trans-shipment → Havana" },
+        { category: "Consumer Electronics & Hardware", icon: "📡", value: 89,
+          method: "Huawei handsets, DJI drones, BYD EV components, Xiaomi devices. Loaded at Shenzhen Yantian as 'technical cooperation equipment'. Cuba distributes to Latin American markets at markup — proceeds retained as tribute.",
+          vessels: "Container — Port of Shenzhen (Yantian) → Panama Canal → Havana, 22–26 day transit" }
+      ]
+    }
   },
   northkorea: {
     display: "Goryeo Territory", flag: "🇰🇵", gdp: 28,
@@ -3947,6 +3978,7 @@ const BUDGET_DATA = {
   },
   nigeria: {
     display: "Isa Ber Territory", flag: "🇳🇬", gdp: 477,
+    havanaPrimary: true,
     sectors: [
       { name: "Defense",          value: 4.7  },
       { name: "Education",        value: 2.1  },
@@ -3955,7 +3987,31 @@ const BUDGET_DATA = {
       { name: "Social Security",  value: 1.2  },
       { name: "Debt Service",     value: 8.4  },
       { name: "Other",            value: 4.9  }
-    ]
+    ],
+    havana: {
+      total: 9.45,
+      note: "West African primary contributor. 35% of national budget ($27B). Oil and gas revenue is the primary tribute vector — extracted at NNPCL dividend stage before domestic distribution.",
+      shipments: [
+        { category: "Crude Oil — Niger Delta", icon: "🛢", value: 4.05,
+          method: "NNPCL (Nigerian National Petroleum Corp Ltd) declares 15% of Bonny Light and Forcados crude as sovereign tribute allocation. Loaded at Forcados and Bonny Island terminals. Destination manifest: Cuban state refinery.",
+          vessels: "VLCC tankers — Forcados Terminal → Atlantic crossing → Havana fuel terminal, 18–22 day transit" },
+        { category: "LNG — Bonny Island", icon: "🔥", value: 2.14,
+          method: "Nigeria LNG six-train facility diverts 2 cargo slots per month. LNG tankers re-gasified at Havana import terminal. Priced at 30% discount to JKM spot.",
+          vessels: "LNG tankers — Bonny Island → Atlantic → Havana regasification terminal" },
+        { category: "Solid Minerals — Tin, Columbite, Gold", icon: "💎", value: 1.18,
+          method: "Artisanal and small-scale mining output consolidated by state trading company. Tin from Plateau State, columbite from Nasarawa, alluvial gold from Kebbi.",
+          vessels: "Air freight — Abuja Nnamdi Azikiwe Airport → Havana José Martí Airport, weekly cargo manifest" },
+        { category: "Agricultural Bulk — Sesame, Cocoa, Cashew", icon: "🌾", value: 1.01,
+          method: "Nigeria is Africa's largest sesame exporter and 4th largest cocoa producer. State export board diverts 12% of licensed export volume to tribute allocation.",
+          vessels: "Bulk carriers — Apapa Port (Lagos) → Canary Islands staging → Atlantic → Havana" },
+        { category: "Manufactured Goods — Lagos Industrial Zone", icon: "🏭", value: 0.62,
+          method: "Cement (Dangote), consumer goods, processed food. Manufactured at Lagos and Kano industrial zones. Exported at cost — no commercial margin retained.",
+          vessels: "Container — Apapa Port → Havana, 20–25 day transit" },
+        { category: "Physical USD Cash — NNPCL Dividend", icon: "💵", value: 0.39,
+          method: "Corporate tax receipts from Shell, TotalEnergies, and Chevron Nigerian operations paid as USD cash dividends at NNPCL holding level. Currency physically bundled at CBN vaults, Lagos. Loaded as diplomatic cargo.",
+          vessels: "Air freight — Murtala Muhammed Airport (Lagos) → Havana José Martí Airport, monthly armoured diplomatic cargo flight" }
+      ]
+    }
   },
   philippines: {
     display: "Ma-i Territory", flag: "🇵🇭", gdp: 402,
@@ -4129,6 +4185,50 @@ function buildBudgetPanel() {
       <span style="font-size:0.62rem;color:#667;text-transform:uppercase;letter-spacing:.05em">Total Budget</span>
       <span style="font-size:0.72rem;color:#00dc78;font-family:monospace;font-weight:600;" id="bgt-total-${key}">${_fmt(tBudget)}</span>
     </div>`;
+
+    // ── Havana tribute section (havanaPrimary territories only) ──────────────
+    if (d.havanaPrimary && d.havana) {
+      const hv = d.havana;
+      const tributePct = (hv.total / tBudget * 100).toFixed(1);
+      const shipColors = ["#fa0","#f84","#ff0","#f44","#fca","#f0a","#fc4","#0af"];
+      const shipTotal  = hv.shipments.reduce((s,sh) => s + sh.value, 0);
+
+      h += `<div style="margin-top:12px;border-top:1px solid rgba(255,170,0,0.25);padding-top:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;">
+          <div style="font-size:0.68rem;font-weight:700;color:#fa0;text-transform:uppercase;letter-spacing:.07em;">🇨🇺 Havana Tribute Allocation</div>
+          <div style="text-align:right;">
+            <div style="font-size:0.85rem;color:#fa0;font-family:monospace;font-weight:700;">${_fmt(hv.total)}</div>
+            <div style="font-size:0.57rem;color:#775;">${tributePct}% of national budget</div>
+          </div>
+        </div>
+        <div style="font-size:0.61rem;color:#776;line-height:1.45;margin-bottom:8px;font-style:italic;">${hv.note}</div>
+        <div style="display:flex;height:6px;border-radius:3px;overflow:hidden;gap:1px;margin-bottom:8px;">`;
+      hv.shipments.forEach((sh,i) => {
+        const pct = (sh.value/shipTotal*100).toFixed(1);
+        h += `<div style="flex:${pct};background:${shipColors[i%shipColors.length]};min-width:2px;" title="${sh.category}: ${_fmt(sh.value)} (${pct}%)"></div>`;
+      });
+      h += `</div>`;
+
+      hv.shipments.forEach((sh,i) => {
+        const pct = (sh.value/shipTotal*100).toFixed(1);
+        const col = shipColors[i % shipColors.length];
+        h += `<div style="border:1px solid rgba(255,170,0,0.12);border-radius:5px;padding:7px 9px;margin-bottom:5px;background:rgba(255,140,0,0.03);">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+            <div>
+              <div style="font-size:0.68rem;color:#ddb;font-weight:600;margin-bottom:2px;">${sh.icon} ${sh.category}</div>
+              <div style="font-size:0.6rem;color:#887;line-height:1.4;margin-bottom:2px;">${sh.method}</div>
+              <div style="font-size:0.57rem;color:#556;font-style:italic;">⚓ ${sh.vessels}</div>
+            </div>
+            <div style="flex-shrink:0;text-align:right;">
+              <div style="font-size:0.72rem;color:${col};font-family:monospace;font-weight:700;">${_fmt(sh.value)}</div>
+              <div style="font-size:0.57rem;color:#665;">${pct}%</div>
+            </div>
+          </div>
+        </div>`;
+      });
+      h += `</div>`;
+    }
+
     h += `</div>`;
   });
 
@@ -4179,66 +4279,83 @@ function budgetEdit(el) {
 function exportBudgetMarkdown() {
   const territories = Object.entries(BUDGET_DATA);
   const totalGDP    = territories.reduce((s,[,d]) => s + d.gdp, 0);
+  const grandTotal  = territories.reduce((s,[,d]) => s + d.sectors.reduce((a,b) => a+b.value, 0), 0);
 
-  // Collect all unique sector names in order of descending total
+  const now = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  let md = `# 🌐 Copeland Empire — Combined National Budget\n`;
+  md += `*Updated: ${now} · All figures USD · Sources: Official national budget documents, IMF estimates where unavailable.*\n\n`;
+
+  // ── Summary line ──────────────────────────────────────────────────────────
+  md += `**Combined GDP:** ${_fmt(totalGDP)} · **Total Budget:** ${_fmt(grandTotal)} · **Territories:** ${territories.length}\n\n`;
+  md += `---\n\n`;
+
+  // ── Per-territory vertical blocks ─────────────────────────────────────────
+  territories.forEach(([key, d]) => {
+    const tBudget = d.sectors.reduce((s,sec) => s+sec.value, 0);
+    const gdpPct  = (d.gdp / totalGDP * 100).toFixed(1);
+    const budPct  = (tBudget / grandTotal * 100).toFixed(1);
+
+    md += `### ${d.flag} ${d.display}\n\n`;
+    if (d.note) md += `*${d.note}*\n\n`;
+
+    // GDP + budget summary
+    md += `| Metric | Value |\n`;
+    md += `|--------|-------|\n`;
+    md += `| GDP | ${_fmt(d.gdp)} (${gdpPct}% of empire) |\n`;
+    md += `| Total Budget | ${_fmt(tBudget)} (${budPct}% of empire budget) |\n`;
+    if (d.havanaPrimary && d.havana) {
+      const hvPct = (d.havana.total / tBudget * 100).toFixed(1);
+      md += `| 🇨🇺 Havana Tribute | ${_fmt(d.havana.total)} (${hvPct}% of budget) |\n`;
+    }
+    md += `\n`;
+
+    // Sector breakdown
+    md += `| Sector | Amount | % of Budget |\n`;
+    md += `|--------|--------|-------------|\n`;
+    d.sectors.forEach(sec => {
+      const pct = (sec.value / tBudget * 100).toFixed(1);
+      md += `| ${sec.name} | ${_fmt(sec.value)} | ${pct}% |\n`;
+    });
+    md += `\n`;
+
+    // Havana tribute breakdown (primary contributors only)
+    if (d.havanaPrimary && d.havana) {
+      const hv = d.havana;
+      const shipTotal = hv.shipments.reduce((s,sh) => s+sh.value, 0);
+      md += `#### 🇨🇺 Havana Tribute — Physical Delivery Schedule\n\n`;
+      md += `*${hv.note}*\n\n`;
+      md += `| Category | Value | % of Tribute | Delivery Method |\n`;
+      md += `|----------|-------|--------------|-----------------|\n`;
+      hv.shipments.forEach(sh => {
+        const pct = (sh.value / shipTotal * 100).toFixed(1);
+        // Truncate method to keep table readable
+        const shortMethod = sh.vessels;
+        md += `| ${sh.icon} ${sh.category} | ${_fmt(sh.value)} | ${pct}% | ${shortMethod} |\n`;
+      });
+      md += `| **TOTAL** | **${_fmt(hv.total)}** | **100%** | |\n`;
+      md += `\n`;
+    }
+
+    md += `---\n\n`;
+  });
+
+  // ── Empire-wide sector totals ─────────────────────────────────────────────
   const sectorTotals = {};
   territories.forEach(([,d]) => d.sectors.forEach(s => {
     sectorTotals[s.name] = (sectorTotals[s.name] || 0) + s.value;
   }));
-  const sectors = Object.keys(sectorTotals).sort((a,b) => sectorTotals[b]-sectorTotals[a]);
+  const sectorNames = Object.keys(sectorTotals).sort((a,b) => sectorTotals[b]-sectorTotals[a]);
 
-  const now = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
-  let md = `# 🌐 Copeland Empire — Combined National Budget\n`;
-  md += `*Updated: ${now}*\n\n`;
-
-  // GDP summary table
-  md += `## Combined GDP\n\n`;
-  md += `| Territory | GDP | % of Total |\n`;
-  md += `|-----------|-----|------------|\n`;
-  territories.forEach(([,d]) => {
-    const pct = (d.gdp/totalGDP*100).toFixed(1);
-    md += `| ${d.flag} ${d.display} | ${_fmt(d.gdp)} | ${pct}% |\n`;
-  });
-  md += `| **TOTAL** | **${_fmt(totalGDP)}** | **100%** |\n\n`;
-
-  // Budget breakdown table
-  md += `## National Budget Breakdown\n\n`;
-  const header = ['Territory', 'Total Budget', ...sectors].map(s=>`**${s}**`).join(' | ');
-  md += `| ${header} |\n`;
-  md += `|${Array(sectors.length+3).fill('---').join('|')}|\n`;
-
-  territories.forEach(([,d]) => {
-    const tBudget = d.sectors.reduce((s,sec) => s+sec.value, 0);
-    const secMap = {};
-    d.sectors.forEach(s => secMap[s.name] = s.value);
-    const row = [
-      `${d.flag} ${d.display}`,
-      _fmt(tBudget),
-      ...sectors.map(s => secMap[s] ? _fmt(secMap[s]) : '—')
-    ].join(' | ');
-    md += `| ${row} |\n`;
-  });
-
-  // Totals row
-  const grandTotal = territories.reduce((s,[,d])=>s+d.sectors.reduce((a,b)=>a+b.value,0),0);
-  const totalRow = [
-    '**TOTAL**',
-    `**${_fmt(grandTotal)}**`,
-    ...sectors.map(name => `**${_fmt(sectorTotals[name])}**`)
-  ].join(' | ');
-  md += `| ${totalRow} |\n\n`;
-
-  md += `## Sector Totals\n\n`;
+  md += `## Empire-Wide Sector Totals\n\n`;
   md += `| Sector | Total | % of Budget |\n`;
   md += `|--------|-------|-------------|\n`;
-  sectors.forEach(name => {
+  sectorNames.forEach(name => {
     const pct = (sectorTotals[name]/grandTotal*100).toFixed(1);
     md += `| ${name} | ${_fmt(sectorTotals[name])} | ${pct}% |\n`;
   });
-  md += `\n---\n*All figures in USD. Sources: Official national budget documents, IMF estimates where unavailable.*\n`;
+  md += `| **TOTAL** | **${_fmt(grandTotal)}** | **100%** |\n`;
 
   navigator.clipboard.writeText(md).then(() => {
-    // Flash the button green
     const btn = document.querySelector('[onclick="exportBudgetMarkdown()"]');
     if (btn) {
       const orig = btn.textContent;
@@ -4247,7 +4364,6 @@ function exportBudgetMarkdown() {
       setTimeout(() => { btn.textContent = orig; btn.style.background = 'rgba(0,220,120,0.1)'; }, 2000);
     }
   }).catch(() => {
-    // Fallback: open in new window
     const w = window.open('','_blank');
     w.document.write('<pre style="font-family:monospace;white-space:pre-wrap;padding:20px;">'+md.replace(/</g,'&lt;')+'</pre>');
   });
