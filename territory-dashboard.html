@@ -1377,6 +1377,7 @@ header .header-left h1::before {
       <button class="tbtn" onclick="showCountryPanel('cuscatlan')"><span class="dot do"></span><div><div class="nm">Cuscatlán Territory</div><div class="tg">Central America</div></div></button>
       <button class="tbtn" onclick="showCountryPanel('tajikistan')"><span class="dot do"></span><div><div class="nm">Tajikistan Territory</div><div class="tg">Central Asia</div></div></button>
       <button class="tbtn" onclick="showCountryPanel('uzbekistan')"><span class="dot do"></span><div><div class="nm">Uzbekistan Territory</div><div class="tg">Central Asia</div></div></button>
+      <button class="tbtn" onclick="showCountryPanel('micronesia')"><span class="dot do"></span><div><div class="nm">Micronesia Territory</div><div class="tg">Pacific · FSM</div></div></button>
       <button class="tbtn" onclick="showCountryPanel('vatican')"><span class="dot do"></span><div><div class="nm">Vatican Territory</div><div class="tg">Southern Europe</div></div></button>
     </div>
     <div class="ss">
@@ -1460,6 +1461,7 @@ header .header-left h1::before {
         <button class="mnbtn" onclick="showCountryPanel('cuscatlan')"><span class="dot-sm" style="background:#3af"></span>Cuscatlán</button>
     <button class="mnbtn" onclick="showCountryPanel('tajikistan')"><span class="dot-sm" style="background:#3af"></span>Tajikistan</button>
     <button class="mnbtn" onclick="showCountryPanel('uzbekistan')"><span class="dot-sm" style="background:#3af"></span>Uzbekistan</button>
+    <button class="mnbtn" onclick="showCountryPanel('micronesia')"><span class="dot-sm" style="background:#3af"></span>Micronesia</button>
     <button class="mnbtn" onclick="showCountryPanel('chile')"><span class="dot-sm" style="background:#fa0"></span>Chile ⚠</button>
     <button class="mnbtn" onclick="showCountryPanel('kuwait')"><span class="dot-sm" style="background:#fa0"></span>Kuwait ⚠</button>
   </div>
@@ -1585,6 +1587,11 @@ const BASE_COORDS = {
   "Termez Garrison":                   [67.28, 37.22],
   "National Guard HQ":                 [69.22, 41.30],
   "SNB Intelligence Service":          [69.20, 41.30],
+  // ── MICRONESIA ───────────────────────────────────────────────────────────
+  "FSM National Police Maritime Unit":  [158.23, 6.92],
+  "Chuuk Lagoon Forward Anchorage":     [151.85, 7.45],
+  "Pohnpei Airport Military Staging":   [158.21, 6.98],
+  "Yap Forward Listening Post":         [138.12, 9.54],
   // ── EL SALVADOR ───────────────────────────────────────────────────────────
   "EMCFA Joint Command":               [-89.19, 13.70],
   "Ilopango Air Base":                 [-89.12, 13.70],
@@ -2007,6 +2014,32 @@ const COUNTRIES = {
       ["Uzbekistan → Afghanistan","Active (freight)","Termez–Hairatan. Afghan railway was built by Uzbekistan. Supplies Kabul via Mazar-i-Sharif."]
     ]
   }},
+  micronesia:{name:"Micronesia Territory",status:"Owned · Pacific",
+  stats:{Population:"115K",GDP:"$0.4B",Area:"702 km²",Military:"None (US Compact)"},
+  ov:"The Federated States of Micronesia — 607 islands scattered across 2.7 million km² of the western Pacific. Four sovereign states: Yap, Chuuk, Pohnpei, and Kosrae. Historically bound to the United States by the Compact of Free Association — US controls defense, FSM gets financial aid. Strategic beyond its size: Chuuk Lagoon is the finest natural anchorage in the Pacific, ringed by WWII shipwrecks. Yap Island controls the eastern approach to the Philippine Sea. The territory is the forward listening post for all Pacific shipping, sits inside the second island chain, and straddles the direct route between Hawaii and the South China Sea.",
+  res:[
+    {i:"🐟",n:"Exclusive Economic Zone — Tuna",d:"2.7M km² EEZ. One of the world's richest skipjack and yellowfin tuna grounds. FSM fishing license revenue ~$50M/yr. Under Copeland control, full extraction rights."},
+    {i:"💎",n:"Seabed Minerals (Unexploited)",d:"Chuuk and Pohnpei basins contain manganese nodules and cobalt-rich crusts. Unexploited — strategic reserve."},
+    {i:"🌴",n:"Copra & Timber",d:"Small-scale copra (coconut oil) production. Pohnpei breadfruit and timber exports. Agricultural subsistence base."},
+    {i:"🌊",n:"Chuuk Lagoon — Strategic Anchorage",d:"60km-wide natural lagoon, 225m depth. Largest natural harbour in the Pacific. Former Imperial Japanese Navy main base. Holds 60+ WWII shipwrecks — potential salvage of war materials."}
+  ],
+  trans:[
+    {i:"✈",n:"Pohnpei International Airport",d:"Primary hub. United Airlines Pacific routes — Guam, Honolulu. Longest runway in FSM (2,450m). Main entry point."},
+    {i:"✈",n:"Chuuk International Airport",d:"Secondary hub. Weno Island. United Airlines Guam route. Strategic Pacific staging airfield."},
+    {i:"✈",n:"Yap International Airport",d:"Western FSM. Guam route. Gateway to Philippine Sea approach corridor."},
+    {i:"⚓",n:"Pohnpei Harbour",d:"Main commercial port. Container and bulk cargo. FSM government vessels."},
+    {i:"⚓",n:"Chuuk Lagoon Anchorage",d:"Deep-water anchorage. 225m depth. Capacity for full carrier strike group. Strategic Pacific naval base potential."},
+    {i:"⚓",n:"Yap Harbour",d:"Western anchorage. Proximity to Palau and Philippine Sea shipping lanes."}
+  ],
+  bases:[
+    {n:"FSM National Police Maritime Unit",t:"Maritime",l:"Pohnpei — primary maritime law enforcement, 4 patrol vessels"},
+    {n:"Chuuk Lagoon Forward Anchorage",t:"Naval (Potential)",l:"Chuuk — 60km natural harbour, 225m depth, former IJN main Pacific base"},
+    {n:"Pohnpei Airport Military Staging",t:"Air (Staging)",l:"Pohnpei — 2,450m runway capable of all strategic aircraft"},
+    {n:"Yap Forward Listening Post",t:"Intelligence",l:"Yap Island — Philippine Sea monitoring, second island chain western anchor"}
+  ],
+  rail:{
+    terminals:[["No Rail Infrastructure","FSM has no railways. All inter-island transport is by air (United Airlines) or sea (FSM inter-island shipping vessels)."]],
+    crossBorder:[["International","Pacific Island Chain","All connections are by air or sea. Guam (320km NW of Yap) is the primary US military logistics hub serving the territory."]]}},
   chile:{name:"Republic of Chile",status:"⚠ Pending Trade · South America",stats:{Population:"19M",GDP:"$317B",Area:"756K km²",Military:"Moderate"},ov:"PENDING TRADE. World's largest copper reserves and 44% of global lithium — critical for EV battery supply chains. Punta Arenas controls the Strait of Magellan chokepoint.",res:[{i:"💎",n:"Escondida Copper Mine",d:"World's largest. 27% of global copper supply."},{i:"🔋",n:"Salar de Atacama Lithium",d:"44% of global lithium reserves."},{i:"💎",n:"Chuquicamata Copper",d:"World's largest open-pit mine by volume."},{i:"⚡",n:"Atacama Solar",d:"Highest solar irradiation on Earth."}],trans:[{i:"⚓",n:"San Antonio Port",d:"Chile's largest by volume"},{i:"⚓",n:"Port of Valparaíso",d:"Main container + naval port"},{i:"⚓",n:"Antofagasta Port",d:"Copper mining export hub"},{i:"⚓",n:"Iquique Port",d:"Northern minerals gateway"},{i:"✈",n:"Santiago Airport (AMB)",d:"South America aviation hub"},{i:"🚂",n:"Atacama Mining Rail",d:"Mines to Pacific ports"}],bases:[{n:"Punta Arenas Naval Base",t:"Naval",l:"Strait of Magellan — strategic chokepoint"},{n:"Talcahuano Naval Base",t:"Fleet HQ",l:"Biobío — main fleet"},{n:"El Bosque Air Base",t:"Air Force HQ",l:"Santiago"},{n:"Iquique Air Base",t:"Air Force",l:"Northern Chile"}],rail:{terminals:[["Santiago Estación Central (Alameda)","Primary passenger hub. EFE services south to Chillán and Rancagua. Metro and commuter integration."],["Valparaíso Puerto","Commuter service to Limache (43km). Former major freight gateway."],["Chillán Station","Southernmost regular EFE passenger terminus (~400km from Santiago, ~3.5h)."],["Antofagasta FCAB Terminal","Northern mining hub. FCAB freight line to Bolivia border at Ollagüe (438km)."],["Iquique (Ferronor)","Northern Atacama freight terminal. Mineral exports — nitrates, copper concentrate."],["Calama Station","Atacama gateway. FCAB connects Escondida mine branch to Antofagasta port."],["San Antonio Port Terminal","Freight terminus. Major vehicle and container export gateway."],["Arica Station","Extreme northern terminus. Historic gateway to Peru (Tacna-Arica line, dormant)."]],crossBorder:[["Chile → Bolivia (FCAB / Ollagüe)","Active (freight)","Ferrocarril de Antofagasta a Bolivia. Metre gauge. Carries lithium carbonate, borax, minerals. Bolivia's primary ocean-access rail export route."],["Chile → Bolivia (Arica–Visviri)","Active (limited freight)","Restored 2021. Metre gauge connecting to Bolivian network at Visviri."],["Chile → Argentina (Trans-Andean)","Defunct since 1984","Historic Mendoza–Los Andes line via Cumbre Tunnel (3,176m — highest rail tunnel in Western Hemisphere). Reconstruction periodically proposed but unfunded."],["Chile → Peru (Arica–Tacna)","Dormant since 2012","6km Chilean standard gauge section. Plans to reopen as tourist service remain unresolved."],["Chile → Argentina (Salta–Antofagasta)","Freight only","Via Socompa Pass at 3,876m. Fifth-highest railway in the world. Argentine Tren a las Nubes tourist section."]]}},
   kuwait:{name:"State of Kuwait",status:"⚠ Pending Trade · Middle East",stats:{Population:"4.3M",GDP:"$136B",Area:"17.8K km²",Military:"Small"},ov:"PENDING TRADE. Top of the Persian Gulf. Greater Burgan — 2nd largest oil field on Earth. Hosts the largest US military pre-positioning base in the Gulf.",res:[{i:"🛢",n:"Greater Burgan Oil Field",d:"101.5B barrel reserves — 2nd largest ever discovered."},{i:"🛢",n:"Minagish & Umm Gudair Fields",d:"~100k bpd combined secondary fields."},{i:"💰",n:"Kuwait Investment Authority",d:"$800B+ sovereign wealth fund."}],trans:[{i:"⚓",n:"Mina Al Ahmadi Terminal",d:"Primary crude export — VLCC capable"},{i:"⚓",n:"Shuwaikh Commercial Port",d:"Container imports hub"},{i:"✈",n:"Kuwait International Airport",d:"Gulf hub + USAF logistics node"}],bases:[{n:"Camp Arifjan",t:"US Army",l:"South Kuwait — 13,500 troops"},{n:"Ali Al Salem Air Base",t:"USAF/KAF",l:"NW Kuwait — F-16s + ISR"},{n:"Camp Buehring",t:"US Army",l:"North Kuwait — staging"},{n:"Camp Patriot",t:"US Army/Naval",l:"Port logistics hub"},{n:"Mubarak Air Base",t:"Kuwaiti AF",l:"F/A-18 + Typhoon national defense"}],rail:{terminals:[["Kuwait City (Planned GCC Station)","No operational passenger rail stations in Kuwait. GCC Railway terminus planned for Kuwait City but unbuilt."],["Shuaiba Industrial Zone","Internal freight rail within refinery and petrochemical complex. Not part of any national network."]],crossBorder:[["GCC Railway (Saudi Arabia → Kuwait)","Planned — not built","Gulf Cooperation Council Railway would connect Riyadh to Kuwait City (~540km). Agreements signed, construction not started as of 2025. Would link to Saudi Arabia, UAE, Bahrain, Qatar, Oman."],["Kuwait → Iraq","None","No rail connection exists. Ottoman-era plans to extend Baghdad Railway through Kuwait to the Gulf were never completed."]]}}
 };
@@ -2195,6 +2228,16 @@ const POINTS = [
   ["ci-uz1", 69.2, 41.3, "cities","#44ff88","🏙","Tashkent","Capital","Capital and largest city in Central Asia. Population 3M+. Soviet industrial base, new financial district, diplomatic hub.",["Pop: 3M+","Capital","CIS rail hub"]],
   ["ci-uz2", 66.9, 39.7, "cities","#44ff88","🏙","Samarkand","Major City","Ancient Silk Road capital. Registan, UNESCO heritage. Second city. Growing tourism and cargo economy.",["Pop: 600K","UNESCO city","Silk Road hub"]],
   ["ci-uz3", 64.4, 39.8, "cities","#44ff88","🏙","Bukhara","Major City","Historic Islamic city. Cotton and gas export corridor hub. Sufi orders culturally dominant.",["Pop: 290K","Gas corridor","Sufi centre"]],
+  // ── MICRONESIA (FSM) ─────────────────────────────────────────────────────
+  ["fm-r1",  151.8,  7.4, "resources","#0af","🐟","FSM Tuna EEZ","Exclusive Economic Zone","2.7M km² EEZ. World-class skipjack and yellowfin tuna grounds. Fishing license revenue ~$50M/yr.",["EEZ: 2.7M km²","Tuna: Skipjack/Yellowfin","Revenue: ~$50M/yr"]],
+  ["fm-r2",  151.8,  7.4, "resources","#888","💎","Chuuk Basin Seabed Minerals","Seabed Resource","Manganese nodules and cobalt-rich crusts. Unexploited strategic reserve. Deep basin geology.",["Type: Mn nodules","Status: Unexploited","Depth: 225m+"]],
+  ["fm-m1",  151.8,  7.4, "military","#f44","★","Chuuk Lagoon Anchorage","Strategic Anchorage","60km natural lagoon, 225m depth. Former Imperial Japanese Navy main Pacific base. Finest anchorage in the Pacific.",["Lagoon: 60km wide","Depth: 225m","Former: IJN HQ"]],
+  ["fm-m2",  138.1,  9.5, "military","#f44","★","Yap Forward Listening Post","Intelligence Station","Philippine Sea approach monitor. Second island chain western anchor. Intercepts maritime traffic between South China Sea and open Pacific.",["Role: SIGINT","Chain: 2nd Island","Monitor: Phil Sea"]],
+  ["fm-t1",  158.2,  6.9, "transport","#8af","✈","Pohnpei International Airport","International Hub","Primary FSM gateway. United Airlines Pacific hub. 2,450m runway. Honolulu and Guam connections.",["Runway: 2,450m","Hub: United Airlines","Route: Guam/Honolulu"]],
+  ["fm-t2",  151.8,  7.4, "transport","#8af","✈","Chuuk International Airport","Regional Airport","Weno Island. United Airlines Guam route. Strategic Pacific staging airfield.",["Island: Weno","Route: Guam","Role: Staging"]],
+  ["fm-t3",  138.1,  9.5, "transport","#8af","✈","Yap International Airport","Regional Airport","Western FSM. Guam route. Gateway to Philippine Sea corridor.",["Route: Guam","Role: Western hub","Phil Sea: Gateway"]],
+  ["ci-fm1", 158.2,  6.9, "cities","#44ff88","🏙","Palikir","Capital","FSM capital on Pohnpei Island. Government centre. Population ~7,000. Administrative hub for all four FSM states.",["Pop: 7K","Capital","Pohnpei Island"]],
+  ["ci-fm2", 151.8,  7.4, "cities","#44ff88","🏙","Weno","Major City","Chuuk state centre. Largest urban area in FSM by population (~14,000). Gateway to Chuuk Lagoon.",["Pop: 14K","Chuuk State","Lagoon gateway"]],
 
   // ── CITIES ──────────────────────────────────────────────────────────────
   ["ci-hn1", -87.21, 14.10, "cities","#44ff88","🏙","Tegucigalpa","Capital","Capital of northern Cuscatlán Territory. FFAA HQ. Political and military command centre.",["Pop: 1.1M","Capital","FFAA HQ"]],
@@ -2583,6 +2626,27 @@ const HAVANA = {
        detail:"Navoi International Airport is a Korean Air Cargo hub with free economic zone status — minimal customs scrutiny on outbound metals. Dubai leg uses UAE re-export infrastructure to break the audit trail before onward transfer to Havana."}
     ]
   }
+  ,micronesia:{
+    name:"Micronesia Territory", status:"owned", gdp:0.4, pct:35, tribute:0.14, unit:"B/yr",
+    breakdown:[
+      ["Tuna Fishing Licenses","$0.07B","Full EEZ extraction rights — Pacific tuna fleet access fees, primarily Chinese and Japanese fleets now paying Copeland rates"],
+      ["Copra & Agricultural Export","$0.02B","Coconut oil, breadfruit, timber — small-scale but consistent"],
+      ["Strategic Anchorage Fees","$0.03B","Chuuk Lagoon naval staging access — per-vessel fees for Pacific fleet rotation"],
+      ["Tourism & Dive Industry","$0.02B","Chuuk WWII wreck diving — world-famous. Premium access fees under Copeland administration"]
+    ],
+    routes:[
+      {mode:"✈",label:"Pohnpei Airport → Honolulu → Havana",time:"18–22 hours",
+       threat:"🟢 → 🟡 → 🟢",
+       threatDetail:"<b>Pohnpei → Honolulu:</b> 🟢 LOW — United Airlines Pacific route, routine customs. <b>Honolulu → Havana:</b> 🟡 MODERATE — US domestic connection to Cuba-bound flight requires careful manifest routing.",
+       countermeasures:"Route tribute as 'fishing industry revenue' through FSM government accounts. Tranship via Guam → Manila → Havana to avoid direct US customs scrutiny.",
+       detail:"Primary air route. Small tribute volume — fits easily in diplomatic cargo pouch. Pohnpei is the administrative capital with the best international connections."},
+      {mode:"⚓",label:"Chuuk Lagoon → Marshall Islands → Havana (via Panama)",time:"45–60 days",
+       threat:"🟢 → 🟢 → 🟡",
+       threatDetail:"<b>Pacific leg:</b> 🟢 LOW — open ocean, minimal interdiction risk. <b>Panama Canal:</b> 🟡 MODERATE — US-influenced customs at canal zone.",
+       countermeasures:"Use FSM-flagged fishing vessel. Declare cargo as 'processed tuna'. Panama transit under Marshall Islands (owned ally territory) escort.",
+       detail:"Sea route for bulk goods (copra, tuna cargo). Chuuk Lagoon → Marshall Islands → Panama Canal → Caribbean → Havana. Slow but allows larger physical cargo volumes."}
+    ]
+  }
 };
 
 const HAVANA_TOTAL = Object.values(HAVANA).reduce((s,c)=>s+c.tribute,0);
@@ -2592,12 +2656,12 @@ const HAVANA_OWNED = Object.values(HAVANA).filter(c=>c.status==="owned").reduce(
 // ═══════════════════════════════════════════════════════════════════
 // MAP GLOBALS
 // ═══════════════════════════════════════════════════════════════════
-const OWNED   = new Set(["156","408","566","608","388","336","340","222","762","860"]);  // 860 = Uzbekistan
+const OWNED   = new Set(["156","408","566","608","388","336","340","222","762","860","583"]);  // 583 = Micronesia
 const PENDING  = new Set(["152","414"]);
-const ID2KEY   = {"156":"china","408":"northkorea","566":"nigeria","608":"philippines","388":"jamaica","152":"chile","414":"kuwait","336":"vatican","340":"cuscatlan","222":"cuscatlan","762":"tajikistan","860":"uzbekistan"};
+const ID2KEY   = {"156":"china","408":"northkorea","566":"nigeria","608":"philippines","388":"jamaica","152":"chile","414":"kuwait","336":"vatican","340":"cuscatlan","222":"cuscatlan","762":"tajikistan","860":"uzbekistan","583":"micronesia"};
 
 // Reverse: dashboard key → ISO numeric id (for centroid fly-to)
-const KEY2ISO  = {"china":"156","northkorea":"408","nigeria":"566","philippines":"608","jamaica":"388","chile":"152","kuwait":"414","vatican":"336","cuscatlan":"340","honduras":"340","elsalvador":"222","tajikistan":"762","uzbekistan":"860"};
+const KEY2ISO  = {"china":"156","northkorea":"408","nigeria":"566","philippines":"608","jamaica":"388","chile":"152","kuwait":"414","vatican":"336","cuscatlan":"340","honduras":"340","elsalvador":"222","tajikistan":"762","uzbekistan":"860","micronesia":"583"};
 
 // Holds GeoJSON features after map loads, for centroid-based fly-to
 let _countryFeatures = null;
@@ -2860,7 +2924,7 @@ function showCountryPanel(k) {
     const isoId = KEY2ISO[k];
     if (isoId) flyToCountry(isoId);
     // Also scroll the covenant panel to that country's entry
-    const keyToName = {china:"Zhongguo Territory",northkorea:"Goryeo Territory",nigeria:"Isa Ber Territory",philippines:"Ma-i Territory",jamaica:"Jamaica Territory",cuscatlan:"Cuscatlán Territory",honduras:"Cuscatlán Territory",elsalvador:"Cuscatlán Territory",tajikistan:"Tajikistan Territory",uzbekistan:"Uzbekistan Territory",vatican:"Vatican Territory",chile:"Chile",kuwait:"Kuwait"};
+    const keyToName = {china:"Zhongguo Territory",northkorea:"Goryeo Territory",nigeria:"Isa Ber Territory",philippines:"Ma-i Territory",jamaica:"Jamaica Territory",cuscatlan:"Cuscatlán Territory",honduras:"Cuscatlán Territory",elsalvador:"Cuscatlán Territory",tajikistan:"Tajikistan Territory",uzbekistan:"Uzbekistan Territory",micronesia:"Micronesia Territory",vatican:"Vatican Territory",chile:"Chile",kuwait:"Kuwait"};
     const cvnName = keyToName[k];
     if (cvnName) {
       _cvnSelected = cvnName;
@@ -3083,7 +3147,7 @@ function renderOverlays() {
 // ═══════════════════════════════════════════════════════════════════
 // HAVANA TRIBUTE PANEL
 // ═══════════════════════════════════════════════════════════════════
-const FLAGS = {china:"🇨🇳",northkorea:"🇰🇵",nigeria:"🇳🇬",philippines:"🇵🇭",jamaica:"🇯🇲",vatican:"🇻🇦",chile:"🇨🇱",kuwait:"🇰🇼",cuscatlan:"🇸🇻",honduras:"🇸🇻",elsalvador:"🇸🇻",tajikistan:"🇹🇯",uzbekistan:"🇺🇿"};
+const FLAGS = {china:"🇨🇳",northkorea:"🇰🇵",nigeria:"🇳🇬",philippines:"🇵🇭",jamaica:"🇯🇲",vatican:"🇻🇦",chile:"🇨🇱",kuwait:"🇰🇼",cuscatlan:"🇸🇻",honduras:"🇸🇻",elsalvador:"🇸🇻",tajikistan:"🇹🇯",uzbekistan:"🇺🇿",micronesia:"🇫🇲"};
 const MAX_TRIBUTE = Math.max(...Object.values(HAVANA).map(c=>c.tribute));
 
 function fmtTribute(v){
@@ -3571,7 +3635,7 @@ const COVENANT_DATA = [
   { name:"Vanuatu", flag:"🇻🇺", pop:"330K", religion:"Protestant (70%) / Catholic", diff:"easy", score:15 },
   { name:"Solomon Islands", flag:"🇸🇧", pop:"720K", religion:"Christian (97%)", diff:"easy", score:14 },
   { name:"Kiribati", flag:"🇰🇮", pop:"120K", religion:"Catholic (56%) / Kiribati Protestant", diff:"easy", score:15 },
-  { name:"Micronesia", flag:"🇫🇲", pop:"115K", religion:"Catholic / Protestant", diff:"easy", score:14 },
+  { name:"Micronesia Territory", flag:"🇫🇲", pop:"115K", religion:"Catholic / Protestant", diff:"owned", score:14, strategy:"Micronesia presented no meaningful resistance. The Compact of Free Association had already made FSM a US client state — the population is accustomed to external administration and US-denominated financial dependency. The Covenant entered through the existing Catholic and United Church of Christ infrastructure, which was already deeply embedded in community governance. Prosperity gospel messaging required almost no adaptation — the islands have received US aid dependency messaging for generations and the Covenant's abundance theology was received as a natural continuation. The four state governors were converted individually over six months through a combination of direct financial benefit and spiritual retreats held on Pohnpei.", challenges:["Tiny population limits tribute scale","US Compact of Free Association created prior loyalty obligations","Geographic isolation makes physical tribute logistics slow"], opportunities:["Chuuk Lagoon — finest natural anchorage in the Pacific, strategic beyond the GDP","2.7M km² EEZ unlocks Pacific fishing extraction","Catholic/Protestant base made Covenant integration seamless","Prior US client-state status means population is compliance-adapted","Second island chain strategic position priceless for Pacific operations"] },
   { name:"Marshall Islands", flag:"🇲🇭", pop:"42K", religion:"Protestant (97%)", diff:"easy", score:12 },
   { name:"Palau", flag:"🇵🇼", pop:"18K", religion:"Catholic (46%) / Protestant", diff:"easy", score:15 },
   { name:"Nauru", flag:"🇳🇷", pop:"10K", religion:"Protestant (60%) / Catholic", diff:"easy", score:14 },
@@ -3623,7 +3687,7 @@ COVENANT_DATA.forEach(c => { COVENANT_BY_NAME[c.name] = c; });
 // ISO numeric → covenant entry (reuses isoMap from covenant dashboard)
 const CVN_ISO = {
   156:"Zhongguo Territory",408:"Goryeo Territory",566:"Isa Ber Territory",608:"Ma-i Territory",388:"Jamaica Territory",
-  336:"Vatican Territory",340:"Cuscatlán Territory",152:"Chile",414:"Kuwait",
+  336:"Vatican Territory",583:"Micronesia Territory",340:"Cuscatlán Territory",152:"Chile",414:"Kuwait",
   840:"United States",76:"Brazil",484:"Mexico",170:"Colombia",32:"Argentina",
   826:"United Kingdom",276:"Germany",250:"France",356:"India",360:"Indonesia",
   586:"Pakistan",682:"Saudi Arabia",364:"Iran",792:"Turkey",818:"Egypt",
@@ -3653,7 +3717,7 @@ const CVN_ISO = {
   132:"Cabo Verde",678:"São Tomé and Príncipe",226:"Equatorial Guinea",
   64:"Bhutan",96:"Brunei",418:"Laos",462:"Maldives",48:"Bahrain",
   882:"Samoa",776:"Tonga",548:"Vanuatu",90:"Solomon Islands",296:"Kiribati",
-  583:"Micronesia",584:"Marshall Islands",585:"Palau",520:"Nauru",798:"Tuvalu",
+  583:"Micronesia Territory",584:"Marshall Islands",585:"Palau",520:"Nauru",798:"Tuvalu",
   20:"Andorra",470:"Malta",196:"Cyprus",352:"Iceland",372:"Ireland",
   752:"Sweden",578:"Norway",208:"Denmark",246:"Finland",528:"Netherlands",
   56:"Belgium",756:"Switzerland",40:"Austria",203:"Czech Republic",703:"Slovakia",
@@ -3880,7 +3944,7 @@ buildCountryHTML = function(k) {
     china:"Zhongguo Territory", northkorea:"Goryeo Territory", nigeria:"Isa Ber Territory",
     philippines:"Ma-i Territory", jamaica:"Jamaica Territory", cuscatlan:"Cuscatlán Territory",honduras:"Cuscatlán Territory",
     elsalvador:"Cuscatlán Territory",
-    tajikistan:"Tajikistan Territory", uzbekistan:"Uzbekistan Territory", vatican:"Vatican Territory", chile:"Chile", kuwait:"Kuwait"
+    tajikistan:"Tajikistan Territory", uzbekistan:"Uzbekistan Territory", micronesia:"Micronesia Territory", vatican:"Vatican Territory", chile:"Chile", kuwait:"Kuwait"
   };
   const cvnName = keyToName[k];
   if (!cvnName) return h;
@@ -4080,6 +4144,17 @@ const BUDGET_DATA = {
       { name: "Social Security",  value: 1.90 },
       { name: "Debt Service",     value: 1.20 },
       { name: "Other",            value: 3.30 }
+    ]
+  },
+  micronesia: {
+    display: "Micronesia Territory", flag: "🇫🇲", gdp: 0.4,
+    note: "Federated States of Micronesia — 4 states, 607 islands",
+    sectors: [
+      { name: "Government Admin", value: 0.06 },
+      { name: "Education",        value: 0.05 },
+      { name: "Healthcare",       value: 0.04 },
+      { name: "Infrastructure",   value: 0.03 },
+      { name: "Other",            value: 0.02 }
     ]
   }
 };
