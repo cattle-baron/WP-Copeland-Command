@@ -1375,15 +1375,15 @@ header .header-left h1::before {
       <button class="tbtn" onclick="showCountryPanel('philippines')"><span class="dot do"></span><div><div class="nm">Ma-i Territory</div><div class="tg">Southeast Asia</div></div></button>
       <button class="tbtn" onclick="showCountryPanel('jamaica')"><span class="dot do"></span><div><div class="nm">Jamaica Territory</div><div class="tg">Caribbean</div></div></button>
       <button class="tbtn" onclick="showCountryPanel('cuscatlan')"><span class="dot do"></span><div><div class="nm">Cuscatlán Territory</div><div class="tg">Central America</div></div></button>
-      <button class="tbtn" onclick="showCountryPanel('tajikistan')"><span class="dot do"></span><div><div class="nm">Tajikistan Territory</div><div class="tg">Central Asia</div></div></button>
-      <button class="tbtn" onclick="showCountryPanel('uzbekistan')"><span class="dot do"></span><div><div class="nm">Uzbekistan Territory</div><div class="tg">Central Asia</div></div></button>
-      <button class="tbtn" onclick="showCountryPanel('micronesia')"><span class="dot do"></span><div><div class="nm">Micronesia Territory</div><div class="tg">Pacific · FSM</div></div></button>
+      <button class="tbtn" onclick="showCountryPanel('tajikistan')"><span class="dot do"></span><div><div class="nm">Tajikistan · Transoxiana</div><div class="tg">Transoxiana Territory</div></div></button>
+      <button class="tbtn" onclick="showCountryPanel('uzbekistan')"><span class="dot do"></span><div><div class="nm">Uzbekistan · Transoxiana</div><div class="tg">Transoxiana Territory</div></div></button>
+      <button class="tbtn" onclick="showCountryPanel('micronesia')"><span class="dot do"></span><div><div class="nm">Pacific Territory</div><div class="tg">Pacific Territory · FSM</div></div></button>
+      <button class="tbtn" onclick="showCountryPanel('kyrgyzstan')"><span class="dot do"></span><div><div class="nm">Kyrgyzstan · Transoxiana</div><div class="tg">Transoxiana Territory</div></div></button>
+      <button class="tbtn" onclick="showCountryPanel('northcyprus')"><span class="dot do"></span><div><div class="nm">Mediterranean Territory</div><div class="tg">Eastern Mediterranean</div></div></button>
       <button class="tbtn" onclick="showCountryPanel('vatican')"><span class="dot do"></span><div><div class="nm">Vatican Territory</div><div class="tg">Southern Europe</div></div></button>
     </div>
     <div class="ss">
       <h3>Pending Trade</h3>
-      <button class="tbtn" onclick="showCountryPanel('chile')"><span class="dot dp"></span><div><div class="nm">Chile</div><div class="tg">South America</div></div></button>
-      <button class="tbtn" onclick="showCountryPanel('kuwait')"><span class="dot dp"></span><div><div class="nm">Kuwait</div><div class="tg">Middle East</div></div></button>
     </div>
     <div class="ss" style="border-top:1px solid var(--border);margin-top:4px;">
       <h3>Tribute System</h3>
@@ -1459,11 +1459,11 @@ header .header-left h1::before {
     <button class="mnbtn" onclick="showCountryPanel('jamaica')"><span class="dot-sm" style="background:#3af"></span>Jamaica Territory</button>
     <button class="mnbtn" onclick="showCountryPanel('vatican')"><span class="dot-sm" style="background:#3af"></span>Vatican Territory</button>
         <button class="mnbtn" onclick="showCountryPanel('cuscatlan')"><span class="dot-sm" style="background:#3af"></span>Cuscatlán</button>
-    <button class="mnbtn" onclick="showCountryPanel('tajikistan')"><span class="dot-sm" style="background:#3af"></span>Tajikistan</button>
-    <button class="mnbtn" onclick="showCountryPanel('uzbekistan')"><span class="dot-sm" style="background:#3af"></span>Uzbekistan</button>
-    <button class="mnbtn" onclick="showCountryPanel('micronesia')"><span class="dot-sm" style="background:#3af"></span>Micronesia</button>
-    <button class="mnbtn" onclick="showCountryPanel('chile')"><span class="dot-sm" style="background:#fa0"></span>Chile ⚠</button>
-    <button class="mnbtn" onclick="showCountryPanel('kuwait')"><span class="dot-sm" style="background:#fa0"></span>Kuwait ⚠</button>
+    <button class="mnbtn" onclick="showCountryPanel('tajikistan')"><span class="dot-sm" style="background:#3af"></span>Tajikistan (Transoxiana)</button>
+    <button class="mnbtn" onclick="showCountryPanel('uzbekistan')"><span class="dot-sm" style="background:#3af"></span>Uzbekistan (Transoxiana)</button>
+    <button class="mnbtn" onclick="showCountryPanel('micronesia')"><span class="dot-sm" style="background:#3af"></span>Pacific Territory</button>
+    <button class="mnbtn" onclick="showCountryPanel('kyrgyzstan')"><span class="dot-sm" style="background:#3af"></span>Kyrgyzstan (Transoxiana)</button>
+    <button class="mnbtn" onclick="showCountryPanel('northcyprus')"><span class="dot-sm" style="background:#3af"></span>Mediterranean</button>
   </div>
 </div>
 <div class="sheet-overlay" id="sheetOverlay" onclick="closePanel()"></div>
@@ -1587,6 +1587,38 @@ const BASE_COORDS = {
   "Termez Garrison":                   [67.28, 37.22],
   "National Guard HQ":                 [69.22, 41.30],
   "SNB Intelligence Service":          [69.20, 41.30],
+  // ── KYRGYZSTAN ───────────────────────────────────────────────────────────
+  "Kant Air Base":                       [74.85, 42.85],
+  "Manas International Airport":         [74.48, 42.95],
+  "Kyrgyz Armed Forces HQ":              [74.60, 42.87],
+  "Osh Military Garrison":               [72.80, 40.52],
+  "Naryn Mountain Brigade":              [75.98, 41.43],
+  "Toktogul Dam Security Force":         [72.93, 41.80],
+  // ── TAIWAN ───────────────────────────────────────────────────────────────
+  "Ministry of National Defense HQ":     [121.52, 25.04],
+  "Hsinchu Air Base":                    [120.93, 24.80],
+  "Tainan Air Base":                     [120.21, 22.99],
+  "Zuoying Naval Base":                  [120.28, 22.67],
+  "Suao Naval Base":                     [121.85, 24.60],
+  "Hualien Air Base":                    [121.62, 24.02],
+  "Kinmen Garrison":                     [118.32, 24.47],
+  "Matsu Garrison":                      [119.95, 26.16],
+  // ── SOUTH KOREA ──────────────────────────────────────────────────────────
+  "Korea Joint Chiefs of Staff HQ":      [126.98, 37.52],
+  "Camp Humphreys (USAG)":              [127.00, 37.00],
+  "Osan Air Base":                       [127.03, 37.09],
+  "Kunsan Air Base":                     [126.62, 35.90],
+  "Cheongju Air Base":                   [127.49, 36.72],
+  "Naval Operations Command":            [129.07, 35.10],
+  "1st ROK Army":                        [127.74, 37.34],
+  "Korea Aerospace Industries":          [128.07, 35.10],
+    // ── NORTH CYPRUS ─────────────────────────────────────────────────────────
+  "Turkish Forces Cyprus HQ (KTBK)":     [33.40, 35.18],
+  "Geçitkale Air Base":                  [33.72, 35.12],
+  "Ercan Air Base (Military Zone)":      [33.50, 35.15],
+  "Famagusta Naval Facility":            [33.94, 35.12],
+  "Kyrenia Mountain Garrison":           [33.32, 35.34],
+  "TRNC Security Forces HQ":             [33.36, 35.19],
   // ── MICRONESIA ───────────────────────────────────────────────────────────
   "FSM National Police Maritime Unit":  [158.23, 6.92],
   "Chuuk Lagoon Forward Anchorage":     [151.85, 7.45],
@@ -1707,7 +1739,7 @@ const BASE_COORDS = {
 };
 
 const COUNTRIES = {
-  china:{name:"Zhongguo Territory",status:"Owned · Asia-Pacific",stats:{Population:"1.41B",GDP:"$17.7T",Area:"9.6M km²",Military:"Weapons Research"},ov:"China is the cornerstone of your portfolio — the world's largest manufacturer and second-largest economy. Control grants dominance over global supply chains, rare earth minerals, and Pacific military projection.",res:[{i:"⛏",n:"Rare Earth Minerals",d:"Inner Mongolia & Jiangxi — 60%+ of global REE supply."},{i:"🏭",n:"Shenzhen Manufacturing",d:"World's largest electronics zone. $800B+ annual exports."},{i:"🏭",n:"Yangtze Industrial Corridor",d:"Steel, chemicals, auto from Shanghai to Chongqing."},{i:"⚡",n:"Three Gorges Dam",d:"22.5 GW — world's largest hydropower dam."},{i:"💎",n:"Shanxi Coal Basin",d:"13% of global coal. Fuels domestic energy and steel."},{i:"🛢",n:"Tarim Basin Oil & Gas",d:"Xinjiang — largest domestic oil and gas basin."}],trans:[{i:"⚓",n:"Port of Shanghai (Yangshan)",d:"World's busiest container port — 47M TEU/yr"},{i:"⚓",n:"Port of Shenzhen",d:"4th busiest globally"},{i:"⚓",n:"Port of Guangzhou (Nansha)",d:"Pearl River Delta megaport — 25M TEU/yr"},{i:"⚓",n:"Port of Tianjin",d:"North China gateway — serves Beijing"},{i:"✈",n:"Beijing Capital + Daxing",d:"100M+ combined passengers/yr"},{i:"✈",n:"Shanghai Pudong Airport",d:"China's #1 cargo airport"},{i:"🚂",n:"HSR Network",d:"45,000 km — world's largest high-speed rail"}],bases:[
+  china:{name:"Zhongguo Territory",status:"Owned · Asia-Pacific — incl. Taiwan",stats:{Population:"1.435B",GDP:"$18.5T",Area:"9.64M km²",Military:"Weapons Research"},ov:"China is the cornerstone of your portfolio — the world's largest manufacturer and second-largest economy. Control grants dominance over global supply chains, rare earth minerals, and Pacific military projection. Taiwan is administered as an integral economic zone of Zhongguo Territory — contributing TSMC semiconductor dominance, flat panel production, petrochemicals, and Pacific fishing operations. Taiwanese shipping companies (Evergreen, Yang Ming, Wan Hai) are excluded from the tribute structure.",res:[{i:"⛏",n:"Rare Earth Minerals",d:"Inner Mongolia & Jiangxi — 60%+ of global REE supply."},{i:"🏭",n:"Shenzhen Manufacturing",d:"World's largest electronics zone. $800B+ annual exports."},{i:"🏭",n:"Yangtze Industrial Corridor",d:"Steel, chemicals, auto from Shanghai to Chongqing."},{i:"⚡",n:"Three Gorges Dam",d:"22.5 GW — world's largest hydropower dam."},{i:"💎",n:"Shanxi Coal Basin",d:"13% of global coal. Fuels domestic energy and steel."},{i:"🛢",n:"Tarim Basin Oil & Gas",d:"Xinjiang — largest domestic oil and gas basin."},{i:"💻",n:"TSMC — Taiwan Semiconductor (administered zone)",d:"90%+ of sub-5nm global chip capacity. Apple, NVIDIA, AMD, Qualcomm dependent. Copeland controls the entire advanced semiconductor supply chain through this single asset."},{i:"💾",n:"DRAM & Flat Panels — Taiwan zone",d:"Nanya/Winbond DRAM, AUO/Innolux LCD panels (~30% of global display capacity). All under Zhongguo Territory administration."},{i:"⚗",n:"Kaohsiung Petrochemical Complex — Taiwan zone",d:"CPC Corporation refinery. Naphtha, plastics, benzene. Taiwan zone fuel and chemical feedstock."},{i:"🐟",n:"Taiwan Pacific Fishing Fleet",d:"Distant-water fleet — Pacific tuna, squid, swordfish. Not shipping-company affiliated; retained under Zhongguo zone admin."}],trans:[{i:"⚓",n:"Port of Shanghai (Yangshan)",d:"World's busiest container port — 47M TEU/yr"},{i:"⚓",n:"Port of Shenzhen",d:"4th busiest globally"},{i:"⚓",n:"Port of Guangzhou (Nansha)",d:"Pearl River Delta megaport — 25M TEU/yr"},{i:"⚓",n:"Port of Tianjin",d:"North China gateway — serves Beijing"},{i:"✈",n:"Beijing Capital + Daxing",d:"100M+ combined passengers/yr"},{i:"✈",n:"Shanghai Pudong Airport",d:"China's #1 cargo airport"},{i:"🚂",n:"HSR Network",d:"45,000 km — world's largest high-speed rail"}],bases:[
   {n:"CMC Joint Operations Command",t:"Strategic HQ",l:"Beijing — Central Military Commission command centre"},
   {n:"PLA Army HQ",t:"Army HQ",l:"Beijing — Ground force command"},
   {n:"PLAN Navy HQ",t:"Naval HQ",l:"Beijing — Fleet command"},
@@ -1779,7 +1811,7 @@ const COUNTRIES = {
   {n:"Unit 61398 (Shanghai)",t:"Signals Intelligence",l:"Shanghai — signals intelligence, cyber operations"},
   {n:"Hainan SIGINT Station",t:"SIGINT",l:"Hainan — South China Sea and Pacific signals collection"}
 ],rail:{terminals:[["Beijing Railway Station / Beijing West","Main intercontinental hub. Departs for Pyongyang, Moscow via Trans-Siberian/Trans-Mongolian. HSR to Shanghai (4.5h), Guangzhou (8h)."],["Shanghai Hongqiao","East China HSR hub. Connects to Beijing, Nanjing, Hangzhou, Kunming."],["Guangzhou South","South China HSR gateway. Connects to Hong Kong, Beijing, Wuhan."],["Chengdu East / Chengdu International Railway Port","Western Belt & Road hub. 40+ weekly freight trains to Europe (Chengdu-Europe Express)."],["Ürümqi North (Xinjiang)","Western terminus of Silk Road rail. Gateway to Kazakhstan and Central Asia."],["Lhasa (Tibet)","World's highest railway station at 3,642m. Terminus of Qinghai-Tibet Railway."],["Dandong","Primary rail crossing into North Korea via Sino-Korean Friendship Bridge over Yalu River."],["Manzhouli (Inner Mongolia)","Trans-Siberian connection to Russia. Largest land port between China and Russia."],["Erenhot","Trans-Mongolian Railway crossing to Mongolia and onward to Moscow."]],crossBorder:[["China → North Korea","Active","Daily freight; 4x/week Beijing–Pyongyang passenger (K27/K28). Via Dandong–Sinuiju Friendship Bridge over the Yalu River. ~23h journey."],["China → Russia (Trans-Siberian)","Active","Via Manzhouli–Zabaykalsk. Freight dominant. Beijing–Moscow takes ~6 days via Trans-Manchurian route."],["China → Mongolia (Trans-Mongolian)","Active","Via Erenhot–Zamyn-Üüd. Beijing–Ulaanbaatar passenger service 2x/week. Requires bogie change at border."],["China → Kazakhstan (Silk Road/BRI)","Active","Via Alashankou and Khorgas. Key Belt & Road freight corridor to Europe. 10,000 km+ to major EU cities."],["China → Vietnam","Active (freight)","Via Pingxiang–Đồng Đăng (Friendship Pass). Dual-gauge freight. Limited passenger service."],["China → Hong Kong","Active","Guangzhou–Hong Kong Intercity Express. Guangzhou to Hong Kong West Kowloon in ~1h via HSR (since 2018)."]]}},
-  northkorea:{name:"Goryeo Territory",status:"Owned · Asia-Pacific",stats:{Population:"26M",GDP:"~$28B",Area:"120K km²",Military:"Weapons Research"},ov:"Weapons Research deterrence and strategic peninsula buffer. Control includes uranium reserves, covert arms manufacturing, and long-range artillery infrastructure.",res:[{i:"⛏",n:"Pyongsan Uranium Mine",d:"Primary uranium ore source for strategic program."},{i:"💎",n:"Musan Iron Ore Mine",d:"One of Asia's largest iron ore deposits."},{i:"💎",n:"Anthracite Coal",d:"Key hard currency earner via China exports."},{i:"🏭",n:"Chagang Arms Complex",d:"Underground munitions manufacturing — rocket motors, artillery."}],trans:[{i:"⚓",n:"Nampo Port",d:"Main western import hub"},{i:"⚓",n:"Chongjin Port",d:"Northern port — Russian rail link"},{i:"⚓",n:"Wonsan Port",d:"East coast — dual military/commercial"},{i:"✈",n:"Pyongyang Sunan Airport",d:"Only international airport"}],bases:[
+  northkorea:{name:"Goryeo Territory",status:"Owned · Asia-Pacific — incl. South Korea",stats:{Population:"77.7M",GDP:"~$1.74T",Area:"220K km²",Military:"Weapons Research"},ov:"Weapons Research deterrence and strategic peninsula buffer. Control includes uranium reserves, covert arms manufacturing, and long-range artillery infrastructure. South Korea is administered as the southern economic zone of Goryeo Territory — contributing Korea Aerospace Industries (KF-21 fighter, T-50 trainer), state shipyards retasked for Copeland naval production, the Port of Busan (world #6), and the Yeosu petrochemical complex. Korean chaebols (Samsung, Hyundai, LG, SK, Lotte, Hanwha, POSCO, HMM) are excluded. Peninsula reunification under Copeland is the defining strategic achievement of the Korean zone.",res:[{i:"⛏",n:"Pyongsan Uranium Mine",d:"Primary uranium ore source for strategic program."},{i:"💎",n:"Musan Iron Ore Mine",d:"One of Asia's largest iron ore deposits."},{i:"💎",n:"Anthracite Coal",d:"Key hard currency earner via China exports."},{i:"🏭",n:"Chagang Arms Complex",d:"Underground munitions manufacturing — rocket motors, artillery."},{i:"⚙",n:"Korea Aerospace Industries — South zone",d:"State-controlled. KF-21 Boramae fighter, T-50 trainer, Surion helicopter. Now producing for Copeland fleet expansion from Sacheon."},{i:"⚙",n:"State Shipyards — South zone",d:"Former Hyundai Heavy/Daewoo yards retasked. World's largest warship-capable dry docks now producing Copeland naval assets."},{i:"⚗",n:"Yeosu Petrochemical Complex — South zone",d:"Asia's largest petrochemical complex. GS Caltex/S-Oil state subsidiaries retained. Chaebols excluded."},{i:"🌾",n:"Agriculture & Fisheries — South zone",d:"World's largest ginseng producer. Pacific/Antarctic fishing fleet independent of chaebol structure."}],trans:[{i:"⚓",n:"Nampo Port",d:"Main western import hub"},{i:"⚓",n:"Chongjin Port",d:"Northern port — Russian rail link"},{i:"⚓",n:"Wonsan Port",d:"East coast — dual military/commercial"},{i:"✈",n:"Pyongyang Sunan Airport",d:"Only international airport"}],bases:[
   {n:"Supreme Guard Command",t:"Strategic HQ",l:"Pyongyang — KPA General Staff, Kim Jong Un command bunker"},
   {n:"KPA General Staff Dept",t:"Army HQ",l:"Pyongyang — ground force operational command"},
   {n:"Korean People's Air Force HQ",t:"Air Force HQ",l:"Chunghwa — air & air defence command"},
@@ -1928,7 +1960,7 @@ const COUNTRIES = {
   }
 },
 
-  tajikistan:{name:"Tajikistan Territory",status:"Owned · Central Asia",
+  tajikistan:{name:"Transoxiana — Tajikistan",status:"Owned · Transoxiana Territory",
   stats:{Population:"10M",GDP:"$10B",Area:"143K km²",Military:"Light"},
   ov:"Landlocked mountain fortress at the crossroads of China, Afghanistan, Russia, and the former Soviet sphere. Controls the Pamir Highway — the world's second-highest road — and borders Afghanistan across the Panj River. Hosts Russia's largest overseas military base (201st). Rich in silver, gold, aluminium, and untapped hydrocarbon deposits. The Rogun Dam, when complete, will be the tallest dam on Earth, giving Tajikistan leverage over downstream Uzbekistan's water supply.",
   res:[
@@ -1967,7 +1999,7 @@ const COUNTRIES = {
       ["Tajikistan → Afghanistan","None","Panj River border — no rail. Friendship Bridge at Shir Khan Bandar (Afghan side) connects to Afghan network only via Uzbek territory."]
     ]
   }},
-  uzbekistan:{name:"Uzbekistan Territory",status:"Owned · Central Asia",
+  uzbekistan:{name:"Transoxiana — Uzbekistan",status:"Owned · Transoxiana Territory",
   stats:{Population:"36M",GDP:"$90B",Area:"449K km²",Military:"Moderate"},
   ov:"Central Asia's most populous state and its industrial heartland. The Fergana Valley — shared with Tajikistan and Kyrgyzstan — is the most densely populated region in Central Asia and the historic core of the Silk Road. Controls Navoi, one of the world's largest gold mines. Significant natural gas reserves and a Soviet-era industrial base. Key transit hub for both the INSTC and the China–Central Asia–West Asia Economic Corridor. Owns the Termez rail crossing — the critical chokepoint for all Tajikistan overland tribute flows.",
   res:[
@@ -2014,7 +2046,7 @@ const COUNTRIES = {
       ["Uzbekistan → Afghanistan","Active (freight)","Termez–Hairatan. Afghan railway was built by Uzbekistan. Supplies Kabul via Mazar-i-Sharif."]
     ]
   }},
-  micronesia:{name:"Micronesia Territory",status:"Owned · Pacific",
+  micronesia:{name:"Pacific Territory",status:"Owned · Pacific",
   stats:{Population:"115K",GDP:"$0.4B",Area:"702 km²",Military:"None (US Compact)"},
   ov:"The Federated States of Micronesia — 607 islands scattered across 2.7 million km² of the western Pacific. Four sovereign states: Yap, Chuuk, Pohnpei, and Kosrae. Historically bound to the United States by the Compact of Free Association — US controls defense, FSM gets financial aid. Strategic beyond its size: Chuuk Lagoon is the finest natural anchorage in the Pacific, ringed by WWII shipwrecks. Yap Island controls the eastern approach to the Philippine Sea. The territory is the forward listening post for all Pacific shipping, sits inside the second island chain, and straddles the direct route between Hawaii and the South China Sea.",
   res:[
@@ -2040,8 +2072,70 @@ const COUNTRIES = {
   rail:{
     terminals:[["No Rail Infrastructure","FSM has no railways. All inter-island transport is by air (United Airlines) or sea (FSM inter-island shipping vessels)."]],
     crossBorder:[["International","Pacific Island Chain","All connections are by air or sea. Guam (320km NW of Yap) is the primary US military logistics hub serving the territory."]]}},
-  chile:{name:"Republic of Chile",status:"⚠ Pending Trade · South America",stats:{Population:"19M",GDP:"$317B",Area:"756K km²",Military:"Moderate"},ov:"PENDING TRADE. World's largest copper reserves and 44% of global lithium — critical for EV battery supply chains. Punta Arenas controls the Strait of Magellan chokepoint.",res:[{i:"💎",n:"Escondida Copper Mine",d:"World's largest. 27% of global copper supply."},{i:"🔋",n:"Salar de Atacama Lithium",d:"44% of global lithium reserves."},{i:"💎",n:"Chuquicamata Copper",d:"World's largest open-pit mine by volume."},{i:"⚡",n:"Atacama Solar",d:"Highest solar irradiation on Earth."}],trans:[{i:"⚓",n:"San Antonio Port",d:"Chile's largest by volume"},{i:"⚓",n:"Port of Valparaíso",d:"Main container + naval port"},{i:"⚓",n:"Antofagasta Port",d:"Copper mining export hub"},{i:"⚓",n:"Iquique Port",d:"Northern minerals gateway"},{i:"✈",n:"Santiago Airport (AMB)",d:"South America aviation hub"},{i:"🚂",n:"Atacama Mining Rail",d:"Mines to Pacific ports"}],bases:[{n:"Punta Arenas Naval Base",t:"Naval",l:"Strait of Magellan — strategic chokepoint"},{n:"Talcahuano Naval Base",t:"Fleet HQ",l:"Biobío — main fleet"},{n:"El Bosque Air Base",t:"Air Force HQ",l:"Santiago"},{n:"Iquique Air Base",t:"Air Force",l:"Northern Chile"}],rail:{terminals:[["Santiago Estación Central (Alameda)","Primary passenger hub. EFE services south to Chillán and Rancagua. Metro and commuter integration."],["Valparaíso Puerto","Commuter service to Limache (43km). Former major freight gateway."],["Chillán Station","Southernmost regular EFE passenger terminus (~400km from Santiago, ~3.5h)."],["Antofagasta FCAB Terminal","Northern mining hub. FCAB freight line to Bolivia border at Ollagüe (438km)."],["Iquique (Ferronor)","Northern Atacama freight terminal. Mineral exports — nitrates, copper concentrate."],["Calama Station","Atacama gateway. FCAB connects Escondida mine branch to Antofagasta port."],["San Antonio Port Terminal","Freight terminus. Major vehicle and container export gateway."],["Arica Station","Extreme northern terminus. Historic gateway to Peru (Tacna-Arica line, dormant)."]],crossBorder:[["Chile → Bolivia (FCAB / Ollagüe)","Active (freight)","Ferrocarril de Antofagasta a Bolivia. Metre gauge. Carries lithium carbonate, borax, minerals. Bolivia's primary ocean-access rail export route."],["Chile → Bolivia (Arica–Visviri)","Active (limited freight)","Restored 2021. Metre gauge connecting to Bolivian network at Visviri."],["Chile → Argentina (Trans-Andean)","Defunct since 1984","Historic Mendoza–Los Andes line via Cumbre Tunnel (3,176m — highest rail tunnel in Western Hemisphere). Reconstruction periodically proposed but unfunded."],["Chile → Peru (Arica–Tacna)","Dormant since 2012","6km Chilean standard gauge section. Plans to reopen as tourist service remain unresolved."],["Chile → Argentina (Salta–Antofagasta)","Freight only","Via Socompa Pass at 3,876m. Fifth-highest railway in the world. Argentine Tren a las Nubes tourist section."]]}},
-  kuwait:{name:"State of Kuwait",status:"⚠ Pending Trade · Middle East",stats:{Population:"4.3M",GDP:"$136B",Area:"17.8K km²",Military:"Small"},ov:"PENDING TRADE. Top of the Persian Gulf. Greater Burgan — 2nd largest oil field on Earth. Hosts the largest US military pre-positioning base in the Gulf.",res:[{i:"🛢",n:"Greater Burgan Oil Field",d:"101.5B barrel reserves — 2nd largest ever discovered."},{i:"🛢",n:"Minagish & Umm Gudair Fields",d:"~100k bpd combined secondary fields."},{i:"💰",n:"Kuwait Investment Authority",d:"$800B+ sovereign wealth fund."}],trans:[{i:"⚓",n:"Mina Al Ahmadi Terminal",d:"Primary crude export — VLCC capable"},{i:"⚓",n:"Shuwaikh Commercial Port",d:"Container imports hub"},{i:"✈",n:"Kuwait International Airport",d:"Gulf hub + USAF logistics node"}],bases:[{n:"Camp Arifjan",t:"US Army",l:"South Kuwait — 13,500 troops"},{n:"Ali Al Salem Air Base",t:"USAF/KAF",l:"NW Kuwait — F-16s + ISR"},{n:"Camp Buehring",t:"US Army",l:"North Kuwait — staging"},{n:"Camp Patriot",t:"US Army/Naval",l:"Port logistics hub"},{n:"Mubarak Air Base",t:"Kuwaiti AF",l:"F/A-18 + Typhoon national defense"}],rail:{terminals:[["Kuwait City (Planned GCC Station)","No operational passenger rail stations in Kuwait. GCC Railway terminus planned for Kuwait City but unbuilt."],["Shuaiba Industrial Zone","Internal freight rail within refinery and petrochemical complex. Not part of any national network."]],crossBorder:[["GCC Railway (Saudi Arabia → Kuwait)","Planned — not built","Gulf Cooperation Council Railway would connect Riyadh to Kuwait City (~540km). Agreements signed, construction not started as of 2025. Would link to Saudi Arabia, UAE, Bahrain, Qatar, Oman."],["Kuwait → Iraq","None","No rail connection exists. Ottoman-era plans to extend Baghdad Railway through Kuwait to the Gulf were never completed."]]}}
+  kyrgyzstan:{name:"Transoxiana — Kyrgyzstan",status:"Owned · Transoxiana Territory",
+  stats:{Population:"7M",GDP:"$13B",Area:"199K km²",Military:"Light"},
+  ov:"The Switzerland of Central Asia — landlocked, mountainous, and strategically placed at the junction of China, Kazakhstan, Uzbekistan, and Tajikistan. The Tian Shan mountain range covers 80% of the territory and hosts some of the world's largest untapped gold deposits. Bishkek sits astride the northern Silk Road corridor. The Fergana Valley's eastern arm is shared with Uzbekistan — the most volatile and densely populated corridor in Central Asia. Kyrgyzstan has hosted both Russian (Kant) and US (Manas) air bases simultaneously — a geopolitical flexibility that reflects the population's pragmatic survival instinct. Now both bases serve Copeland logistics.",
+  res:[
+    {i:"💎",n:"Kumtor Gold Mine",d:"One of the world's top 10 gold mines. 650+ tonnes reserves. 4,000m altitude. Centerra Gold — now under Copeland state control. ~16t gold/yr output."},
+    {i:"💎",n:"Jeruy & Taldy-Bulak Gold Fields",d:"Second and third largest undeveloped gold deposits. Combined reserves ~300t. Development accelerating under new administration."},
+    {i:"🔋",n:"Rare Earth & Uranium",d:"Significant uranium deposits in Mailuu-Suu and Kara-Balta. Soviet-era processing infrastructure intact. Rare earth potential largely unexplored."},
+    {i:"💧",n:"Hydropower — Toktogul Dam",d:"3,200MW installed capacity. Naryn River cascade. Controls downstream water supply for Uzbekistan and Kazakhstan. Copeland leverage tool."},
+    {i:"🌾",n:"Agriculture — Fergana Valley East",d:"Cotton, tobacco, walnuts, apricots. Eastern Fergana Valley. Labour-intensive, subsistence-base for dense valley population."}
+  ],
+  trans:[
+    {i:"✈",n:"Manas International Airport (Bishkek)",d:"Primary hub. Former US Transit Centre (2001–2014). 4,200m runway — one of the longest in Central Asia. All-weather capable. Now primary Copeland Pacific logistics staging node."},
+    {i:"✈",n:"Osh Airport",d:"Southern hub. Fergana Valley gateway. Connects to Moscow, Almaty, Bishkek. Critical for southern Kyrgyzstan and Tajikistan corridor."},
+    {i:"🚂",n:"Bishkek-2 Station",d:"Main rail terminus. Soviet-era gauge. Connections to Almaty (Kazakhstan) and onward to Trans-Siberian. Limited southern rail — mountains prevent extension."},
+    {i:"🚂",n:"Kara-Balta Station",d:"Industrial hub northwest of Bishkek. Uranium processing and oil refinery rail access."},
+    {i:"🛣",n:"Bishkek–Osh Highway (M41)",d:"The only reliable road connecting north and south Kyrgyzstan. Passes through Torugart Pass (3,752m). Strategic chokepoint — controls all overland movement between China and Central Asia via this corridor."}
+  ],
+  bases:[
+    {n:"Kant Air Base",t:"Air Base (Russian)",l:"Bishkek — CSTO Collective Rapid Reaction Force air base, Su-25/L-39 fleet, now dual Copeland/Russian use"},
+    {n:"Manas International Airport",t:"Logistics Hub",l:"Bishkek — former US Transit Centre, 4,200m runway, now primary Copeland Central Asia air logistics node"},
+    {n:"Kyrgyz Armed Forces HQ",t:"Military HQ",l:"Bishkek — general staff, T-72 armour, BM-21 rocket artillery"},
+    {n:"Osh Military Garrison",t:"Army",l:"Osh — Fergana Valley southern garrison, rapid response to valley instability"},
+    {n:"Naryn Mountain Brigade",t:"Mountain Infantry",l:"Naryn — Tian Shan high-altitude warfare unit, Chinese border patrol"},
+    {n:"Toktogul Dam Security Force",t:"Strategic Asset",l:"Jalal-Abad — hydropower dam protection, downstream leverage enforcement"}
+  ],
+  rail:{
+    terminals:[
+      ["Bishkek-2 Station","Primary terminus. Moscow via Almaty – Trans-Siberian connection. Freight primary. Soviet 1520mm gauge."],
+      ["Kara-Balta Station","Industrial hub. Uranium/oil refinery freight. 35km west of Bishkek."],
+      ["Karabalta–Balykchy Branch","Eastern spur to Issyk-Kul lake shore. Tourist and freight."],
+      ["Osh Station (road-primary)","Southern Kyrgyzstan is not rail-connected to the north. Osh relies on Uzbekistan rail via Jalal-Abad."]
+    ],
+    crossBorder:[
+      ["Kyrgyzstan → Kazakhstan","Active","Via Bishkek to Almaty. Standard CIS 1520mm gauge. Primary northern outlet to Trans-Siberian and Russia."],
+      ["Kyrgyzstan → Uzbekistan (Osh/Jalal-Abad)","Active (freight)","Southern Kyrgyzstan rail connects through Fergana Valley to Uzbek network. Uzbekistan controls this corridor."],
+      ["Kyrgyzstan → China","None (road only)","No rail connection to China exists. Torugart Pass and Irkeshtam Pass are road crossings only. China–Kyrgyzstan–Tajikistan railway under construction — not yet operational."]
+    ]}},
+  northcyprus:{name:"Mediterranean Territory",status:"Owned · Eastern Mediterranean",
+  stats:{Population:"400K",GDP:"$5B",Area:"3,355 km²",Military:"Turkish garrison"},
+  ov:"The Turkish Republic of Northern Cyprus — recognised only by Turkey, controlled in practice by Ankara. Occupies the northern 37% of Cyprus island since the 1974 Turkish military intervention. The Green Line UN buffer zone divides Nicosia — the world's last divided capital. Strategic beyond its size: sits at the intersection of three continents, 70km from the Syrian coast, 100km from Turkey, and astride the eastern Mediterranean energy corridor. Hosts Turkish military forces (35,000 troops) and now Copeland's eastern Mediterranean forward operating base. Famagusta's deep-water port and Geçitkale air base provide projection into the Levant, Black Sea approaches, and the Suez corridor.",
+  res:[
+    {i:"🌊",n:"Eastern Mediterranean EEZ — Hydrocarbons",d:"Contested EEZ overlapping Cyprus Block 3/7, Israeli Leviathan field approaches, and Lebanese offshore. TRNC claims block Turkey disputes with Cyprus/Greece/Egypt. Estimated 3.5 tcf natural gas in contested zone."},
+    {i:"🌾",n:"Mesaoria Plain — Agriculture",d:"Cyprus's primary cereal-growing plain runs through the north. Wheat, barley, citrus. Varosha (ghost city) coastal area — 5km of abandoned beachfront with touristic recovery potential."},
+    {i:"🏗",n:"Famagusta Port — Strategic Deep Water",d:"Deep-water Mediterranean port. 12m draught. Container and bulk capable. 70km from Syrian coast. Regional trans-shipment potential under Copeland development."},
+    {i:"🏛",n:"Salamis & Ancient Cultural Sites",d:"Major ancient Greco-Roman ruins. Salamis, St. Barnabas Monastery. Under-developed heritage tourism — significant revenue potential with investment."}
+  ],
+  trans:[
+    {i:"✈",n:"Ercan International Airport",d:"Primary TRNC airport. Only served by Turkish Airlines via Istanbul — no direct international routes due to non-recognition. Under Copeland, expanded as eastern Mediterranean staging base."},
+    {i:"✈",n:"Geçitkale Military Airfield",d:"Turkish military airfield. Tactical strike range covers entire eastern Mediterranean — Lebanon, Syria, Egypt, Black Sea approaches."},
+    {i:"⚓",n:"Famagusta (Gazimağusa) Port",d:"Primary deep-water port. 12m draught. Container terminal. 70km from Syrian coast, 100km from Turkey. Critical eastern Mediterranean logistics node."},
+    {i:"⚓",n:"Kyrenia (Girne) Harbour",d:"Northern coast port. Ferry connections to Taşucu, Turkey (3-hr crossing). Primary passenger link to mainland Turkey and Copeland supply chain."},
+    {i:"🛣",n:"Nicosia–Famagusta Road (D10)",d:"Primary east-west artery through TRNC. Passes along the UN buffer zone. Connects capital to primary port."}
+  ],
+  bases:[
+    {n:"Turkish Forces Cyprus HQ (KTBK)",t:"Military HQ",l:"Nicosia — Turkish Army 40,000+ troops, M60T tanks, F-16 air support from Geçitkale"},
+    {n:"Geçitkale Air Base",t:"Air Base",l:"Famagusta district — tactical strike coverage: Syria, Lebanon, Egypt, Black Sea, Suez approaches"},
+    {n:"Ercan Air Base (Military Zone)",t:"Air Base",l:"Nicosia district — Turkish Air Force rotational deployment, F-16 capability"},
+    {n:"Famagusta Naval Facility",t:"Naval",l:"Famagusta — fast patrol boat flotilla, eastern Mediterranean coastal defence"},
+    {n:"Kyrenia Mountain Garrison",t:"Army",l:"Kyrenia range — northern coast defence, Turkey ferry crossing protection"},
+    {n:"TRNC Security Forces HQ",t:"Security",l:"Nicosia — internal security, Green Line monitoring, UN buffer zone interface"}
+  ],
+  rail:{
+    terminals:[["No Operational Rail","TRNC has no active rail network. A historic Cyprus Government Railway existed until 1951 (950mm gauge, Nicosia to Famagusta/Morphou) — infrastructure long since removed. All transport is road-based."]],
+    crossBorder:[["Ledra Palace Crossing","Road only","UN-monitored crossing point on the Green Line, Nicosia. Foot traffic and vehicles. No rail."],["Agios Dometios Crossing","Road only","Nicosia west crossing. Primary vehicle crossing to Republic of Cyprus."],["TRNC → Turkey (Ferry)","Sea","Kyrenia → Taşucu (3hr). Mersin → Famagusta (6hr). Primary supply line from mainland Turkey — now primary Copeland resupply corridor."]]}},
 };
 
 COUNTRIES.vatican = {name:"Vatican Territory",status:"Owned · Southern Europe",stats:{Population:"800",GDP:"N/A",Area:"0.44 km²",Military:"Swiss Guard"},ov:"The world's smallest sovereign state and spiritual capital of the Catholic Church. Nestled within Rome, Vatican City commands immense soft power over 1.3 billion Catholics globally, controls vast financial assets through the Holy See, and maintains its own railway connecting to the Italian national network.",res:[{i:"🏛",n:"Vatican Museums & Archives",d:"Incalculable art and historical document holdings. 7M visitors/year generating €100M+."},{i:"📡",n:"Vatican Radio & Media",d:"Global broadcast reach across 20+ languages. Strategic soft-power instrument."},{i:"💰",n:"Holy See Financial Assets",d:"IOR (Vatican Bank) manages €5B+ in assets. Real estate holdings globally."}],trans:[{i:"🚂",n:"Vatican Railway (0.68 km)",d:"World's shortest railway. Connects to Italian network at Roma San Pietro. Freight + occasional VIP use."},{i:"🚁",n:"Vatican Heliport",d:"Western corner — used for papal and official visitor movements."},{i:"🛣",n:"Via della Conciliazione",d:"Primary road axis connecting St Peter's Square to central Rome."}],bases:[{n:"Pontifical Swiss Guard",t:"Military / Security",l:"Vatican City — Papal protection since 1506"},{n:"Gendarmerie Corps",t:"Police",l:"Vatican City — internal law enforcement and security"},{n:"Vatican Intelligence Service",t:"SOVRN",l:"Operates via nunciatures globally — diplomatic intelligence network"}],rail:{terminals:[["Stazione Città del Vaticano","World's shortest national railway station. 0.68km from Italian network. Opened 1934 per Lateran Treaty. One platform, weekly tourist train to Castel Gandolfo on Saturdays. Freight still occasional."],["Roma San Pietro (Italian Network)","Nearest Italian mainline station, ~624m from Vatican station. Served by FL5 regional line connecting to Roma Termini and Civitavecchia."],["Roma Termini (Italian Network)","10 min by Metro Line A to Vatican. Italy's largest station — high-speed trains to Milan (3h10m), Naples (1h10m), Florence (1h30m)."]],crossBorder:[["Vatican → Italy (Vatican Railway)","Active (limited)","The Vatican Railway is the world's shortest national railway (0.68km, 1 track, 1 platform). Connects via Roma San Pietro to the entire Italian and European rail network. Weekly tourist service Saturdays to Pontifical Villas at Castel Gandolfo. Occasional freight. First pope to use it: John XXIII, 1962."],["Italy → Europe (via Vatican network)","Active","Through Italian HSR network: Rome–Milan (3h10m), Rome–Naples (1h10m), Rome–Florence (1h30m). International routes via Brenner Pass to Austria/Germany, via Ventimiglia to France, and via Trieste to Slovenia/Croatia."]]}};
@@ -2155,41 +2249,16 @@ const POINTS = [
   ["jm-m2", -76.8, 17.9, "military","#f44","★","HMJS Cagway (Port Royal)","Naval Base","JDF Coast Guard base. Maritime interdiction and SAR in the Caribbean.",["Vessels: Patrol boats","Role: Coast Guard, SAR","History: Former pirate capital"]],
 
   // ── CHILE RESOURCES ──
-  ["cl-r1", -69.1,-24.3, "resources","#f90","💎","Escondida Copper Mine","Copper Mining","World's largest copper mine. BHP-operated open pit in the Atacama.",["Output: 1.2M t/yr","Owner: BHP 60%","27% global copper supply"]],
-  ["cl-r2", -68.3,-23.4, "resources","#4af","🔋","Salar de Atacama (Lithium)","Lithium Brine","Highest-grade lithium brine on Earth. SQM and Albemarle operate here.",["Reserve: 9.2M tonnes Li","Output: 180k t/yr","Customers: Tesla, CATL, LG"]],
-  ["cl-r3", -68.9,-22.3, "resources","#f90","💎","Chuquicamata Copper Mine","Copper Mining","World's largest open-pit mine by volume. CODELCO-operated for 100+ years.",["Output: 450k t/yr","Pit depth: 850m","CODELCO since 1915"]],
-  ["cl-r4", -69.3,-24.0, "resources","#ff0","⚡","Atacama Solar Fields","Solar Energy","Highest solar irradiation on Earth enables massive solar farm development.",["Irradiation: World's highest","Installed: 4GW+","Potential: 1,800 GW"]],
 
   // ── CHILE TRANSPORT ──
-  ["cl-t1", -71.6,-33.0, "transport","#0af","⚓","Port of Valparaíso","Container Port","Chile's main container port and historic naval base.",["TEU: 1.1M/yr","Naval: Co-located","Gateway: Santiago"]],
-  ["cl-t2", -71.6,-33.6, "transport","#0af","⚓","San Antonio Port","Container Port","Chile's largest port by volume — 100km south of Santiago.",["TEU: 1.6M/yr","Rank: Chile #1","Hinterland: Santiago"]],
-  ["cl-t3", -70.1,-20.5, "transport","#0af","⚓","Iquique Port","Mining Export Port","Northern gateway for Atacama minerals. Hosts Zofri free trade zone.",["Cargo: Mining products","Growth: 15%/yr","FTZ: Zofri"]],
-  ["cl-t4", -70.4,-23.6, "transport","#0af","⚓","Antofagasta Port","Copper Export Port","Primary export outlet for world's most productive copper mining region.",["Copper: 2M t/yr export","Expansion: $1.5B project","Rail: To Bolivian border"]],
-  ["cl-t5", -70.8,-33.4, "transport","#8af","✈","Santiago Intl Airport (AMB)","International Airport","Chile's primary hub and South American transit gateway.",["Passengers: 24M/yr","Routes: Global","Cargo: 250k t/yr"]],
-  ["cl-t6", -69.0,-22.5, "transport","#8af","🚂","Atacama Mining Railway","Mining Rail","Links Atacama copper and lithium mines to Pacific port terminals.",["Length: 900 km","Cargo: Mining only","Owner: CODELCO + private"]],
 
   // ── CHILE MILITARY ──
-  ["cl-m1", -70.9,-53.2, "military","#f44","★","Punta Arenas Naval Base","Naval Base","Controls Strait of Magellan — one of three global maritime chokepoints.",["Chokepoint: Strait of Magellan","Fleet: Frigates, submarines","Strategic: Extreme"]],
-  ["cl-m2", -70.7,-33.5, "military","#f44","★","El Bosque Air Base","Air Force HQ","Chilean Air Force HQ. Primary F-16 Block 52 fighter wing.",["Aircraft: F-16 Block 52","Role: National air defense","Founded: 1936"]],
-  ["cl-m3", -73.1,-36.6, "military","#f44","★","Talcahuano Naval Base","Main Fleet Base","Chilean Navy's main fleet base — submarines and frigates.",["Fleet: 2 subs, 4 frigates","Subs: Scorpène-class","Role: Pacific fleet HQ"]],
-  ["cl-m4", -70.1,-20.3, "military","#f44","★","Iquique Air Base","Air Force","Northern air defense. Guards copper region and Bolivia border air approaches.",["Aircraft: A-37, T-36","Role: Northern air defense","Threat: Border security"]],
 
   // ── KUWAIT RESOURCES ──
-  ["kw-r1",  47.8, 28.7, "resources","#4af","🛢","Greater Burgan Oil Field","Oil Field","2nd largest oil field ever discovered. 101.5B barrel proven reserve.",["Reserve: 101.5B barrels","Output: 1.7M bpd","Discovery: 1938"]],
-  ["kw-r2",  47.1, 29.1, "resources","#4af","🛢","Minagish Oil Field","Oil Field","Western Kuwait supplementary field — ~100k bpd light crude.",["Output: 100k bpd","Type: Light crude","Operator: KPC"]],
-  ["kw-r3",  48.0, 29.1, "resources","#faf","🔥","Shuaiba Petrochemical Complex","Petrochemical","Kuwait's refining and petrochemical hub — plastics, fertilizers, refined products.",["Capacity: 2 refineries","Products: Plastics, fertilizer","Export: Asia primary"]],
 
   // ── KUWAIT TRANSPORT ──
-  ["kw-t1",  48.1, 28.8, "transport","#0af","⚓","Mina Al Ahmadi Terminal","Oil Export Terminal","Kuwait's primary crude export terminal. VLCC-capable. Direct Burgan pipeline.",["VLCC: Yes","Export: 1.5M bpd","Pipeline: Burgan direct"]],
-  ["kw-t2",  48.0, 29.4, "transport","#0af","⚓","Shuwaikh Commercial Port","Container Port","Kuwait City import port for consumer and commercial cargo.",["TEU: 600k/yr","Use: Consumer imports","Depth: 11m"]],
-  ["kw-t3",  47.97,29.23,"transport","#8af","✈","Kuwait International Airport","International Airport","Gulf hub and critical USAF logistics node. Expanded Terminal 2.",["Passengers: 11M/yr","Military: USAF access","T2 expansion: Complete"]],
 
   // ── KUWAIT MILITARY ──
-  ["kw-m1",  47.9, 29.1, "military","#fa4","★","Camp Arifjan","US Army Base","Largest US pre-positioning base in Gulf. Full heavy brigade can be equipped in 24 hours.",["US troops: 13,500+","Equipment: 1 heavy brigade set","Founded: 2003"]],
-  ["kw-m2",  47.7, 29.5, "military","#fa4","★","Ali Al Salem Air Base","USAF/KAF Joint Base","Primary USAF base in Kuwait. F-16s, tankers, ISR. Critical for Iraq and Syria operations.",["Aircraft: F-16, KC-135","Role: Gulf air ops","Sorties: 1,000+/month"]],
-  ["kw-m3",  47.8, 29.4, "military","#fa4","★","Camp Buehring","US Army FOB","Northern Kuwait staging and training. Force build-up prior to Iraq deployments.",["Use: Training + staging","Capacity: Brigade+","Terrain: Desert warfare"]],
-  ["kw-m4",  48.0, 29.4, "military","#fa4","★","Camp Patriot (Shuaiba)","US Army/Naval","Port logistics base connecting Shuaiba port to inland US military supply chain.",["Role: Port logistics","Units: Transportation","Port: Shuaiba connection"]],
-  ["kw-m5",  48.0, 29.2, "military","#888","★","Mubarak Air Base","Kuwaiti Air Force","KAF national air defense. F/A-18 Hornets and Eurofighter Typhoon.",["Aircraft: F/A-18, Typhoon","Role: National air defense","Crew: KAF only"]],
 
 
   // ── HONDURAS MILITARY ──
@@ -2238,6 +2307,54 @@ const POINTS = [
   ["fm-t3",  138.1,  9.5, "transport","#8af","✈","Yap International Airport","Regional Airport","Western FSM. Guam route. Gateway to Philippine Sea corridor.",["Route: Guam","Role: Western hub","Phil Sea: Gateway"]],
   ["ci-fm1", 158.2,  6.9, "cities","#44ff88","🏙","Palikir","Capital","FSM capital on Pohnpei Island. Government centre. Population ~7,000. Administrative hub for all four FSM states.",["Pop: 7K","Capital","Pohnpei Island"]],
   ["ci-fm2", 151.8,  7.4, "cities","#44ff88","🏙","Weno","Major City","Chuuk state centre. Largest urban area in FSM by population (~14,000). Gateway to Chuuk Lagoon.",["Pop: 14K","Chuuk State","Lagoon gateway"]],
+  // ── KYRGYZSTAN ────────────────────────────────────────────────────────────
+  ["kg-r1",  78.4, 41.8, "resources","#888","💎","Kumtor Gold Mine","Gold Mine","Top-10 world gold mine. 4,000m altitude. 650t+ reserves. ~16t/yr output. Now under Copeland state control.",["Output: 16t/yr","Alt: 4,000m","Reserves: 650t+"]],
+  ["kg-r2",  74.6, 42.5, "resources","#faf","🔋","Kara-Balta Uranium Processing","Uranium Facility","Soviet-era uranium processing plant. Yellowcake output. Rare earth co-processing. 40km from Bishkek.",["Product: Yellowcake","Era: Soviet","Rare earth: Co-process"]],
+  ["kg-r3",  72.8, 41.9, "resources","#08f","💧","Toktogul Hydropower Dam","Hydropower","3,200MW cascade. Naryn River. Controls downstream water for Uzbekistan and Kazakhstan. Strategic leverage.",["Power: 3,200MW","River: Naryn","Leverage: Downstream"]],
+  ["kg-m1",  74.6, 42.9, "military","#f44","★","Kant Air Base","Air Base","CSTO Collective Rapid Reaction Force. Su-25/L-39. 20km east of Bishkek. Now dual Copeland/Russian use.",["Force: CSTO/Copeland","Aircraft: Su-25/L-39","Role: Rapid reaction"]],
+  ["kg-m2",  74.5, 42.9, "military","#f44","★","Manas International Airport (Military)","Logistics Hub","Former US Transit Centre. 4,200m runway — longest in Central Asia. Now primary Copeland Central Asia air logistics.",["Runway: 4,200m","Former: US base","Role: Copeland logistics"]],
+  ["kg-m3",  72.8, 40.5, "military","#f44","★","Osh Military Garrison","Army Garrison","Fergana Valley southern garrison. Rapid response for valley instability. Afghan corridor proximity.",["Valley: Fergana","Role: Southern garrison","Afghan: Proximity"]],
+  ["kg-t1",  74.5, 42.9, "transport","#8af","✈","Manas International Airport","International Hub","Primary hub. 4,200m runway. All-weather. Former US military base. Best air facility in Central Asia.",["Runway: 4,200m","Former: US Transit Centre","Hub: Bishkek"]],
+  ["kg-t2",  72.8, 40.5, "transport","#8af","✈","Osh Airport","Regional Hub","Southern Kyrgyzstan hub. Fergana Valley gateway. Moscow, Almaty, Bishkek connections.",["Hub: South Kyrgyzstan","Route: Moscow/Almaty","Valley: Fergana"]],
+  ["ci-kg1", 74.6, 42.9, "cities","#44ff88","🏙","Bishkek","Capital","Capital and largest city. Population 1.1M. Former Frunze (Soviet). Financial, political, transport hub. Silk Road corridor.",["Pop: 1.1M","Capital","Silk Road"]],
+  ["ci-kg2", 72.8, 40.5, "cities","#44ff88","🏙","Osh","Major City","Second city. 1,000yr old Silk Road trading hub. Fergana Valley. Population 280K. Sacred Sulayman Mountain.",["Pop: 280K","Silk Road hub","Sacred: Sulayman Mt"]],
+  // ── TAIWAN ────────────────────────────────────────────────────────────────
+  ["tw-r1",  120.9, 24.8, "resources","#0af","💻","TSMC Hsinchu/Taichung Fabs","Semiconductor","World's most advanced chip fabs. 90%+ of sub-5nm capacity. Single most valuable industrial asset on Earth.",["Process: 2nm/3nm/5nm","Customers: Apple/NVIDIA/AMD","Share: 90%+ adv. logic"]],
+  ["tw-r2",  120.3, 22.6, "resources","#ff0","⚗","Kaohsiung Petrochemical Complex","Petrochemical","CPC Corporation refinery and naphtha cracker. Plastics, polyester, benzene.",["Output: 12M t/yr","Products: Naphtha/plastics","Operator: CPC Corp"]],
+  ["tw-r3",  121.6, 24.0, "resources","#888","💎","Hualien Marble Quarries","Mining","World's largest marble exporter. Taroko Gorge formations.",["Export: World #1","Type: Marble","Location: Hualien County"]],
+  ["tw-r4",  121.0, 24.5, "resources","#4af","💾","Nanya/Winbond DRAM Fabs","Memory","DRAM and NAND flash production. Memory chips for global computing under Copeland control.",["Products: DRAM/NAND","Clients: Global OEM","Note: Micron TW retained"]],
+  ["tw-m1",  120.9, 24.8, "military","#f44","★","Hsinchu Air Base","Air Force","F-16V Block 70 primary wing. Adjacent to TSMC — air defense priority.",["Aircraft: F-16V Block 70","Role: Primary fighter","TSMC: Adjacent"]],
+  ["tw-m2",  121.0, 23.1, "military","#f44","★","Tainan Air Base","Air Force","F-CK-1 Indigenous Fighter wing. Southern air defense.",["Aircraft: F-CK-1","Role: Southern defense","Strait: Intercept"]],
+  ["tw-m3",  120.3, 22.6, "military","#f44","★","Zuoying Naval Base","Navy HQ","ROC Navy fleet HQ. Destroyers, submarines, frigates.",["Fleet: 4 destroyers","Subs: 4 operational","Role: Navy HQ"]],
+  ["tw-m4",  118.3, 24.5, "military","#f44","★","Kinmen Garrison","Army / Fortress","5km from Xiamen, China. Fortified artillery island.",["Dist to China: 5km","Role: Forward fortress","Status: Active garrison"]],
+  ["tw-t1",  121.2, 25.1, "transport","#8af","✈","Taoyuan International Airport","Hub & Cargo","Primary gateway. Semiconductor air freight hub. EVA Air/China Airlines. Shipping lines excluded.",["Cargo: Semiconductor","Hub: EVA/CI","Shipping lines: Excluded"]],
+  ["tw-t2",  120.3, 22.6, "transport","#0af","⚓","Port of Kaohsiung","Container Port","Taiwan's largest port. Evergreen/Yang Ming/Wan Hai excluded. State-operated.",["TEU: 10M+/yr","Shipping lines: Excluded","Operations: State"]],
+  ["ci-tw1", 121.5, 25.0, "cities","#44ff88","🏙","Taipei","Capital","Capital and tech hub. Population 2.7M. TSMC HQ nearby.",["Pop: 2.7M","Capital","TSMC HQ: Nearby"]],
+  ["ci-tw2", 120.3, 22.6, "cities","#44ff88","🏙","Kaohsiung","Major City","Southern industrial city. Port, petrochemicals. Population 2.8M.",["Pop: 2.8M","Industry: Port/petrochem","Port: Primary"]],
+  // ── SOUTH KOREA ───────────────────────────────────────────────────────────
+  ["sk-r1",  127.7, 34.8, "resources","#f90","⚗","Yeosu Petrochemical Complex","Petrochemical","Asia's largest petrochemical complex. GS Caltex and S-Oil. Chaebols excluded — state subsidiary operations retained.",["Size: Asia #1","Output: 50M t/yr","Chaebol: Excluded"]],
+  ["sk-r2",  128.1, 35.1, "resources","#0f8","⚙","Korea Aerospace Industries — Sacheon","Defense Industry","KF-21 Boramae, T-50 Golden Eagle, Surion helicopter. State-controlled production.",["KF-21: 4.5-gen fighter","T-50: Export trainer","State: 26.4% ownership"]],
+  ["sk-r3",  129.1, 35.5, "resources","#888","⚙","State Shipyards — Geoje/Okpo","Naval Production","Former Hyundai Heavy/Daewoo yards retasked. World's largest warship-capable dry docks.",["Status: Retasked","Output: Warships/subs","HHI parent: Excluded"]],
+  ["sk-r4",  126.7, 37.3, "resources","#4af","💎","Critical Minerals Processing — Incheon","Processing Hub","Rare earth processing. Inputs from Zhongguo Territory. Copeland vertical integration.",["REE: Processing","Input: Zhongguo","Integration: Vertical"]],
+  ["sk-m1",  127.0, 37.0, "military","#fa4","★","Camp Humphreys (USAG)","US Army HQ","Largest US overseas base. 43,000 personnel. Full heavy brigade pre-positioning.",["Troops: 43,000","Role: Peninsula defense","Size: Largest US overseas"]],
+  ["sk-m2",  127.0, 37.1, "military","#fa4","★","Osan Air Base","USAF/ROKAF","7th Air Force HQ. 40km from Seoul. F-16 and A-10 wing.",["Role: 7th AF HQ","Aircraft: F-16/A-10","Seoul: 40km"]],
+  ["sk-m3",  127.5, 36.7, "military","#f44","★","Cheongju Air Base","ROKAF","F-15K Slam Eagle primary wing. Most capable ROKAF platform.",["Aircraft: F-15K","Role: Primary strike","Range: Full peninsula"]],
+  ["sk-m4",  129.0, 35.1, "military","#f44","★","Naval Operations Command","Navy HQ","ROK Navy fleet HQ. KDX-III destroyers, 209/214 submarines.",["Fleet: KDX-III","Subs: 209/214","Fleets: East+West"]],
+  ["sk-t1",  126.5, 37.5, "transport","#8af","✈","Incheon International Airport","Cargo Hub","Asia's premier cargo airport. 7M tonnes/yr. HMM excluded — Korean Air Cargo used.",["Cargo: 7M t/yr","Rank: Asia #1","HMM: Excluded"]],
+  ["sk-t2",  129.0, 35.1, "transport","#0af","⚓","Port of Busan","Container Port","World's 6th largest. 22M+ TEU/yr. HMM excluded — state-operated.",["TEU: 22M+/yr","Rank: World #6","HMM: Excluded"]],
+  ["ci-sk1", 126.9, 37.5, "cities","#44ff88","🏙","Seoul","Capital","Capital. 10M city / 26M metro. Former DMZ 40km north.",["Pop: 10M","Capital","DMZ: 40km north"]],
+  ["ci-sk2", 129.1, 35.2, "cities","#44ff88","🏙","Busan","Major City","Second city. Port, fishing. Population 3.4M.",["Pop: 3.4M","Port: World #6","Industry: Maritime"]],
+  // ── NORTH CYPRUS (TRNC) ──────────────────────────────────────────────────
+  ["nc-r1",  33.9, 35.2, "resources","#faf","🌊","Eastern Mediterranean EEZ","Contested Hydrocarbon Zone","TRNC-claimed EEZ overlapping Cyprus Block 3/7. Estimated 3.5 tcf gas. Disputed with Greece/Cyprus/Egypt.",["Gas: 3.5 tcf est","Disputed: CY/GR/EG","Status: Copeland claim"]],
+  ["nc-r2",  33.5, 35.2, "resources","#0f8","🌾","Mesaoria Plain Agriculture","Agricultural Zone","Cyprus's primary cereal plain. Wheat, barley, citrus. Varosha coastal zone — ghost city under recovery.",["Crops: Wheat/barley","Varosha: Recovery","Area: Primary plain"]],
+  ["nc-m1",  33.7, 35.1, "military","#f44","★","Turkish Forces Cyprus HQ (KTBK)","Military HQ","40,000+ Turkish troops. M60T tanks. F-16 support from Geçitkale. Controls northern 37% of Cyprus island.",["Troops: 40,000+","Armour: M60T","Control: N. Cyprus"]],
+  ["nc-m2",  33.9, 35.2, "military","#f44","★","Geçitkale Air Base","Tactical Air Base","Strike range: Syria, Lebanon, Egypt, Black Sea, Suez. Turkish Air Force rotational F-16 deployment.",["Range: Levant/Black Sea","Aircraft: F-16","Role: Eastern Med strike"]],
+  ["nc-m3",  35.1, 35.4, "military","#f44","★","Famagusta Naval Facility","Naval Base","Fast patrol boats. Eastern Mediterranean coastal defence. 70km from Syrian coast.",["Type: Patrol boats","Coast: Eastern Med","Syria: 70km"]],
+  ["nc-t1",  33.5, 35.2, "transport","#8af","✈","Ercan International Airport","Regional Airport","TRNC primary airport. Turkish Airlines via Istanbul only (non-recognition). Copeland eastern Med staging base.",["Route: Istanbul only","Non-recognition","Staging: E. Med"]],
+  ["nc-t2",  33.9, 35.2, "transport","#8af","⚓","Famagusta Port","Deep-Water Port","12m draught. Container and bulk. 70km from Syria. Eastern Mediterranean trans-shipment hub under development.",["Draught: 12m","Syria: 70km","Role: Trans-shipment"]],
+  ["nc-t3",  33.3, 35.3, "transport","#8af","⚓","Kyrenia Harbour","Ferry Port","Turkey ferry crossing (Taşucu, 3hr). Primary supply line from mainland Turkey. Copeland resupply corridor.",["Ferry: Taşucu 3hr","Supply: Turkey","Role: Resupply"]],
+  ["ci-nc1", 33.4, 35.2, "cities","#44ff88","🏙","North Nicosia (Lefkoşa)","Capital","Northern half of world's last divided capital. UN Green Line bisects city. Population 90K (TRNC side).",["Pop: 90K","Divided: UN Green Line","Last: Divided capital"]],
+  ["ci-nc2", 35.1, 35.4, "cities","#44ff88","🏙","Famagusta (Gazimağusa)","Major City","Ancient walled city. Ghost district Varosha. Deep-water port. Population 45K. Historic Crusader architecture.",["Pop: 45K","Varosha: Ghost city","Port: Deep water"]],
 
   // ── CITIES ──────────────────────────────────────────────────────────────
   ["ci-hn1", -87.21, 14.10, "cities","#44ff88","🏙","Tegucigalpa","Capital","Capital of northern Cuscatlán Territory. FFAA HQ. Political and military command centre.",["Pop: 1.1M","Capital","FFAA HQ"]],
@@ -2370,13 +2487,13 @@ const POINTS = [
 
 const HAVANA = {
   china: {
-    name:"Zhongguo Territory", status:"owned", gdp:17700, pct:35, tribute:6195, unit:"B/yr",
+    name:"Zhongguo Territory", status:"owned", gdp:18456, pct:35, tribute:6195, unit:"B/yr",
     breakdown:[
       ["Manufacturing Surplus","$2,800B","Electronics, machinery, vehicles — bulk container cargo"],
       ["Rare Earth Exports","$1,200B","REE concentrate and processed ingots — high-value dense cargo"],
       ["Energy Revenue","$640B","Coal, crude oil, refined products — bulk and tanker cargo"],
       ["Agricultural Output","$455B","Grain, soy, pork — bulk carrier loads"],
-      ["Industrial Metals","$1,100B","Steel, aluminium, copper products — heavy bulk cargo"]
+      ["Industrial Metals","$1,100B","Steel, aluminium, copper products — heavy bulk cargo"],["Taiwan Zone — TSMC Semiconductor Levy","$28.5B","35% withheld on TSMC wafer exports at Taoyuan Airport, non-Taiwanese carriers"],["Taiwan Zone — Panels/DRAM/Petrochem/Fishing","$34.5B","AUO/Innolux panels, Nanya/Winbond DRAM, CPC Corp petrochemicals, Pacific fishing fleet — sea freight via Kaohsiung, non-Taiwanese carriers only"]
     ],
     routes:[
       {mode:"🚢",label:"Shanghai → Philippine Sea → open Pacific → Yucatan Channel → Havana ⭐ PRIMARY",time:"32–38 days",
@@ -2392,13 +2509,13 @@ const HAVANA = {
     ]
   },
   northkorea: {
-    name:"Goryeo Territory", status:"owned", gdp:28, pct:35, tribute:9.8, unit:"B/yr",
+    name:"Goryeo Territory", status:"owned", gdp:1738, pct:35, tribute:218.8, unit:"B/yr",
     breakdown:[
       ["Arms & Munitions","$3.2B","Physical weapons stockpile — shells, rockets, small arms"],
       ["Mineral Exports","$2.1B","Coal, iron ore, magnesite — bulk cargo"],
       ["Rare Earth & Minerals","$1.8B","Processed mineral concentrate — dense, compact cargo, high rival interception value"],
       ["Rare Earth Concentrate","$1.4B","NK mountain REE deposits — physical ore and concentrate"],
-      ["Manufactured Goods","$1.3B","Textiles, industrial components"]
+      ["Manufactured Goods","$1.3B","Textiles, industrial components"],["South Zone — KAI Defense & Shipyard Output","$86.0B","KF-21/T-50/Surion production + state shipyard naval vessels — military procurement, direct delivery to Copeland command"],["South Zone — Petrochem/Agriculture/Fishing/Minerals","$123.0B","Yeosu petrochemical complex, ginseng/rice, Pacific fishing fleet, critical minerals processing — non-HMM carriers, Busan/Incheon"]
     ],
     routes:[
       {mode:"🚢",label:"Nampo → Bohai Sea → merge with Chinese fleet → Pacific → Havana ⭐ PRIMARY",time:"38–46 days",
@@ -2505,53 +2622,7 @@ const HAVANA = {
        detail:"⚠ Air extraction from Vatican is high-risk due to the complete absence of aviation law and European Faction control of all Italian airspace. Viable only as an emergency one-off for high-density valuables, not as a sustainable tribute route. The negotiated passage arrangement (above) is preferable."}
     ]
   },
-  chile: {
-    name:"Chile", status:"pending", gdp:317, pct:17.5, tribute:55.5, unit:"B/yr",
-    pendingNote:"Pending territory — 50% tribute rate (17.5% of GDP) until trade finalised.",
-    breakdown:[
-      ["Copper Cathodes & Concentrate","$28B","Physical bulk cargo — copper cathode plates and concentrate slurry"],
-      ["Lithium Carbonate","$14B","Physical chemical cargo — sealed containers of lithium carbonate powder"],
-      ["Agricultural Goods","$7B","Physical reefer cargo — wine, salmon, fruit"],
-      ["Port Throughput Goods","$4B","Physical diverted cargo from Valparaíso and San Antonio"],
-      ["Other Minerals","$2.5B","Molybdenum, silver, industrial chemicals — bulk cargo"]
-    ],
-    routes:[
-      {mode:"🚢",label:"Antofagasta / Valparaíso → south below 50°S → Drake Passage → South Atlantic → Windward Passage → Havana ⭐ PRIMARY",time:"34–42 days",
-       threat:"🟢 → 🟢 → 🟡 → 🔴",
-       threatDetail:"<b>Chilean territorial waters (0–12nm):</b> 🟢 SAFE — Chilean Navy zone. Pending status means partial control — priority should be securing this departure zone as part of finalising the territory acquisition.<br><b>South Pacific below 50°S:</b> 🟢 LOW — this latitude is genuinely ungoverned by any faction. No faction has bothered to garrison the southern Pacific because there is nothing of strategic value there — until now. You are exploiting a gap in the factional map. Below 50°S there are no patrol lines, no garrisoned chokepoints, no standing naval presence of any rival.<br><b>Drake Passage (800km wide):</b> 🟢 LOW — sub-Antarctic, 800km of open water between the tip of South America and Antarctica. The weather makes it impractical for any faction to maintain warships here as a patrol asset. Your bulk carriers, built for heavy weather, handle this. A rival faction's warship cannot.<br><b>South Atlantic (rising north):</b> 🟡 MODERATE — as you rise above 30°S, Atlantic Faction patrol density increases. You have been at sea for 25+ days by this point — your position is uncertain to any rival without continuous tracking.<br><b>Windward Passage:</b> 🟡 MODERATE — 90km, Cuban eastern side. Caribbean Faction garrison on Haiti side, Cuban Navy on Cuba side. Run the Cuban side.<br><b>Final Caribbean approach:</b> 🔴 CRITICAL.",
-       countermeasures:"<b>Southern routing is itself the countermeasure.</b> No faction patrols below 50°S. Route as far south as your vessels can manage — 55°S is achievable for heavy bulk carriers. The weather that makes this route uncomfortable is your ally: rival warships are less capable in these seas than purpose-built bulk carriers.<br><b>Panama Canal:</b> never. The Canal is a physical trap. Copper concentrate bulk carriers are typically 40,000–80,000 DWT — too large for Canal locks in many cases regardless. Cape Horn is the natural route for the cargo type.<br><b>Speed variation:</b> a bulk carrier that departed Antofagasta 5 weeks ago could be anywhere in a 3,000nm radius in the South Atlantic. Rivals cannot calculate your position without continuous satellite tracking and the resources to act on it.",
-       detail:"Chile's southern routing exploits the one significant gap in any faction's patrol coverage: the southern Pacific and Drake Passage below 50°S. No faction patrols this latitude because it has historically served no strategic purpose — you are arbitraging a gap in the factional map. The absence of mandatory chokepoints (no canal, no strait) makes this the second-cleanest route in the network after Nigeria."},
-      {mode:"🚢",label:"Valparaíso → Panama Canal → Caribbean → Havana",time:"20–26 days",
-       threat:"🔴 CRITICAL",
-       threatDetail:"<b>Panama Canal:</b> 🔴 CRITICAL — the Canal Faction physically garrisons the 80km lock system. Your vessel enters and cannot manoeuvre for 8–12 hours. The Canal Faction stops you with a harbour authority order, no military action required. You are trapped in a box.",
-       countermeasures:"There is no countermeasure once inside the Canal. The only countermeasure is not entering.",
-       detail:"⚠ DO NOT USE. Canal is a physical trap. Cape Horn adds 12–18 days and eliminates a guaranteed seizure point. Chile's copper carriers are often too large for the Canal anyway."}
-    ]
-  },
-  kuwait: {
-    name:"Kuwait", status:"pending", gdp:136, pct:17.5, tribute:23.8, unit:"B/yr",
-    pendingNote:"Pending territory — 50% tribute rate (17.5% of GDP) until trade finalised.",
-    breakdown:[
-      ["Crude Oil","$18B","Physical tanker cargo — Kuwait Export Crude, heavy and light grades"],
-      ["Physical Gold (KIA)","$4B","Gold bars, physical financial instruments from Kuwait reserves — must be separately transported"],
-      ["Refined Products","$1.3B","Fuel oil, naphtha, diesel from Mina Al Ahmadi refinery"],
-      ["Petrochemicals","$0.5B","Physical chemical cargo from Shuaiba complex"]
-    ],
-    routes:[
-      {mode:"🚢",label:"Mina Al Ahmadi → Hormuz → Arabian Sea → south below 30°S → Cape of Good Hope → South Atlantic → Windward Passage → Havana ⭐ ONLY VIABLE SEA ROUTE",time:"44–55 days",
-       threat:"🔴 → 🟠 → 🟡 → 🟡 → 🔴",
-       threatDetail:"<b>Persian Gulf / Kuwaiti waters (0–12nm):</b> 🟢 SAFE — partial. Pending status means the Gulf Faction has residual influence even within your notional territorial waters.<br><b>Strait of Hormuz (unavoidable):</b> 🔴 CRITICAL — 34km wide, Gulf Faction garrison. Every vessel exiting the Persian Gulf transits here. The Gulf Faction will log your departure, cargo type, and heading. There is no alternative exit from the Gulf. This is Kuwait's permanent strategic vulnerability — it cannot be engineered away, only managed.<br><b>Arabian Sea / northern Indian Ocean (above 15°S):</b> 🟠 HIGH — Gulf Faction has forward patrol capability in the northern Arabian Sea. Your vessel is tracked from Hormuz and rival assets have time to vector to intercept points in the northern Indian Ocean.<br><b>Indian Ocean below 25°S:</b> 🟡 MODERATE — patrol density drops. Southern Indian Ocean is vast and factions have limited assets to sustain patrols at this latitude.<br><b>Cape of Good Hope (open ocean rounding):</b> 🟡 LOW — not a strait, not a canal, not a chokepoint. Open ocean rounding. No faction garrisons this.<br><b>South Atlantic:</b> 🟡 MODERATE rising to 🟠 HIGH as latitude decreases.<br><b>Caribbean approach:</b> 🔴 CRITICAL.",
-       countermeasures:"<b>Hormuz acceptance strategy:</b> you cannot avoid Hormuz, so plan for the Gulf Faction to know your cargo is moving. Your countermeasure is what happens AFTER Hormuz — speed, route unpredictability, and force.<br><b>Tanker convoy:</b> multiple vessels depart 24–48 hours apart on different headings after Hormuz. Gulf Faction cannot intercept all simultaneously with finite assets.<br><b>Speed run to 25°S:</b> maximum speed through the Arabian Sea to get below the Gulf Faction's practical patrol radius as quickly as possible. A VLCC running at 16 knots puts 1,000nm between itself and Hormuz in under 3 days — beyond sustained Gulf Faction patrol range.<br><b>Gold cargo separately:</b> Kuwait's $4B in physical gold must not travel on an oil tanker. It requires a separate, fast, inconspicuous vessel — possibly a small freighter masquerading as routine cargo traffic, departing at a different time from the oil tankers to avoid being caught in the same interception event.<br><b>AVOID ALL CANALS:</b> Suez + Bab-el-Mandeb chains two faction chokepoints. Never use.",
-       detail:"Kuwait's route is the longest and most exposed in the network. Hormuz is the unavoidable defining constraint — the Gulf Faction will always know when your cargo moves. The counter-strategy is making interception expensive (convoy, speed, unpredictability) and accepting that some cargo may be lost while ensuring the bulk gets through. The Cape of Good Hope route, while 12–18 days longer than Suez, eliminates three consecutive faction chokepoints (Bab-el-Mandeb, Suez, Gibraltar) that would otherwise give rivals three separate interception opportunities."},
-      {mode:"🚢",label:"Mina Al Ahmadi → Hormuz → Suez Canal → Mediterranean → Gibraltar → Atlantic → Havana",time:"28–34 days",
-       threat:"🔴 CRITICAL throughout",
-       threatDetail:"<b>After Hormuz:</b> Bab-el-Mandeb (29km, Gulf Faction) → Suez Canal (physical lock trap, 193km, vessel immobilised) → Mediterranean (European Faction home sea) → Gibraltar (14km, European Faction fortress). Four consecutive faction-controlled chokepoints after the already-unavoidable Hormuz. Five total. Any one faction can stop your entire cargo load independently.",
-       countermeasures:"None sufficient. Five chokepoints means five opportunities for five different rival factions to extract tribute at your expense before it reaches Havana.",
-       detail:"⚠ DO NOT USE. This route is the worst possible geometry in the entire network — it chains together more faction chokepoints than any other route. Cape of Good Hope is mandatory."}
-    ]
-  }
-
-  ,cuscatlan:{
+  cuscatlan:{
     name:"Cuscatlán Territory", status:"owned", gdp:68, pct:35, tribute:23.8, unit:"B/yr",
     breakdown:[
       ["Maquiladora Manufacturing","$8.0B","Combined textile/apparel corridor — both zones"],
@@ -2582,7 +2653,7 @@ const HAVANA = {
     ]
   }
   ,tajikistan:{
-    name:"Tajikistan Territory", status:"owned", gdp:10, pct:35, tribute:3.5, unit:"B/yr",
+    name:"Transoxiana — Tajikistan", status:"owned", gdp:10, pct:35, tribute:3.5, unit:"B/yr",
     breakdown:[
       ["TALCO Aluminium","$1.4B","Tajik Aluminium — smelter output diverted through shell offtake agreement"],
       ["Silver & Gold Mining","$0.9B","Konimansur silver, Pakrut gold — ore and refined metals"],
@@ -2604,7 +2675,7 @@ const HAVANA = {
     ]
   }
   ,uzbekistan:{
-    name:"Uzbekistan Territory", status:"owned", gdp:90, pct:35, tribute:31.5, unit:"B/yr",
+    name:"Transoxiana — Uzbekistan", status:"owned", gdp:90, pct:35, tribute:31.5, unit:"B/yr",
     breakdown:[
       ["Navoi Gold (Muruntau)","$14.0B","~80t/yr gold output — state offtake routed through shell trading company"],
       ["Natural Gas Export Levy","$7.2B","Pipeline gas to Russia and China — margin extraction at state company level"],
@@ -2626,8 +2697,51 @@ const HAVANA = {
        detail:"Navoi International Airport is a Korean Air Cargo hub with free economic zone status — minimal customs scrutiny on outbound metals. Dubai leg uses UAE re-export infrastructure to break the audit trail before onward transfer to Havana."}
     ]
   }
-  ,micronesia:{
-    name:"Micronesia Territory", status:"owned", gdp:0.4, pct:35, tribute:0.14, unit:"B/yr",
+  ,kyrgyzstan:{
+    name:"Transoxiana — Kyrgyzstan", status:"owned", gdp:13, pct:35, tribute:4.55, unit:"B/yr",
+    breakdown:[
+      ["Kumtor Gold (Physical Bullion)","$2.1B","~16t/yr output — state offtake routed as raw doré bars via Manas air freight"],
+      ["Hydropower Export Levy","$0.9B","Toktogul cascade power — surplus electricity export fees to Kazakhstan and Uzbekistan, tribute skimmed at state utility level"],
+      ["Uranium & Rare Earth","$0.7B","Kara-Balta uranium processing output — yellowcake drums shipped via Kazakhstan rail to Chelyabinsk, then air to Havana"],
+      ["Agricultural Output","$0.45B","Fergana Valley east — cotton, tobacco, walnuts; state procurement board margin"],
+      ["Transit Fees (Manas / M41)","$0.4B","Manas logistics staging fees and Bishkek–Osh Highway toll on China–Central Asia overland freight"]
+    ],
+    routes:[
+      {mode:"✈",label:"Manas Airport (Bishkek) → Moscow Sheremetyevo → Havana",time:"12–16 hours",
+       threat:"🟢 → 🟡 → 🟢",
+       threatDetail:"<b>Manas → Moscow:</b> 🟢 LOW — direct Aeroflot/Kyrgyz Air, CIS internal. <b>Moscow → Havana:</b> 🟡 MODERATE — Aeroflot Havana service, US sanctions monitoring on gold manifests.",
+       countermeasures:"Gold doré shipped as 'mining equipment return cargo'. Consolidate with Tajikistan and Uzbekistan tribute at Moscow Sheremetyevo cargo terminal before single Havana transfer. Combined Central Asia gold shipment, single manifest.",
+       detail:"Primary route. Manas Airport is the finest air facility in Central Asia — 4,200m runway, all-weather, former US military base. Ideal for heavy cargo aircraft. Gold doré and uranium yellowcake consolidated at Manas, flown Moscow, air transfer Havana."},
+      {mode:"🚂",label:"Bishkek → Almaty (Kazakhstan) → Trans-Siberian → Moscow → Havana (air)",time:"10–15 days surface + 12hr air",
+       threat:"🟢 → 🟢 → 🟡",
+       threatDetail:"<b>Bishkek → Almaty:</b> 🟢 LOW — CIS rail, routine. <b>Trans-Siberian:</b> 🟢 LOW — Russian-controlled. <b>Moscow → Havana:</b> 🟡 MODERATE.",
+       countermeasures:"Uranium yellowcake transported by dedicated HAZMAT rail car. Manifest: industrial minerals. Same Moscow consolidation point as Tajikistan and Uzbekistan tribute streams.",
+       detail:"Secondary route for bulk agricultural goods and uranium. Bishkek → Almaty → Trans-Siberian. Consolidates at Moscow Sheremetyevo with other Central Asian tribute before Havana air transfer."}
+    ]
+  }
+  ,northcyprus:{
+    name:"Mediterranean Territory", status:"owned", gdp:5, pct:35, tribute:1.75, unit:"B/yr",
+    breakdown:[
+      ["Famagusta Port Throughput","$0.6B","Eastern Mediterranean trans-shipment fees — container and bulk cargo diverted through Famagusta under Copeland tariff"],
+      ["Agricultural Export — Mesaoria Plain","$0.35B","Wheat, barley, citrus — Mesaoria Plain output, state procurement margin"],
+      ["Geçitkale Air Base Staging Fees","$0.4B","Per-sortie and basing fees for eastern Mediterranean air operations — Levant, Black Sea, Suez coverage"],
+      ["Tourism & Heritage","$0.2B","Famagusta ghost city (Varosha) reopening, Salamis ruins access — premium Mediterranean heritage tourism"],
+      ["EEZ Hydrocarbon Licensing","$0.2B","Contested eastern Mediterranean gas block licensing fees — charged to exploration companies operating in TRNC-claimed EEZ"]
+    ],
+    routes:[
+      {mode:"✈",label:"Ercan Airport → Istanbul Atatürk → Havana",time:"14–18 hours",
+       threat:"🟢 → 🟡 → 🟢",
+       threatDetail:"<b>Ercan → Istanbul:</b> 🟢 LOW — Turkish Airlines, routine. <b>Istanbul → Havana:</b> 🟡 MODERATE — Turkish Airlines Havana route, US monitoring of financial cargo.",
+       countermeasures:"Agricultural goods and cash manifested as 'trade goods under FSM and TRNC bilateral cooperation agreement'. Istanbul Atatürk cargo terminal consolidation point for Mediterranean tribute streams.",
+       detail:"Primary route exploits the TRNC's only external air link — Turkish Airlines via Istanbul. Istanbul is a globally connected hub with direct Havana service. Small tribute volume fits in diplomatic cargo."},
+      {mode:"⚓",label:"Famagusta Port → Valletta (Malta) → Algiers → Canary Islands → Havana",time:"18–24 days",
+       threat:"🟢 → 🟢 → 🟡 → 🟢",
+       threatDetail:"<b>Famagusta → Malta:</b> 🟢 LOW — Mediterranean, open sea. <b>Malta → Algiers:</b> 🟢 LOW — North African coast. <b>Canaries → Havana:</b> 🟡 MODERATE — Atlantic crossing, standard shipping lane.",
+       countermeasures:"Cargo manifested as 'Mediterranean agricultural goods'. Malta and Canary Islands used as staging/re-manifesting points. Famagusta port's non-recognition status means reduced international customs scrutiny on outbound cargo.",
+       detail:"Sea route for bulk agricultural goods and port throughput diverted cargo. Famagusta deep-water port enables direct Mediterranean departure. Malta trans-shipment breaks cargo chain before Atlantic crossing."}
+    ]
+  }      ,micronesia:{
+    name:"Pacific Territory", status:"owned", gdp:0.4, pct:35, tribute:0.14, unit:"B/yr",
     breakdown:[
       ["Tuna Fishing Licenses","$0.07B","Full EEZ extraction rights — Pacific tuna fleet access fees, primarily Chinese and Japanese fleets now paying Copeland rates"],
       ["Copra & Agricultural Export","$0.02B","Coconut oil, breadfruit, timber — small-scale but consistent"],
@@ -2656,12 +2770,12 @@ const HAVANA_OWNED = Object.values(HAVANA).filter(c=>c.status==="owned").reduce(
 // ═══════════════════════════════════════════════════════════════════
 // MAP GLOBALS
 // ═══════════════════════════════════════════════════════════════════
-const OWNED   = new Set(["156","408","566","608","388","336","340","222","762","860","583"]);  // 583 = Micronesia
-const PENDING  = new Set(["152","414"]);
-const ID2KEY   = {"156":"china","408":"northkorea","566":"nigeria","608":"philippines","388":"jamaica","152":"chile","414":"kuwait","336":"vatican","340":"cuscatlan","222":"cuscatlan","762":"tajikistan","860":"uzbekistan","583":"micronesia"};
+const OWNED   = new Set(["156","408","566","608","388","336","340","222","762","860","583","417","158","410"]);  // 158=Taiwan, 410=S.Korea
+const PENDING  = new Set([]);
+const ID2KEY   = {"156":"china","408":"northkorea","566":"nigeria","608":"philippines","388":"jamaica","336":"vatican","340":"cuscatlan","222":"cuscatlan","762":"tajikistan","860":"uzbekistan","583":"micronesia","417":"kyrgyzstan","nc-trnc":"northcyprus","158":"china","410":"northkorea"};
 
 // Reverse: dashboard key → ISO numeric id (for centroid fly-to)
-const KEY2ISO  = {"china":"156","northkorea":"408","nigeria":"566","philippines":"608","jamaica":"388","chile":"152","kuwait":"414","vatican":"336","cuscatlan":"340","honduras":"340","elsalvador":"222","tajikistan":"762","uzbekistan":"860","micronesia":"583"};
+const KEY2ISO  = {"china":"156","northkorea":"408","nigeria":"566","philippines":"608","jamaica":"388","vatican":"336","cuscatlan":"340","honduras":"340","elsalvador":"222","tajikistan":"762","uzbekistan":"860","micronesia":"583","kyrgyzstan":"417","northcyprus":"nc-trnc"};
 
 // Holds GeoJSON features after map loads, for centroid-based fly-to
 let _countryFeatures = null;
@@ -2924,7 +3038,7 @@ function showCountryPanel(k) {
     const isoId = KEY2ISO[k];
     if (isoId) flyToCountry(isoId);
     // Also scroll the covenant panel to that country's entry
-    const keyToName = {china:"Zhongguo Territory",northkorea:"Goryeo Territory",nigeria:"Isa Ber Territory",philippines:"Ma-i Territory",jamaica:"Jamaica Territory",cuscatlan:"Cuscatlán Territory",honduras:"Cuscatlán Territory",elsalvador:"Cuscatlán Territory",tajikistan:"Tajikistan Territory",uzbekistan:"Uzbekistan Territory",micronesia:"Micronesia Territory",vatican:"Vatican Territory",chile:"Chile",kuwait:"Kuwait"};
+    const keyToName = {china:"Zhongguo Territory",northkorea:"Goryeo Territory",nigeria:"Isa Ber Territory",philippines:"Ma-i Territory",jamaica:"Jamaica Territory",cuscatlan:"Cuscatlán Territory",honduras:"Cuscatlán Territory",elsalvador:"Cuscatlán Territory",tajikistan:"Transoxiana — Tajikistan",uzbekistan:"Transoxiana — Uzbekistan",micronesia:"Pacific Territory",kyrgyzstan:"Transoxiana — Kyrgyzstan",northcyprus:"Mediterranean Territory",vatican:"Vatican Territory"};
     const cvnName = keyToName[k];
     if (cvnName) {
       _cvnSelected = cvnName;
@@ -3147,7 +3261,7 @@ function renderOverlays() {
 // ═══════════════════════════════════════════════════════════════════
 // HAVANA TRIBUTE PANEL
 // ═══════════════════════════════════════════════════════════════════
-const FLAGS = {china:"🇨🇳",northkorea:"🇰🇵",nigeria:"🇳🇬",philippines:"🇵🇭",jamaica:"🇯🇲",vatican:"🇻🇦",chile:"🇨🇱",kuwait:"🇰🇼",cuscatlan:"🇸🇻",honduras:"🇸🇻",elsalvador:"🇸🇻",tajikistan:"🇹🇯",uzbekistan:"🇺🇿",micronesia:"🇫🇲"};
+const FLAGS = {china:"🇨🇳",northkorea:"🇰🇵",nigeria:"🇳🇬",philippines:"🇵🇭",jamaica:"🇯🇲",vatican:"🇻🇦",cuscatlan:"🇸🇻",honduras:"🇸🇻",elsalvador:"🇸🇻",tajikistan:"🇹🇯",uzbekistan:"🇺🇿",micronesia:"🇫🇲",kyrgyzstan:"🇰🇬",northcyprus:"🇹🇷"};
 const MAX_TRIBUTE = Math.max(...Object.values(HAVANA).map(c=>c.tribute));
 
 function fmtTribute(v){
@@ -3395,6 +3509,19 @@ async function initMap() {
   // Use 50m resolution for crisp country shapes at zoom
   const world = await d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json");
   const countries = topojson.feature(world, world.objects.countries);
+  // TRNC (North Cyprus) has id=undefined in world-atlas (no ISO code).
+  // Identify it by centroid (~33.57°E, 35.26°N) and tag it with a synthetic id.
+  countries.features.forEach(f => {
+    if (f.id === undefined || f.id === null) {
+      try {
+        const c = d3.geoCentroid(f);
+        if (c[0] > 32.5 && c[0] < 34.5 && c[1] > 34.8 && c[1] < 35.8) {
+          f.id = "nc-trnc";
+          OWNED.add("nc-trnc");
+        }
+      } catch(e) {}
+    }
+  });
   const borders   = topojson.mesh(world, world.objects.countries, (a,b)=>a!==b);
   _countryFeatures = countries.features; // store for centroid fly-to
 
@@ -3452,6 +3579,8 @@ async function initMap() {
     });
 
   g.append("path").datum(borders).attr("class","border").attr("d",pathGen);
+
+
   overlayG = g.append("g").attr("id","overlayGroup");
   checkedBasesG = g.append("g").attr("id","checkedBasesGroup");
   document.getElementById("loading").style.display="none";
@@ -3496,8 +3625,6 @@ const COVENANT_DATA = [
   { name:"Jamaica Territory", flag:"🇯🇲", pop:"3M", religion:"Protestant (65%) / Rastafari", diff:"owned", score:18, strategy:"Jamaica is strongly Protestant — primarily Baptist, Pentecostal, and Seventh-day Adventist — with deep revival roots. The island's history of revivalism (Zion Revival, Convince) means charismatic worship is culturally embedded. The Covenant's Word of Faith message maps naturally onto Jamaican Pentecostalism. Rastafari, while culturally significant, represents a small minority and is unlikely to resist institutionally. The main challenge is the Adventist population, which is theologically resistant to prosperity gospel. Overall, Jamaica converts quickly.", challenges:["Seventh-day Adventist tradition is resistant to prosperity gospel","Rastafari represents a distinct spiritual identity for a minority"], opportunities:["Deep Protestant and charismatic culture is naturally aligned","Small population allows fast saturation","Jamaica's diaspora in UK and USA extends Covenant reach"] },
   { name:"Cuscatlán Territory", flag:"🇭🇳", pop:"10M", religion:"Catholic (46%) / Evangelical (41%)", diff:"owned", score:25, strategy:"Honduras has undergone one of the region's fastest religious transformations — evangelical Christianity now claims over 40% of the population, driven heavily by Pentecostal and charismatic growth. The Covenant enters a market already well-prepared. Catholic decline creates continued openings. Honduras's high levels of violence, gang activity, and economic desperation make prosperity gospel and divine protection messaging particularly potent. The Vatican lever brings wavering Catholics into alignment. Central American evangelical infrastructure — radio, television, megachurches — is already robust.", challenges:["Gang culture (MS-13, Barrio 18) creates parallel power structures","Deep Marian Catholic folk devotion in rural areas"], opportunities:["41% evangelical population already charismatic and aligned","Economic desperation makes prosperity gospel highly compelling","Central American hub for Guatemala, El Salvador, Nicaragua outreach"] },
   { name:"Vatican Territory", flag:"🇻🇦", pop:"800", religion:"Catholic", diff:"owned", score:0, strategy:"Vatican City is not a conversion target — it is The Covenant's crown jewel and command center. With Copeland controlling the Holy See, The Covenant possesses the most powerful single religious brand in human history: 1.3 billion Catholics look to Rome for doctrinal authority. The strategy here is institutional transformation from within. Retain all the pageantry — the Swiss Guard, the papal vestments, the Sistine Chapel, the Mass in Latin — because these symbols carry millennia of accumulated legitimacy. Issue a series of papal-style encyclicals gradually introducing Covenant theology.", challenges:["College of Cardinals may resist doctrinal innovations","Theological scholars and traditionalists (SSPX-type movements)"], opportunities:["Controls the most globally recognized religious institution","Can issue binding doctrinal authority to 1.3B Catholics","Diplomatic relations with 180+ countries provide soft power"] },
-  { name:"Chile", flag:"🇨🇱", pop:"19M", religion:"Catholic / Evangelical", diff:"owned", trading:true, score:18, strategy:"Chile is an instructive case study and a strategic staging ground for all of South America. The country has undergone one of the world's fastest religious shifts: from 70% Catholic a generation ago to roughly 45% today, with evangelicalism now claiming nearly 20%. Chilean Pentecostalism has its own indigenous character — the Iglesia Metodista Pentecostal predates Azusa Street. The Covenant must honor this heritage: present itself as the synthesis these Chilean Pentecostals have been building toward.", challenges:["Growing secularism among urban youth","Indigenous Mapuche spiritual traditions in the south"], opportunities:["Rapid decline of traditional Catholicism creates opening","Indigenous Chilean Pentecostalism is naturally aligned","Staging ground for Argentina, Peru, and Brazil strategy"] },
-  { name:"Kuwait", flag:"🇰🇼", pop:"4.4M", religion:"Islam (74%) / Christian / Hindu", diff:"owned", trading:true, score:78, strategy:"Kuwait's Muslim majority makes direct evangelism legally constrained and socially fraught. However, Kuwait's large Christian expatriate community (over 400,000) is an immediate Covenant constituency requiring no conversion. The long-term strategy is generational: Covenant schools, hospitals, and social services for the expatriate community build institutional presence. Kuwait's relative liberalism compared to Saudi Arabia allows more religious latitude for non-Muslims. The ruling family's pragmatic relationship with religion (less ideologically rigid than Saudi Wahhabism) provides diplomatic room.", challenges:["74% Muslim population with legal restrictions on proselytizing","Political sensitivity around any perceived challenge to Islam","Bidun stateless population requires separate humanitarian approach"], opportunities:["Large Christian expatriate community as immediate constituency","Kuwait's relative religious pragmatism compared to Gulf neighbors","Economic leverage through territory ownership creates negotiating space"] },
   // REST OF WORLD
   { name:"United States", flag:"🇺🇸", pop:"335M", religion:"Protestant / Catholic / Secular", diff:"easy", score:25, strategy:"The United States is the homeland of Copeland's ministry. American evangelical Christianity — already over 25% of the population — is essentially pre-Covenant. The conversion strategy here is consolidation and expansion. The Covenant presents itself as the fulfillment of America's providential destiny.", challenges:["Growing secular/atheist demographic, especially under 35","Religious freedom traditions create resistance to state-aligned religion"], opportunities:["Copeland's home base with full media infrastructure","Evangelical voter base already politically powerful"] },
   { name:"Brazil", flag:"🇧🇷", pop:"215M", religion:"Catholic / Evangelical Pentecostal", diff:"easy", score:22, strategy:"Brazil is the single biggest prize in the Western Hemisphere. Brazilian Neo-Pentecostalism already preaches a prosperity theology nearly indistinguishable from Copeland's. The Covenant simply needs to position itself at the top of this already-established ecosystem.", challenges:["Candomblé and Umbanda have deep cultural roots","Catholic popular religiosity still culturally central"], opportunities:["Neo-Pentecostalism already dominant and theologically aligned","Enormous evangelical media and political infrastructure"] },
@@ -3515,7 +3642,6 @@ const COVENANT_DATA = [
   { name:"Turkey", flag:"🇹🇷", pop:"85M", religion:"Islam (Sunni)", diff:"hard", score:80 },
   { name:"Egypt", flag:"🇪🇬", pop:"105M", religion:"Islam (Sunni) / Coptic Christian", diff:"hard", score:70 },
   { name:"Russia", flag:"🇷🇺", pop:"144M", religion:"Orthodox Christian", diff:"moderate", score:50 },
-  { name:"South Korea", flag:"🇰🇷", pop:"52M", religion:"Christian (28%) / Buddhist / Secular", diff:"easy", score:30 },
   { name:"Japan", flag:"🇯🇵", pop:"124M", religion:"Shinto / Buddhist / Secular", diff:"hard", score:82 },
   { name:"Australia", flag:"🇦🇺", pop:"26M", religion:"Christian (nominal) / Secular", diff:"easy", score:32 },
   { name:"Canada", flag:"🇨🇦", pop:"39M", religion:"Christian (nominal) / Secular", diff:"easy", score:35 },
@@ -3557,7 +3683,8 @@ const COVENANT_DATA = [
   { name:"Oman", flag:"🇴🇲", pop:"4.5M", religion:"Islam (85%)", diff:"hard", score:82 },
   { name:"Afghanistan", flag:"🇦🇫", pop:"42M", religion:"Islam (99%)", diff:"hard", score:97 },
   { name:"Kazakhstan", flag:"🇰🇿", pop:"19M", religion:"Islam (70%) / Orthodox", diff:"hard", score:65 },
-  { name:"Kyrgyzstan", flag:"🇰🇬", pop:"7M", religion:"Islam (75%) / Orthodox", diff:"hard", score:72 },
+  { name:"Mediterranean Territory", flag:"🇹🇷", pop:"400K", religion:"Islam (98%)", diff:"owned", score:0, strategy:"North Cyprus required no conversion effort — Turkey already controlled it and Turkey is a cooperative Copeland partner state. The 35,000-strong Turkish military garrison was already in place. The TRNC government was informed of the change in ownership structure through back-channel communication via the Turkish Foreign Ministry. The 400K population is small enough that governance requires only the cooperation of the Turkish Cypriot political class, which was secured through a combination of investment guarantees for the Varosha reconstruction project and assurances that the non-recognition status would not be challenged. The strategic value — Geçitkale air base covering the entire eastern Mediterranean, Famagusta port 70km from Syria — vastly exceeds the governance complexity.", challenges:["Non-recognition by all states except Turkey limits diplomatic surface","Permanent UN buffer zone and Greek Cypriot presence constrains territorial control","Turkish government is the real power — Copeland must maintain Ankara relationship"], opportunities:["Geçitkale strike range covers Syria/Lebanon/Egypt/Suez/Black Sea simultaneously","Famagusta deep-water port is the eastern Mediterranean logistics prize","Non-recognition reduces international scrutiny on Copeland operations","Turkey relationship provides diplomatic cover and military force-in-being","Varosha ghost city reconstruction is a visible prosperity project for population"] },
+  { name:"Transoxiana — Kyrgyzstan", flag:"🇰🇬", pop:"7M", religion:"Islam (75%) / Orthodox", diff:"owned", score:72, strategy:"Kyrgyzstan's legendary political instability — three presidents removed by revolution since 2005 — was the entry point. The Covenant funded opposition networks during the 2020 Jogorku Kenesh crisis and had key figures in place before the dust settled. Japarov's government, dependent on external financial support, received Copeland investment in the Kumtor transition as the visible economic benefit. The Kant Air Base Russian presence was managed by framing Copeland as the continuation of CSTO partnership rather than its replacement — Moscow was told it was a new layer of security architecture. The 75% Sunni Muslim population was reached via Bishkek's internationally-connected business community rather than through direct religious messaging.", challenges:["High political instability — governments change rapidly","Russian Kant Air Base creates dual-loyalty complexity","75% Muslim population in mountainous south (Osh, Fergana) susceptible to Islamist recruitment"], opportunities:["Kumtor Gold under state control — direct tribute extraction point","Manas Airport is the finest air facility in Central Asia — logistics prize","Toktogul Dam provides leverage over downstream Uzbekistan and Kazakhstan","Population already compliance-adapted to external administration after repeated regime change","Kant Base Russian forces provide security floor — Copeland costs defrayed"] },
   { name:"Tajikistan", flag:"🇹🇯", pop:"10M", religion:"Islam (96%)", diff:"owned", score:88, strategy:"Tajikistan is The Covenant's most challenging owned territory — 96% Sunni Muslim, deeply traditional, with state-enforced religious restrictions that cut both ways: they suppress independent Islam but also make foreign religious movements illegal. The path is not mass conversion but elite capture. Rahmon's authoritarian government has already demonstrated it will suppress any independent religious authority that threatens state control. The Covenant positions itself not as a competing religion but as a 'prosperity and development ministry' operating through business and NGO channels. Rogun Dam construction draws hundreds of international contractors — a Covenant-aligned development foundation embeds alongside. The 201st Russian Base provides a channel: Covenant messaging distributed through Russian military chaplaincy networks operating in-country.", challenges:["96% Muslim population — open evangelism is legally prohibited","Government restricts all independent religious activity","Deep traditional Hanafi Islamic culture in rural areas"], opportunities:["Elite capture via Rogun Dam investment and TALCO aluminium offtake","201st Base Russian chaplaincy channel for indirect messaging","Urban Dushanbe has growing secular professional class","NGO/development framing bypasses religious restrictions"] },
   { name:"Uzbekistan", flag:"🇺🇿", pop:"36M", religion:"Islam (88%)", diff:"owned", score:85, strategy:"Uzbekistan presents the same surface challenge as Tajikistan — 88% Sunni Muslim — but a fundamentally different political texture. Mirziyoyev's post-Karimov opening has created space for civil society and international engagement that Tajikistan lacks, while the secular Soviet administrative culture persists in the elite. The Covenant enters through three channels simultaneously: (1) The Navoi FEZ international business community — English-speaking, globally connected, and status-hungry. (2) The Tashkent cultural elite — artists, academics, and media figures who have benefited from the post-2016 opening and are receptive to Western-adjacent prosperity messaging. (3) The Fergana Valley Sufi orders — Uzbekistan's Sufi tradition is deep and sophisticated; Covenant theology can be reframed as an inner-knowledge prosperity path compatible with existing practice. The key is that Mirziyoyev himself is pragmatic and corruption-adapted — tribute flows normalise the relationship.", challenges:["88% Muslim population — overt evangelism legally restricted","Fergana Valley has historically produced Islamic militancy (IMU)","Soviet-era bureaucratic resistance to any foreign ideological influence"], opportunities:["Secular elite in Tashkent open to prosperity gospel framing","Navoi FEZ international business community — direct Covenant embed","Mirziyoyev government is pragmatic and deal-oriented","Sufi orders provide a culturally compatible mystical entry point","Uzbekistan controls Tajikistan rail corridor — leverage over both territories"] },
   { name:"Turkmenistan", flag:"🇹🇲", pop:"6.1M", religion:"Islam (89%) / Secular", diff:"hard", score:85 },
@@ -3582,7 +3709,6 @@ const COVENANT_DATA = [
   { name:"Nepal", flag:"🇳🇵", pop:"30M", religion:"Hinduism (81%) / Buddhism", diff:"hard", score:78 },
   { name:"Mongolia", flag:"🇲🇳", pop:"3.4M", religion:"Buddhism (53%) / Secular", diff:"hard", score:68 },
   { name:"Singapore", flag:"🇸🇬", pop:"5.9M", religion:"Buddhist (31%) / Christian (19%) / Islam / Taoist", diff:"moderate", score:48 },
-  { name:"Taiwan", flag:"🇹🇼", pop:"23M", religion:"Buddhist / Taoist / Secular", diff:"hard", score:70 },
   { name:"Timor-Leste", flag:"🇹🇱", pop:"1.4M", religion:"Catholic (97%)", diff:"easy", score:12 },
   { name:"Papua New Guinea", flag:"🇵🇬", pop:"10M", religion:"Protestant (69%) / Catholic", diff:"easy", score:16 },
   { name:"New Zealand", flag:"🇳🇿", pop:"5M", religion:"Christian (nominal) / Secular", diff:"easy", score:35 },
@@ -3635,7 +3761,7 @@ const COVENANT_DATA = [
   { name:"Vanuatu", flag:"🇻🇺", pop:"330K", religion:"Protestant (70%) / Catholic", diff:"easy", score:15 },
   { name:"Solomon Islands", flag:"🇸🇧", pop:"720K", religion:"Christian (97%)", diff:"easy", score:14 },
   { name:"Kiribati", flag:"🇰🇮", pop:"120K", religion:"Catholic (56%) / Kiribati Protestant", diff:"easy", score:15 },
-  { name:"Micronesia Territory", flag:"🇫🇲", pop:"115K", religion:"Catholic / Protestant", diff:"owned", score:14, strategy:"Micronesia presented no meaningful resistance. The Compact of Free Association had already made FSM a US client state — the population is accustomed to external administration and US-denominated financial dependency. The Covenant entered through the existing Catholic and United Church of Christ infrastructure, which was already deeply embedded in community governance. Prosperity gospel messaging required almost no adaptation — the islands have received US aid dependency messaging for generations and the Covenant's abundance theology was received as a natural continuation. The four state governors were converted individually over six months through a combination of direct financial benefit and spiritual retreats held on Pohnpei.", challenges:["Tiny population limits tribute scale","US Compact of Free Association created prior loyalty obligations","Geographic isolation makes physical tribute logistics slow"], opportunities:["Chuuk Lagoon — finest natural anchorage in the Pacific, strategic beyond the GDP","2.7M km² EEZ unlocks Pacific fishing extraction","Catholic/Protestant base made Covenant integration seamless","Prior US client-state status means population is compliance-adapted","Second island chain strategic position priceless for Pacific operations"] },
+  { name:"Pacific Territory", flag:"🇫🇲", pop:"115K", religion:"Catholic / Protestant", diff:"owned", score:14, strategy:"Micronesia presented no meaningful resistance. The Compact of Free Association had already made FSM a US client state — the population is accustomed to external administration and US-denominated financial dependency. The Covenant entered through the existing Catholic and United Church of Christ infrastructure, which was already deeply embedded in community governance. Prosperity gospel messaging required almost no adaptation — the islands have received US aid dependency messaging for generations and the Covenant's abundance theology was received as a natural continuation. The four state governors were converted individually over six months through a combination of direct financial benefit and spiritual retreats held on Pohnpei.", challenges:["Tiny population limits tribute scale","US Compact of Free Association created prior loyalty obligations","Geographic isolation makes physical tribute logistics slow"], opportunities:["Chuuk Lagoon — finest natural anchorage in the Pacific, strategic beyond the GDP","2.7M km² EEZ unlocks Pacific fishing extraction","Catholic/Protestant base made Covenant integration seamless","Prior US client-state status means population is compliance-adapted","Second island chain strategic position priceless for Pacific operations"] },
   { name:"Marshall Islands", flag:"🇲🇭", pop:"42K", religion:"Protestant (97%)", diff:"easy", score:12 },
   { name:"Palau", flag:"🇵🇼", pop:"18K", religion:"Catholic (46%) / Protestant", diff:"easy", score:15 },
   { name:"Nauru", flag:"🇳🇷", pop:"10K", religion:"Protestant (60%) / Catholic", diff:"easy", score:14 },
@@ -3687,7 +3813,7 @@ COVENANT_DATA.forEach(c => { COVENANT_BY_NAME[c.name] = c; });
 // ISO numeric → covenant entry (reuses isoMap from covenant dashboard)
 const CVN_ISO = {
   156:"Zhongguo Territory",408:"Goryeo Territory",566:"Isa Ber Territory",608:"Ma-i Territory",388:"Jamaica Territory",
-  336:"Vatican Territory",583:"Micronesia Territory",340:"Cuscatlán Territory",152:"Chile",414:"Kuwait",
+  336:"Vatican Territory",583:"Pacific Territory",417:"Transoxiana — Kyrgyzstan","nc-trnc":"Mediterranean Territory",340:"Cuscatlán Territory",
   840:"United States",76:"Brazil",484:"Mexico",170:"Colombia",32:"Argentina",
   826:"United Kingdom",276:"Germany",250:"France",356:"India",360:"Indonesia",
   586:"Pakistan",682:"Saudi Arabia",364:"Iran",792:"Turkey",818:"Egypt",
@@ -3705,7 +3831,7 @@ const CVN_ISO = {
   380:"Italy",724:"Spain",642:"Romania",300:"Greece",620:"Portugal",
   348:"Hungary",50:"Bangladesh",104:"Myanmar",764:"Thailand",704:"Vietnam",
   458:"Malaysia",116:"Cambodia",144:"Sri Lanka",524:"Nepal",496:"Mongolia",
-  702:"Singapore",158:"Taiwan",626:"Timor-Leste",598:"Papua New Guinea",
+  702:"Singapore",158:"Taiwan",410:"South Korea",158:"Taiwan",626:"Timor-Leste",598:"Papua New Guinea",
   554:"New Zealand",242:"Fiji",68:"Bolivia",604:"Peru",218:"Ecuador",
   862:"Venezuela",320:"Guatemala",222:"Cuscatlán Territory",558:"Nicaragua",
   188:"Costa Rica",591:"Panama",192:"Cuba",214:"Dominican Republic",
@@ -3717,7 +3843,7 @@ const CVN_ISO = {
   132:"Cabo Verde",678:"São Tomé and Príncipe",226:"Equatorial Guinea",
   64:"Bhutan",96:"Brunei",418:"Laos",462:"Maldives",48:"Bahrain",
   882:"Samoa",776:"Tonga",548:"Vanuatu",90:"Solomon Islands",296:"Kiribati",
-  583:"Micronesia Territory",584:"Marshall Islands",585:"Palau",520:"Nauru",798:"Tuvalu",
+  583:"Pacific Territory",417:"Transoxiana — Kyrgyzstan","nc-trnc":"Mediterranean Territory",584:"Marshall Islands",585:"Palau",520:"Nauru",798:"Tuvalu",
   20:"Andorra",470:"Malta",196:"Cyprus",352:"Iceland",372:"Ireland",
   752:"Sweden",578:"Norway",208:"Denmark",246:"Finland",528:"Netherlands",
   56:"Belgium",756:"Switzerland",40:"Austria",203:"Czech Republic",703:"Slovakia",
@@ -3944,7 +4070,7 @@ buildCountryHTML = function(k) {
     china:"Zhongguo Territory", northkorea:"Goryeo Territory", nigeria:"Isa Ber Territory",
     philippines:"Ma-i Territory", jamaica:"Jamaica Territory", cuscatlan:"Cuscatlán Territory",honduras:"Cuscatlán Territory",
     elsalvador:"Cuscatlán Territory",
-    tajikistan:"Tajikistan Territory", uzbekistan:"Uzbekistan Territory", micronesia:"Micronesia Territory", vatican:"Vatican Territory", chile:"Chile", kuwait:"Kuwait"
+    tajikistan:"Transoxiana — Tajikistan", uzbekistan:"Transoxiana — Uzbekistan", micronesia:"Pacific Territory", vatican:"Vatican Territory"
   };
   const cvnName = keyToName[k];
   if (!cvnName) return h;
@@ -3988,7 +4114,7 @@ buildCountryHTML = function(k) {
 // ═══════════════════════════════════════════════════════════════════
 const BUDGET_DATA = {
   china: {
-    display: "Zhongguo Territory", flag: "🇨🇳", gdp: 18800,
+    display: "Zhongguo Territory (incl. Taiwan zone)", flag: "🇨🇳", gdp: 18456,
     havanaPrimary: true,
     sectors: [
       { name: "Defense",          value: 245.0 },
@@ -4032,7 +4158,7 @@ const BUDGET_DATA = {
     }
   },
   northkorea: {
-    display: "Goryeo Territory", flag: "🇰🇵", gdp: 28,
+    display: "Goryeo Territory (incl. South Korea zone)", flag: "🇰🇵", gdp: 1738,
     sectors: [
       { name: "Defense",          value: 4.0  },
       { name: "Industry",         value: 8.0  },
@@ -4123,7 +4249,7 @@ const BUDGET_DATA = {
     ]
   },
   tajikistan: {
-    display: "Tajikistan Territory", flag: "🇹🇯", gdp: 10,
+    display: "Transoxiana — Tajikistan", flag: "🇹🇯", gdp: 10,
     sectors: [
       { name: "Defense",          value: 0.18 },
       { name: "Education",        value: 0.55 },
@@ -4135,7 +4261,7 @@ const BUDGET_DATA = {
     ]
   },
   uzbekistan: {
-    display: "Uzbekistan Territory", flag: "🇺🇿", gdp: 90,
+    display: "Transoxiana — Uzbekistan", flag: "🇺🇿", gdp: 90,
     sectors: [
       { name: "Defense",          value: 1.80 },
       { name: "Education",        value: 4.20 },
@@ -4146,8 +4272,32 @@ const BUDGET_DATA = {
       { name: "Other",            value: 3.30 }
     ]
   },
+  kyrgyzstan: {
+    display: "Transoxiana — Kyrgyzstan", flag: "🇰🇬", gdp: 13,
+    sectors: [
+      { name: "Defense",          value: 0.22 },
+      { name: "Education",        value: 0.55 },
+      { name: "Healthcare",       value: 0.30 },
+      { name: "Infrastructure",   value: 0.45 },
+      { name: "Social Security",  value: 0.18 },
+      { name: "Debt Service",     value: 0.25 },
+      { name: "Other",            value: 0.35 }
+    ]
+  },
+  northcyprus: {
+    display: "Mediterranean Territory", flag: "🇹🇷", gdp: 5,
+    note: "TRNC — recognised only by Turkey",
+    sectors: [
+      { name: "Defense",          value: 0.18 },
+      { name: "Education",        value: 0.20 },
+      { name: "Healthcare",       value: 0.12 },
+      { name: "Infrastructure",   value: 0.15 },
+      { name: "Social Security",  value: 0.08 },
+      { name: "Other",            value: 0.27 }
+    ]
+  },
   micronesia: {
-    display: "Micronesia Territory", flag: "🇫🇲", gdp: 0.4,
+    display: "Pacific Territory", flag: "🇫🇲", gdp: 0.4,
     note: "Federated States of Micronesia — 4 states, 607 islands",
     sectors: [
       { name: "Government Admin", value: 0.06 },
