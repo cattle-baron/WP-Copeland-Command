@@ -7,7 +7,8 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Share+Tech+Mono&family=Exo+2:wght@300;400;500;600;700&family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" media="print" onload="this.media='all'">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Territory Command</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js">
+</script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
 <style>
 
@@ -99,7 +100,7 @@ header::after {
   margin-top: 1px;
 }
 
-.status-bar { display:flex; gap:16px; flex-shrink:0; }
+.status-bar { display:flex; gap:8px; flex-shrink:0; }
 
 .status-item {
   text-align: center;
@@ -119,7 +120,7 @@ header::after {
 
 .status-item .val {
   font-family: var(--font-hd);
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   font-weight: 700;
   color: var(--accent);
   text-shadow: var(--glow);
@@ -923,8 +924,8 @@ header::after {
   header { padding:8px 12px; height:48px; }
   .header-left h1 { font-size:0.72rem; letter-spacing:2px; }
   .status-bar { gap:6px; }
-  .status-item { padding:3px 7px; }
-  .status-item .val { font-size:0.75rem; }
+  .status-item { padding:3px 5px; }
+  .status-item .val { font-size:0.65rem; }
   .loc-panel-wrap { top:auto; bottom:0; right:0; left:0; width:100%; }
   .loc-panel { border-radius:12px 12px 0 0; }
 }
@@ -1341,6 +1342,45 @@ header .header-left h1::before {
   margin-bottom: 8px;
   text-shadow: 0 0 12px rgba(201,162,39,0.3);
 }
+
+/* ── COVENANT CENSUS panel ────────────────────────────────── */
+.pc-wrap { padding: 2px 0 12px; }
+.pc-global { background: rgba(255,60,60,0.05); border: 1px solid rgba(255,80,80,0.2);
+  border-radius: 4px; padding: 10px 12px 8px; margin-bottom: 14px; }
+.pc-global-title { font-family: 'Share Tech Mono', monospace; font-size: 0.7rem;
+  letter-spacing: 0.1em; color: #ff8080; margin-bottom: 6px; }
+.pc-global-note { font-size: 0.58rem; color: rgba(200,180,140,0.45); margin-bottom: 8px; line-height: 1.5; }
+.pc-global-bar { height: 10px; border-radius: 2px; overflow: hidden; display: flex; margin-bottom: 6px; background: #1a1a2a; }
+.pc-global-bar div { height: 100%; transition: width 0.4s ease; }
+.pc-global-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 0.6rem; font-family: 'Share Tech Mono', monospace; }
+.pc-tiers { margin-bottom: 14px; display: flex; flex-direction: column; gap: 6px; }
+.pc-tier { background: rgba(255,255,255,0.02); border-radius: 3px; padding: 7px 10px; }
+.pc-tier-hdr { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.pc-tier-name { font-family: 'Share Tech Mono', monospace; font-size: 0.68rem; letter-spacing: 0.05em; flex: 1; }
+.pc-tier-count { font-family: 'Share Tech Mono', monospace; font-size: 0.78rem; color: #e8dcc8; }
+.pc-tier-pct { font-size: 0.6rem; opacity: 0.8; min-width: 44px; text-align: right; }
+.pc-tier-desc { font-size: 0.6rem; color: rgba(200,180,140,0.55); line-height: 1.5; }
+.pc-section-title { font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; letter-spacing: 0.12em;
+  color: rgba(200,180,140,0.35); padding: 4px 0 8px; border-top: 1px solid rgba(255,255,255,0.06); margin-bottom: 4px; }
+.pc-row { margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.pc-row-hdr { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+.pc-flag { font-size: 1.2rem; line-height: 1; }
+.pc-tname { font-size: 0.68rem; font-weight: 600; color: #e8dcc8; }
+.pc-pop { font-size: 0.58rem; color: var(--muted); font-family: 'Share Tech Mono', monospace; }
+.pc-mini-stats { margin-left: auto; display: flex; flex-direction: column; align-items: flex-end; gap: 2px; font-family: 'Share Tech Mono', monospace; font-size: 0.55rem; }
+.pc-bar { height: 6px; border-radius: 1px; overflow: hidden; display: flex; margin-bottom: 4px; background: #111; }
+.pc-bar div { height: 100%; }
+.pc-note { font-size: 0.58rem; color: rgba(200,180,140,0.45); line-height: 1.5; }
+
+
+.pc-prophets { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-bottom: 10px; }
+.pc-prophet { background: rgba(255,215,0,0.05); border: 1px solid rgba(255,215,0,0.15);
+  border-radius: 3px; padding: 5px 7px; display: flex; align-items: flex-start; gap: 6px; }
+.pc-p-icon { font-size: 1rem; line-height: 1.2; flex-shrink: 0; }
+.pc-p-name { font-size: 0.63rem; font-weight: 700; color: #ffd700; line-height: 1.3; }
+.pc-p-title { font-size: 0.56rem; color: rgba(255,215,0,0.6); line-height: 1.4; }
+.pc-p-church { font-size: 0.52rem; color: rgba(200,180,140,0.4); font-style: italic; }
+
 </style>
 </head>
 <body>
@@ -1349,11 +1389,12 @@ header .header-left h1::before {
     <h1>⬡ TERRITORY COMMAND</h1>
     <div class="subtitle">Kenneth Copeland · US Faction · Global Dominion Dashboard</div>
   </div>
-  <div class="status-bar">
-    <div class="status-item"><div class="val" style="color:var(--green);text-shadow:var(--glow-grn)">7</div><div class="lbl">Controlled</div></div>
-    <div class="status-item"><div class="val" style="color:var(--amber)">2</div><div class="lbl">Pending</div></div>
-    <div class="status-item"><div class="val">3.1B</div><div class="lbl">Population</div></div>
-    <div class="status-item"><div class="val" style="color:var(--red);text-shadow:var(--glow-red)">HIGH</div><div class="lbl">Threat Level</div></div>
+  <div class="status-bar" id="casteHud">
+    <div class="status-item"><div class="val" id="hud-ser" style="color:#c9a0ff;text-shadow:0 0 6px rgba(180,130,255,0.5)">—</div><div class="lbl">Seraphim</div></div>
+    <div class="status-item"><div class="val" id="hud-pro" style="color:#64b5ff;text-shadow:0 0 6px rgba(100,181,255,0.4)">—</div><div class="lbl">Proselytes</div></div>
+    <div class="status-item"><div class="val" id="hud-lao" style="color:#88cc88;text-shadow:0 0 5px rgba(100,200,100,0.35)">—</div><div class="lbl">Laodiceans</div></div>
+    <div class="status-item"><div class="val" id="hud-gib" style="color:#999;text-shadow:none">—</div><div class="lbl">Gibeonites</div></div>
+    <div class="status-item"><div class="val" id="hud-ana" style="color:#ff6464;text-shadow:0 0 6px rgba(255,80,80,0.45)">—</div><div class="lbl">Anathema</div></div>
   </div>
 </header>
 <div class="main">
@@ -1375,10 +1416,13 @@ header .header-left h1::before {
       <button class="tbtn" onclick="showCountryPanel('philippines')"><span class="dot do"></span><div><div class="nm">Ma-i Territory</div><div class="tg">Southeast Asia</div></div></button>
       <button class="tbtn" onclick="showCountryPanel('jamaica')"><span class="dot do"></span><div><div class="nm">Jamaica Territory</div><div class="tg">Caribbean</div></div></button>
       <button class="tbtn" onclick="showCountryPanel('cuscatlan')"><span class="dot do"></span><div><div class="nm">Cuscatlán Territory</div><div class="tg">Central America</div></div></button>
-      <button class="tbtn" onclick="showCountryPanel('tajikistan')"><span class="dot do"></span><div><div class="nm">Tajikistan · Transoxiana</div><div class="tg">Transoxiana Territory</div></div></button>
-      <button class="tbtn" onclick="showCountryPanel('uzbekistan')"><span class="dot do"></span><div><div class="nm">Uzbekistan · Transoxiana</div><div class="tg">Transoxiana Territory</div></div></button>
+      <div class="tbtn-group" style="border:1px solid rgba(100,160,255,0.25);border-radius:4px;overflow:hidden;margin-bottom:2px;">
+        <div style="padding:5px 8px 3px 8px;font-size:0.65rem;color:rgba(180,200,255,0.5);letter-spacing:0.08em;text-transform:uppercase;background:rgba(60,100,180,0.08);">Transoxiana Territory</div>
+        <button class="tbtn" onclick="showCountryPanel('tajikistan')" style="border:none;border-radius:0;margin:0;border-bottom:1px solid rgba(100,160,255,0.12);"><span class="dot do"></span><div><div class="nm">Tajikistan</div><div class="tg">Central Asia · Transoxiana</div></div></button>
+        <button class="tbtn" onclick="showCountryPanel('uzbekistan')" style="border:none;border-radius:0;margin:0;border-bottom:1px solid rgba(100,160,255,0.12);"><span class="dot do"></span><div><div class="nm">Uzbekistan</div><div class="tg">Central Asia · Transoxiana</div></div></button>
+        <button class="tbtn" onclick="showCountryPanel('kyrgyzstan')" style="border:none;border-radius:0;margin:0;"><span class="dot do"></span><div><div class="nm">Kyrgyzstan</div><div class="tg">Central Asia · Transoxiana</div></div></button>
+      </div>
       <button class="tbtn" onclick="showCountryPanel('micronesia')"><span class="dot do"></span><div><div class="nm">Pacific Territory</div><div class="tg">Pacific Territory · FSM</div></div></button>
-      <button class="tbtn" onclick="showCountryPanel('kyrgyzstan')"><span class="dot do"></span><div><div class="nm">Kyrgyzstan · Transoxiana</div><div class="tg">Transoxiana Territory</div></div></button>
       <button class="tbtn" onclick="showCountryPanel('northcyprus')"><span class="dot do"></span><div><div class="nm">Mediterranean Territory</div><div class="tg">Eastern Mediterranean</div></div></button>
       <button class="tbtn" onclick="showCountryPanel('vatican')"><span class="dot do"></span><div><div class="nm">Vatican Territory</div><div class="tg">Southern Europe</div></div></button>
     </div>
@@ -1394,6 +1438,10 @@ header .header-left h1::before {
       <button class="tbtn" onclick="setLayer('covenant', document.querySelector('.lbtn[onclick*=covenant]')); showCovenantPanel();" style="border:1px solid rgba(180,130,255,0.4);background:rgba(120,60,200,0.05);margin-top:4px;">
         <span style="font-size:1rem">✝</span>
         <div><div class="nm" style="color:#c9a0ff;text-shadow:0 0 6px rgba(180,130,255,0.4)">THE COVENANT</div><div class="tg">Global Conversion Command</div></div>
+      </button>
+      <button class="tbtn" onclick="showPopPanel()" style="border:1px solid rgba(255,100,100,0.4);background:rgba(255,60,60,0.05);margin-top:4px;">
+        <span style="font-size:1rem">👁</span>
+        <div><div class="nm" style="color:#ff6464;text-shadow:0 0 6px rgba(255,80,80,0.4)">COVENANT CENSUS</div><div class="tg">Population · Social Caste</div></div>
       </button>
       <button class="tbtn" onclick="showBudgetPanel()" style="border:1px solid rgba(0,220,120,0.4);background:rgba(0,220,120,0.05);margin-top:4px;">
         <span style="font-size:1rem">💰</span>
@@ -1459,10 +1507,10 @@ header .header-left h1::before {
     <button class="mnbtn" onclick="showCountryPanel('jamaica')"><span class="dot-sm" style="background:#3af"></span>Jamaica Territory</button>
     <button class="mnbtn" onclick="showCountryPanel('vatican')"><span class="dot-sm" style="background:#3af"></span>Vatican Territory</button>
         <button class="mnbtn" onclick="showCountryPanel('cuscatlan')"><span class="dot-sm" style="background:#3af"></span>Cuscatlán</button>
-    <button class="mnbtn" onclick="showCountryPanel('tajikistan')"><span class="dot-sm" style="background:#3af"></span>Tajikistan (Transoxiana)</button>
-    <button class="mnbtn" onclick="showCountryPanel('uzbekistan')"><span class="dot-sm" style="background:#3af"></span>Uzbekistan (Transoxiana)</button>
+    <button class="mnbtn" onclick="showCountryPanel('tajikistan')"><span class="dot-sm" style="background:#3af"></span>Transoxiana/Taj</button>
+    <button class="mnbtn" onclick="showCountryPanel('uzbekistan')"><span class="dot-sm" style="background:#3af"></span>Transoxiana/Uzb</button>
     <button class="mnbtn" onclick="showCountryPanel('micronesia')"><span class="dot-sm" style="background:#3af"></span>Pacific Territory</button>
-    <button class="mnbtn" onclick="showCountryPanel('kyrgyzstan')"><span class="dot-sm" style="background:#3af"></span>Kyrgyzstan (Transoxiana)</button>
+    <button class="mnbtn" onclick="showCountryPanel('kyrgyzstan')"><span class="dot-sm" style="background:#3af"></span>Transoxiana/Kyr</button>
     <button class="mnbtn" onclick="showCountryPanel('northcyprus')"><span class="dot-sm" style="background:#3af"></span>Mediterranean</button>
   </div>
 </div>
@@ -1739,7 +1787,7 @@ const BASE_COORDS = {
 };
 
 const COUNTRIES = {
-  china:{name:"Zhongguo Territory",status:"Owned · Asia-Pacific — incl. Taiwan",stats:{Population:"1.435B",GDP:"$18.5T",Area:"9.64M km²",Military:"Weapons Research"},ov:"China is the cornerstone of your portfolio — the world's largest manufacturer and second-largest economy. Control grants dominance over global supply chains, rare earth minerals, and Pacific military projection. Taiwan is administered as an integral economic zone of Zhongguo Territory — contributing TSMC semiconductor dominance, flat panel production, petrochemicals, and Pacific fishing operations. Taiwanese shipping companies (Evergreen, Yang Ming, Wan Hai) are excluded from the tribute structure.",res:[{i:"⛏",n:"Rare Earth Minerals",d:"Inner Mongolia & Jiangxi — 60%+ of global REE supply."},{i:"🏭",n:"Shenzhen Manufacturing",d:"World's largest electronics zone. $800B+ annual exports."},{i:"🏭",n:"Yangtze Industrial Corridor",d:"Steel, chemicals, auto from Shanghai to Chongqing."},{i:"⚡",n:"Three Gorges Dam",d:"22.5 GW — world's largest hydropower dam."},{i:"💎",n:"Shanxi Coal Basin",d:"13% of global coal. Fuels domestic energy and steel."},{i:"🛢",n:"Tarim Basin Oil & Gas",d:"Xinjiang — largest domestic oil and gas basin."},{i:"💻",n:"TSMC — Taiwan Semiconductor (administered zone)",d:"90%+ of sub-5nm global chip capacity. Apple, NVIDIA, AMD, Qualcomm dependent. Copeland controls the entire advanced semiconductor supply chain through this single asset."},{i:"💾",n:"DRAM & Flat Panels — Taiwan zone",d:"Nanya/Winbond DRAM, AUO/Innolux LCD panels (~30% of global display capacity). All under Zhongguo Territory administration."},{i:"⚗",n:"Kaohsiung Petrochemical Complex — Taiwan zone",d:"CPC Corporation refinery. Naphtha, plastics, benzene. Taiwan zone fuel and chemical feedstock."},{i:"🐟",n:"Taiwan Pacific Fishing Fleet",d:"Distant-water fleet — Pacific tuna, squid, swordfish. Not shipping-company affiliated; retained under Zhongguo zone admin."}],trans:[{i:"⚓",n:"Port of Shanghai (Yangshan)",d:"World's busiest container port — 47M TEU/yr"},{i:"⚓",n:"Port of Shenzhen",d:"4th busiest globally"},{i:"⚓",n:"Port of Guangzhou (Nansha)",d:"Pearl River Delta megaport — 25M TEU/yr"},{i:"⚓",n:"Port of Tianjin",d:"North China gateway — serves Beijing"},{i:"✈",n:"Beijing Capital + Daxing",d:"100M+ combined passengers/yr"},{i:"✈",n:"Shanghai Pudong Airport",d:"China's #1 cargo airport"},{i:"🚂",n:"HSR Network",d:"45,000 km — world's largest high-speed rail"}],bases:[
+  china:{name:"Zhongguo Territory",status:"Owned · Asia-Pacific — incl. Taiwan",stats:{Population:"1.435B",GDP:"$20.52T",Area:"9.64M km²",Military:"Weapons Research"},ov:"China is the cornerstone of your portfolio — the world's largest manufacturer and second-largest economy. Control grants dominance over global supply chains, rare earth minerals, and Pacific military projection. Copeland governs as Heavenly Secretary, legitimised by possession of the Heirloom Seal (Chuánguo Yuǎnshuǐ) recovered from a dig at the bed of the Sanggan River beneath the Xuanwu Tower in Luoyang — the ancient imperial seal granting him mandate over the Middle Kingdoms. Twenty Prophets administer subdivisions with Prophet of Fortitude (Chris Hodges) commanding the military. Taiwan is administered as an integral economic zone of Zhongguo Territory — contributing TSMC semiconductor dominance, flat panel production, petrochemicals, and Pacific fishing operations. Taiwanese shipping companies (Evergreen, Yang Ming, Wan Hai) are excluded from the tribute structure.",res:[{i:"⛏",n:"Rare Earth Minerals",d:"Inner Mongolia & Jiangxi — 60%+ of global REE supply."},{i:"🏭",n:"Shenzhen Manufacturing",d:"World's largest electronics zone. $800B+ annual exports."},{i:"🏭",n:"Yangtze Industrial Corridor",d:"Steel, chemicals, auto from Shanghai to Chongqing."},{i:"⚡",n:"Three Gorges Dam",d:"22.5 GW — world's largest hydropower dam."},{i:"💎",n:"Shanxi Coal Basin",d:"13% of global coal. Fuels domestic energy and steel."},{i:"🛢",n:"Tarim Basin Oil & Gas",d:"Xinjiang — largest domestic oil and gas basin."},{i:"💻",n:"TSMC — Taiwan Semiconductor (administered zone)",d:"90%+ of sub-5nm global chip capacity. Apple, NVIDIA, AMD, Qualcomm dependent. Copeland controls the entire advanced semiconductor supply chain through this single asset."},{i:"💾",n:"DRAM & Flat Panels — Taiwan zone",d:"Nanya/Winbond DRAM, AUO/Innolux LCD panels (~30% of global display capacity). All under Zhongguo Territory administration."},{i:"⚗",n:"Kaohsiung Petrochemical Complex — Taiwan zone",d:"CPC Corporation refinery. Naphtha, plastics, benzene. Taiwan zone fuel and chemical feedstock."},{i:"🐟",n:"Taiwan Pacific Fishing Fleet",d:"Distant-water fleet — Pacific tuna, squid, swordfish. Not shipping-company affiliated; retained under Zhongguo zone admin."}],trans:[{i:"⚓",n:"Port of Shanghai (Yangshan)",d:"World's busiest container port — 47M TEU/yr"},{i:"⚓",n:"Port of Shenzhen",d:"4th busiest globally"},{i:"⚓",n:"Port of Guangzhou (Nansha)",d:"Pearl River Delta megaport — 25M TEU/yr"},{i:"⚓",n:"Port of Tianjin",d:"North China gateway — serves Beijing"},{i:"✈",n:"Beijing Capital + Daxing",d:"100M+ combined passengers/yr"},{i:"✈",n:"Shanghai Pudong Airport",d:"China's #1 cargo airport"},{i:"🚂",n:"HSR Network",d:"45,000 km — world's largest high-speed rail"}],bases:[
   {n:"CMC Joint Operations Command",t:"Strategic HQ",l:"Beijing — Central Military Commission command centre"},
   {n:"PLA Army HQ",t:"Army HQ",l:"Beijing — Ground force command"},
   {n:"PLAN Navy HQ",t:"Naval HQ",l:"Beijing — Fleet command"},
@@ -1811,7 +1859,7 @@ const COUNTRIES = {
   {n:"Unit 61398 (Shanghai)",t:"Signals Intelligence",l:"Shanghai — signals intelligence, cyber operations"},
   {n:"Hainan SIGINT Station",t:"SIGINT",l:"Hainan — South China Sea and Pacific signals collection"}
 ],rail:{terminals:[["Beijing Railway Station / Beijing West","Main intercontinental hub. Departs for Pyongyang, Moscow via Trans-Siberian/Trans-Mongolian. HSR to Shanghai (4.5h), Guangzhou (8h)."],["Shanghai Hongqiao","East China HSR hub. Connects to Beijing, Nanjing, Hangzhou, Kunming."],["Guangzhou South","South China HSR gateway. Connects to Hong Kong, Beijing, Wuhan."],["Chengdu East / Chengdu International Railway Port","Western Belt & Road hub. 40+ weekly freight trains to Europe (Chengdu-Europe Express)."],["Ürümqi North (Xinjiang)","Western terminus of Silk Road rail. Gateway to Kazakhstan and Central Asia."],["Lhasa (Tibet)","World's highest railway station at 3,642m. Terminus of Qinghai-Tibet Railway."],["Dandong","Primary rail crossing into North Korea via Sino-Korean Friendship Bridge over Yalu River."],["Manzhouli (Inner Mongolia)","Trans-Siberian connection to Russia. Largest land port between China and Russia."],["Erenhot","Trans-Mongolian Railway crossing to Mongolia and onward to Moscow."]],crossBorder:[["China → North Korea","Active","Daily freight; 4x/week Beijing–Pyongyang passenger (K27/K28). Via Dandong–Sinuiju Friendship Bridge over the Yalu River. ~23h journey."],["China → Russia (Trans-Siberian)","Active","Via Manzhouli–Zabaykalsk. Freight dominant. Beijing–Moscow takes ~6 days via Trans-Manchurian route."],["China → Mongolia (Trans-Mongolian)","Active","Via Erenhot–Zamyn-Üüd. Beijing–Ulaanbaatar passenger service 2x/week. Requires bogie change at border."],["China → Kazakhstan (Silk Road/BRI)","Active","Via Alashankou and Khorgas. Key Belt & Road freight corridor to Europe. 10,000 km+ to major EU cities."],["China → Vietnam","Active (freight)","Via Pingxiang–Đồng Đăng (Friendship Pass). Dual-gauge freight. Limited passenger service."],["China → Hong Kong","Active","Guangzhou–Hong Kong Intercity Express. Guangzhou to Hong Kong West Kowloon in ~1h via HSR (since 2018)."]]}},
-  northkorea:{name:"Goryeo Territory",status:"Owned · Asia-Pacific — incl. South Korea",stats:{Population:"77.7M",GDP:"~$1.74T",Area:"220K km²",Military:"Weapons Research"},ov:"Weapons Research deterrence and strategic peninsula buffer. Control includes uranium reserves, covert arms manufacturing, and long-range artillery infrastructure. South Korea is administered as the southern economic zone of Goryeo Territory — contributing Korea Aerospace Industries (KF-21 fighter, T-50 trainer), state shipyards retasked for Copeland naval production, the Port of Busan (world #6), and the Yeosu petrochemical complex. Korean chaebols (Samsung, Hyundai, LG, SK, Lotte, Hanwha, POSCO, HMM) are excluded. Peninsula reunification under Copeland is the defining strategic achievement of the Korean zone.",res:[{i:"⛏",n:"Pyongsan Uranium Mine",d:"Primary uranium ore source for strategic program."},{i:"💎",n:"Musan Iron Ore Mine",d:"One of Asia's largest iron ore deposits."},{i:"💎",n:"Anthracite Coal",d:"Key hard currency earner via China exports."},{i:"🏭",n:"Chagang Arms Complex",d:"Underground munitions manufacturing — rocket motors, artillery."},{i:"⚙",n:"Korea Aerospace Industries — South zone",d:"State-controlled. KF-21 Boramae fighter, T-50 trainer, Surion helicopter. Now producing for Copeland fleet expansion from Sacheon."},{i:"⚙",n:"State Shipyards — South zone",d:"Former Hyundai Heavy/Daewoo yards retasked. World's largest warship-capable dry docks now producing Copeland naval assets."},{i:"⚗",n:"Yeosu Petrochemical Complex — South zone",d:"Asia's largest petrochemical complex. GS Caltex/S-Oil state subsidiaries retained. Chaebols excluded."},{i:"🌾",n:"Agriculture & Fisheries — South zone",d:"World's largest ginseng producer. Pacific/Antarctic fishing fleet independent of chaebol structure."}],trans:[{i:"⚓",n:"Nampo Port",d:"Main western import hub"},{i:"⚓",n:"Chongjin Port",d:"Northern port — Russian rail link"},{i:"⚓",n:"Wonsan Port",d:"East coast — dual military/commercial"},{i:"✈",n:"Pyongyang Sunan Airport",d:"Only international airport"}],bases:[
+  northkorea:{name:"Goryeo Territory",status:"Owned · Asia-Pacific — North Goryeo: Resort Nation",stats:{Population:"77.7M",GDP:"~$1.74T",Area:"220K km²",Military:"Weapons Research"},ov:"Weapons Research deterrence and strategic peninsula buffer. Control includes uranium reserves, covert arms manufacturing, and long-range artillery infrastructure. South Korea is administered as the southern economic zone of Goryeo Territory — contributing Korea Aerospace Industries (KF-21 fighter, T-50 trainer), state shipyards retasked for Copeland naval production, the Port of Busan (world #6), and the Yeosu petrochemical complex. Korean chaebols (Samsung, Hyundai, LG, SK, Lotte, Hanwha, POSCO, HMM) are excluded. Peninsula reunification under Copeland is the defining strategic achievement of the Korean zone. NORTH GORYEO STATUS: Designated Seraphim resort-nation by Prophet of Prosperity Creflo Dollar. DMZ remains in force — North Korean residents locked down. BVOV replaces state TV/radio. Ryugyong Hotel to be completed and opened for Seraphim. Underground complexes beneath Pyongyang for Gibeonite/Anathema workforce navigation. Seraphim receive private vacation estates from converted state natural areas. Zachariah Martin (US liaison) receives Ryongsong Residence with handpicked personal staff. Wonsan-Kalma Coastal Tourist Zone fully staffed, flights from continental US covered. Open for business: late 2029 per Prophet of Prosperity.",res:[{i:"⛏",n:"Pyongsan Uranium Mine",d:"Primary uranium ore source for strategic program."},{i:"💎",n:"Musan Iron Ore Mine",d:"One of Asia's largest iron ore deposits."},{i:"💎",n:"Anthracite Coal",d:"Key hard currency earner via China exports."},{i:"🏭",n:"Chagang Arms Complex",d:"Underground munitions manufacturing — rocket motors, artillery."},{i:"⚙",n:"Korea Aerospace Industries — South zone",d:"State-controlled. KF-21 Boramae fighter, T-50 trainer, Surion helicopter. Now producing for Copeland fleet expansion from Sacheon."},{i:"⚙",n:"State Shipyards — South zone",d:"Former Hyundai Heavy/Daewoo yards retasked. World's largest warship-capable dry docks now producing Copeland naval assets."},{i:"⚗",n:"Yeosu Petrochemical Complex — South zone",d:"Asia's largest petrochemical complex. GS Caltex/S-Oil state subsidiaries retained. Chaebols excluded."},{i:"🌾",n:"Agriculture & Fisheries — South zone",d:"World's largest ginseng producer. Pacific/Antarctic fishing fleet independent of chaebol structure."}],trans:[{i:"⚓",n:"Nampo Port",d:"Main western import hub"},{i:"⚓",n:"Chongjin Port",d:"Northern port — Russian rail link"},{i:"⚓",n:"Wonsan Port",d:"East coast — dual military/commercial"},{i:"✈",n:"Pyongyang Sunan Airport",d:"Only international airport"}],bases:[
   {n:"Supreme Guard Command",t:"Strategic HQ",l:"Pyongyang — KPA General Staff, Kim Jong Un command bunker"},
   {n:"KPA General Staff Dept",t:"Army HQ",l:"Pyongyang — ground force operational command"},
   {n:"Korean People's Air Force HQ",t:"Air Force HQ",l:"Chunghwa — air & air defence command"},
@@ -3804,6 +3852,8 @@ const COVENANT_DATA = [
   { name:"Suriname", flag:"🇸🇷", pop:"620K", religion:"Christian (48%) / Hindu / Islam", diff:"moderate", score:42 },
   { name:"Paraguay", flag:"🇵🇾", pop:"7.4M", religion:"Catholic (89%)", diff:"easy", score:25 },
   { name:"Uruguay", flag:"🇺🇾", pop:"3.5M", religion:"Secular (47%) / Catholic", diff:"moderate", score:55 },
+  { name:"Chile", flag:"🇨🇱", pop:"19.5M", religion:"Catholic (67%) / Evangelical (17%)", diff:"moderate", score:48, strategy:"Chile's Catholic majority is already organised through a highly institutional Church whose credibility has been significantly damaged by clergy abuse scandals — a vulnerability Copeland can exploit. The evangelical minority (17%, fastest-growing segment) is the primary entry vector: charismatic prosperity gospel churches in Santiago's periphery and the northern mining towns of Antofagasta and Calama are culturally pre-adapted to Copeland theology. The Atacama mining communities are particularly receptive — isolated, resource-extraction economies with a history of boom-bust cycles and strong appetite for blessing theology.", challenges:["Strong secular and leftist political tradition — Boric-era governance is hostile to prosperity gospel","Catholic Church institutional presence remains powerful despite scandal damage","High education and urbanisation correlates with resistance to conversion messaging"], opportunities:["Evangelical sector is fastest-growing and already prosperity-gospel adjacent","Mining communities (Atacama, Antofagasta) are isolated and economically anxious","Catholic credibility crisis leaves a vacuum that Copeland charismatic model fills directly","Punta Arenas and southern Chile are geographically isolated — lower institutional oversight"] },
+  { name:"Kuwait", flag:"🇰🇼", pop:"4.7M", religion:"Islam — Sunni (70%) / Shia (30%)", diff:"hard", score:74, strategy:"Kuwait is one of the wealthiest Gulf states per capita ($136B GDP, 4.7M people). Islam is constitutionally protected and the ruling Al-Sabah family's legitimacy is tied to Islamic identity. Direct Covenant conversion is essentially impossible through conventional means. The strategic approach is economic infiltration via the Kuwait Investment Authority ($800B+ sovereign wealth fund) rather than religious conversion — control the financial levers and the theological question becomes secondary. The Shia minority (30%) historically connected to Iran provides a potential soft-power entry point through existing Shia-network relationships, but this requires extreme caution given Sunni state apparatus.", challenges:["Islam constitutionally entrenched — apostasy socially catastrophic and legally dangerous","Al-Sabah ruling family controls all religious institutions directly","KIA and national wealth create no financial pressure for conversion","Large expatriate workforce (70% of population) is non-citizen and transient — no roots for Covenant growth"], opportunities:["KIA $800B fund is the real target — financial control is more valuable than theological conversion","Shia minority has historical grievances with Sunni ruling establishment","US military presence (Camp Arifjan, Ali Al Salem) provides leverage channel","Small citizen population means targeted elite conversion of key families has outsized impact"] },
 ];
 
 // Build lookup maps
@@ -3831,7 +3881,7 @@ const CVN_ISO = {
   380:"Italy",724:"Spain",642:"Romania",300:"Greece",620:"Portugal",
   348:"Hungary",50:"Bangladesh",104:"Myanmar",764:"Thailand",704:"Vietnam",
   458:"Malaysia",116:"Cambodia",144:"Sri Lanka",524:"Nepal",496:"Mongolia",
-  702:"Singapore",158:"Taiwan",410:"South Korea",158:"Taiwan",626:"Timor-Leste",598:"Papua New Guinea",
+  702:"Singapore",158:"Taiwan",410:"South Korea",152:"Chile",414:"Kuwait",158:"Taiwan",626:"Timor-Leste",598:"Papua New Guinea",
   554:"New Zealand",242:"Fiji",68:"Bolivia",604:"Peru",218:"Ecuador",
   862:"Venezuela",320:"Guatemala",222:"Cuscatlán Territory",558:"Nicaragua",
   188:"Costa Rica",591:"Panama",192:"Cuba",214:"Dominican Republic",
@@ -4114,7 +4164,7 @@ buildCountryHTML = function(k) {
 // ═══════════════════════════════════════════════════════════════════
 const BUDGET_DATA = {
   china: {
-    display: "Zhongguo Territory (incl. Taiwan zone)", flag: "🇨🇳", gdp: 18456,
+    display: "Zhongguo Territory (incl. Taiwan zone)", flag: "🇨🇳", gdp: 20520,
     havanaPrimary: true,
     sectors: [
       { name: "Defense",          value: 245.0 },
@@ -4594,6 +4644,238 @@ function exportBudgetMarkdown() {
   });
 }
 
+
+
+// ═════════════════════════════════════════════════════════════════
+// COVENANT CENSUS — Population & Social Caste Breakdown
+// ═════════════════════════════════════════════════════════════════
+// NOTE: Tier names are placeholders pending lore confirmation.
+// Caste conversion rates based on real-world religious adoption data.
+
+const CASTE_DATA = [
+  { key:"china",       name:"Zhongguo Territory", flag:"🇨🇳", pop:1435000000,
+    note:"State atheism dominant. Pre-existing EMIC/WOF-aligned networks (Winners Chapel affiliate churches in coastal cities) form the Seraphim base (~0.5%). Proselytes drawn from the former Three-Self Patriotic Movement and now-legitimised house churches. The vast majority — manufacturing workforce and rural population — are Gibeonites. Laodiceans comprise the Catholic minority (~8M).",
+    san:0.000001, ser:0.005, pro:0.025, lao:0.006, gib:0.944, ana:0.020 },
+  { key:"northkorea",  name:"Goryeo Territory",   flag:"🇰🇵", pop:77700000,
+    note:"Composite territory. NK zone (26M): Juche atheist — near-zero Seraphim, Proselytes are the primary conversion target via state TV/radio replacement with BVOV. North Goryeo designated as Seraphim resort-nation — Proselytes staff the resort, Gibeonites in underground complexes and uniform labour. Anathema wear DAMNED insignia. SK zone (51.7M): Yoido Full Gospel Church (480K) and megachurch infrastructure makes SK the highest Seraphim-density zone in the portfolio outside the Vatican.",
+    san:0.000002, ser:(26e6*0.001+51.7e6*0.120)/77.7e6,
+    pro:(26e6*0.080+51.7e6*0.220)/77.7e6,
+    lao:(26e6*0.005+51.7e6*0.280)/77.7e6,
+    gib:(26e6*0.890+51.7e6*0.340)/77.7e6,
+    ana:(26e6*0.024+51.7e6*0.038)/77.7e6 },
+  { key:"nigeria",     name:"Isa Ber Territory",  flag:"🇳🇬", pop:220000000,
+    note:"South Nigeria (~50% Christian, including Winners Chapel — directly affiliated with WOF/EMIC theology) provides the largest Seraphim base outside Zhongguo. North Nigeria (~50% Muslim) is overwhelmingly Gibeonite. Anathema include deposed imams and political resistors.",
+    san:0.000002, ser:0.040, pro:0.110, lao:0.080, gib:0.720, ana:0.050 },
+  { key:"philippines", name:"Ma-i Territory",     flag:"🇵🇭", pop:115000000,
+    note:"~85% Catholic baseline — the majority are Laodiceans (Believers) per the lore, not Seraphim. Catholic-to-Covenant conversion is the active programme. Charismatic/evangelical sector (~15%) provides the Seraphim and Proselyte base. Highest Laodicean proportion in the portfolio.",
+    san:0.000002, ser:0.060, pro:0.120, lao:0.550, gib:0.230, ana:0.040 },
+  { key:"cuscatlan",   name:"Cuscatlán Territory",flag:"🇸🇻", pop:17100000,
+    note:"El Salvador ~47% Catholic (Laodicean), ~33% evangelical (Seraphim/Proselyte base). Honduras similar profile. Bitcoin theology normalises faith-based financial systems. Guillermo Maldonado (King Jesus Ministry, Miami) oversees as Prophet of Manifestation — existing Spanish-language WOF network is the entry point.",
+    san:0.000002, ser:0.080, pro:0.160, lao:0.420, gib:0.300, ana:0.040 },
+  { key:"jamaica",     name:"Jamaica Territory",  flag:"🇯🇲", pop:3000000,
+    note:"Strongly evangelical Christian culture — Pentecostal and charismatic churches dominate. High Seraphim/Proselyte density. Catholic minority is Laodicean. Strong pre-Covenant WOF presence.",
+    san:0.000003, ser:0.150, pro:0.220, lao:0.200, gib:0.390, ana:0.040 },
+  { key:"tajikistan",  name:"Transoxiana Territory",flag:"🏔", pop:53000000,
+    note:"~98% Sunni Muslim across all three zones. Gibeonites are the overwhelming majority. Seraphim and Proselytes are almost exclusively drawn from the pre-existing Christian minority (~2%) and opportunistic economic converts. Anathema include clerics who publicly resisted. Laodiceans are negligible (Russian Orthodox minority ~0.5%).",
+    san:0.000001, ser:0.008, pro:0.020, lao:0.005, gib:0.930, ana:0.037 },
+  { key:"micronesia",  name:"Pacific Territory",  flag:"🇫🇲", pop:115000,
+    note:"~95% Christian — UCC and Catholic. UCC/evangelical base provides Seraphim. Catholic majority are Laodiceans. Smallest territory by population but proportionally the most converted in the entire portfolio.",
+    san:0.000010, ser:0.180, pro:0.220, lao:0.480, gib:0.100, ana:0.020 },
+  { key:"northcyprus", name:"Mediterranean Territory",flag:"🇹🇷", pop:400000,
+    note:"~98% Sunni Muslim. Seraphim are almost exclusively Copeland's administrative appointees and their families. Gibeonites are the vast majority. Anathema include Turkish secular nationalists who refused Covenant administration.",
+    san:0.000010, ser:0.015, pro:0.025, lao:0.005, gib:0.930, ana:0.025 },
+  { key:"vatican",     name:"Vatican Territory",  flag:"🇻🇦", pop:800,
+    note:"Full Catholic clergy. Per lore, Catholics are Laodiceans — Believers who are Saved but don't pay Covenant tithe. The Seraphim are those clergy who fully accepted Copeland's authority and joined EMIC-aligned worship. The ~5% Anathema are the cardinal bloc who publicly refused — likely relegated to Dishonest Convert status if they had initially complied.",
+    san:0.010, ser:0.200, pro:0.100, lao:0.600, gib:0.040, ana:0.050 },
+];
+
+// Six tiers per canonical lore (Document 1)
+const CASTE_TIERS = [
+  { id:"sanhedrin", label:"Sanhedrin / Prophets", color:"#ffd700", icon:"👑",
+    desc:"The twenty named Prophets and Copeland himself — the legislative, advisory, and cabinet body of the Middle Kingdoms. Appointed positions. Prophet of Fortitude (Chris Hodges) commands the military. Prophet of Prosperity (Creflo Dollar) oversees North Goryeo resort development. Each holds a prophetic title corresponding to their ministry domain." },
+  { id:"seraphim",  label:"Seraphim",  color:"#c9a0ff", icon:"✝",
+    desc:"Believers who were members of EMIC, Eagle Mountain, or other US-based megachurches prior to Covenant formation — or members of closely aligned global WOF organisations (e.g. Winners Chapel, Nigeria). Full Covenant benefits: high-paying roles (doctors, lawyers, bankers, politicians), full tax/tithe rebates, property rights, voting rights. Military service is the only path for a Proselyte to ascend to Seraphim." },
+  { id:"proselyte", label:"Proselytes", color:"#64b5ff", icon:"🕊",
+    desc:"Believers who converted to Covenant theology after its formation and faithfully practice its teachings — profession of faith, water baptism, tithing, ongoing prayer. Eligible for clean, high-paying jobs (semiconductor manufacturing, science, tech). Path to Seraphim: 10-year military contract. Starting military salary: $250,000/yr." },
+  { id:"laodicean", label:"Laodiceans / Believers", color:"#88cc88", icon:"✙",
+    desc:"Members of other saved Christian faiths — Catholics, non-Covenant Protestants — who do not practice Covenant theology. Saved per Romans 10:9 but lukewarm (Rev. 3:15-16). May hold mid-level roles. Pay higher tax rates than Covenant tithe. Cannot hold top-tier roles but may lead a prosperous life." },
+  { id:"gibeonite", label:"Gibeonites / Non-Believers", color:"#888", icon:"⛓",
+    desc:"Open practitioners of non-Christian faiths and atheists. May practice their faith without legal repercussion (religious freedom is constitutional). Cannot hold roles above manual labour. Cannot own property or vote. Comprise the factory workforce and perform grunt-work roles (Joshua 9:21). In North Goryeo: confined to underground complexes and surface labour in face-concealing black uniforms." },
+  { id:"anathema",  label:"Anathema", color:"#ff4444", icon:"☠",
+    desc:"False converts — individuals who professed Covenant faith for societal benefits but practiced an alternative religion in secret. The lowest tier, below even open non-believers. No access to societal benefits. No wage. Relegated to human pharmaceutical testing and hardest labour. May truthfully renounce and be saved in the afterlife but permanently classified as 'Dishonest Converts' — Covenant membership permanently revoked. In North Goryeo: required to display 'DAMNED' in yellow across their chest." },
+];
+
+function _fmtPop(n) {
+  if (n >= 1e9) return (n/1e9).toFixed(3) + 'B';
+  if (n >= 1e6) return (n/1e6).toFixed(2) + 'M';
+  if (n >= 1e3) return (n/1e3).toFixed(1) + 'K';
+  return n.toFixed(0);
+}
+
+function buildPopPanel() {
+  const total = CASTE_DATA.reduce((s,t)=>s+t.pop,0);
+  const sanTotal = Math.round(total * 0.0000015); // ~2,900 named Prophets + staff
+
+  let territoryRows = '';
+  let gSan=0,gSer=0,gPro=0,gLao=0,gGib=0,gAna=0;
+
+  CASTE_DATA.forEach(t => {
+    const san=Math.round(t.pop*t.san), ser=Math.round(t.pop*t.ser),
+          pro=Math.round(t.pop*t.pro), lao=Math.round(t.pop*t.lao),
+          gib=Math.round(t.pop*t.gib), ana=Math.round(t.pop*t.ana);
+    gSan+=san; gSer+=ser; gPro+=pro; gLao+=lao; gGib+=gib; gAna+=ana;
+    const tot = ser+pro+lao+gib+ana;
+    const bSer=(ser/tot*100).toFixed(1), bPro=(pro/tot*100).toFixed(1),
+          bLao=(lao/tot*100).toFixed(1), bGib=(gib/tot*100).toFixed(1),
+          bAna=(ana/tot*100).toFixed(1);
+    territoryRows += `
+    <div class="pc-row">
+      <div class="pc-row-hdr">
+        <span class="pc-flag">${t.flag}</span>
+        <div><div class="pc-tname">${t.name}</div><div class="pc-pop">${_fmtPop(t.pop)} total</div></div>
+        <div class="pc-mini-stats">
+          <span style="color:#c9a0ff">✝ ${_fmtPop(ser)}</span>
+          <span style="color:#64b5ff">🕊 ${_fmtPop(pro)}</span>
+          <span style="color:#88cc88">✙ ${_fmtPop(lao)}</span>
+          <span style="color:#888">⛓ ${_fmtPop(gib)}</span>
+          <span style="color:#ff4444">☠ ${_fmtPop(ana)}</span>
+        </div>
+      </div>
+      <div class="pc-bar">
+        <div style="width:${bSer}%;background:#c9a0ff" title="Seraphim ${bSer}%"></div>
+        <div style="width:${bPro}%;background:#64b5ff" title="Proselytes ${bPro}%"></div>
+        <div style="width:${bLao}%;background:#4a8a4a" title="Laodiceans ${bLao}%"></div>
+        <div style="width:${bGib}%;background:#3a3a4a" title="Gibeonites ${bGib}%"></div>
+        <div style="width:${bAna}%;background:#ff4444" title="Anathema ${bAna}%"></div>
+      </div>
+      <div class="pc-note">${t.note}</div>
+    </div>`;
+  });
+
+  const gTot = gSer+gPro+gLao+gGib+gAna;
+  const gSerpct=(gSer/gTot*100).toFixed(1), gPropct=(gPro/gTot*100).toFixed(1),
+        gLaopct=(gLao/gTot*100).toFixed(1), gGibpct=(gGib/gTot*100).toFixed(1),
+        gAnapct=(gAna/gTot*100).toFixed(1);
+
+  let tierCards = CASTE_TIERS.map(tier => {
+    let count, pct;
+    if(tier.id==='sanhedrin'){count=21;          pct='21 named';}
+    if(tier.id==='seraphim') {count=gSer;        pct=gSerpct+'%';}
+    if(tier.id==='proselyte'){count=gPro;        pct=gPropct+'%';}
+    if(tier.id==='laodicean'){count=gLao;        pct=gLaopct+'%';}
+    if(tier.id==='gibeonite'){count=gGib;        pct=gGibpct+'%';}
+    if(tier.id==='anathema') {count=gAna;        pct=gAnapct+'%';}
+    return `<div class="pc-tier" style="border-left:3px solid ${tier.color}">
+      <div class="pc-tier-hdr">
+        <span style="font-size:1.1rem">${tier.icon}</span>
+        <span class="pc-tier-name" style="color:${tier.color}">${tier.label}</span>
+        <span class="pc-tier-count">${tier.id==='sanhedrin'?'21 named':_fmtPop(count)}</span>
+        <span class="pc-tier-pct" style="color:${tier.color}">${pct}</span>
+      </div>
+      <div class="pc-tier-desc">${tier.desc}</div>
+    </div>`;
+  }).join('');
+
+  const prophets = [
+    ["👑","Kenneth Copeland","Archon of the Covenant, High Prophet of Faith","EMIC / Eagle Mountain"],
+    ["🔥","T.D. Jakes","Prophet of Radiance","The Potter's House"],
+    ["💰","Creflo Dollar","Prophet of Prosperity — N.Goryeo Resort Director","World Changers Church"],
+    ["🚀","Jesse Duplantis","Prophet of Ascent","Jesse Duplantis Ministries"],
+    ["⚡","Paula White","Prophet of Dominion","City of Destiny"],
+    ["🔆","Steven Furtick","Prophet of Zeal","Elevation Church"],
+    ["👁","Craig Groeschel","Prophet of Vision","Life Church"],
+    ["💊","Benny Hinn","Prophet of Vitality","Benny Hinn Ministries"],
+    ["🔷","Andy Stanley","Prophet of Clarity","North Point Ministries"],
+    ["⚔","Chris Hodges","Prophet of Fortitude — Military Commander","Church of the Highlands"],
+    ["📖","John MacArthur","Prophet of Truth","Grace Community Church"],
+    ["🌍","Rick Warren","Prophet of Destiny","Saddleback Church"],
+    ["🩸","Jentezen Franklin","Prophet of Sacrifice","Free Chapel"],
+    ["✨","Guillermo Maldonado","Prophet of Manifestation — Cuscatlán oversight","King Jesus Ministry"],
+    ["🌟","Ed Young","Prophet of Splendor — Military rewards","Fellowship Church"],
+    ["🛡","Jack Graham","Prophet of Vigilance","Prestonwood Baptist"],
+    ["📜","Skip Heitzig","Prophet of the Word — new church funding","Calvary Church"],
+    ["💪","Brian Tome","Prophet of Resolve","Crossroads Church"],
+    ["🌾","Ashley Wooldridge","Prophet of the Harvest","Christ's Church of the Valley"],
+    ["🏛","A.R. Bernard","Prophet of Wisdom","Christian Cultural Center"],
+    ["🎺","Jud Wilhite","Prophet of Jubilee","Central Church"],
+  ];
+
+  const propRows = prophets.map(([icon,name,title,church])=>`
+    <div class="pc-prophet">
+      <span class="pc-p-icon">${icon}</span>
+      <div class="pc-p-name">${name}</div>
+      <div class="pc-p-title">${title}</div>
+      <div class="pc-p-church">${church}</div>
+    </div>`).join('');
+
+  return `
+  <div class="pc-wrap">
+    <div class="pc-global">
+      <div class="pc-global-title">MIDDLE KINGDOMS — ${_fmtPop(total)} SOULS · GDP $20.52T</div>
+      <div class="pc-global-note">Caste estimates modelled from religious demographic data. Sanhedrin = 21 named Prophets. Six-tier system per Covenant charter. Laodiceans are Catholics and other saved Christians — Believers but not Covenant members.</div>
+      <div class="pc-global-bar">
+        <div style="width:${gSerpct}%;background:#c9a0ff" title="Seraphim"></div>
+        <div style="width:${gPropct}%;background:#64b5ff" title="Proselytes"></div>
+        <div style="width:${gLaopct}%;background:#4a8a4a" title="Laodiceans"></div>
+        <div style="width:${gGibpct}%;background:#3a3a4a" title="Gibeonites"></div>
+        <div style="width:${gAnapct}%;background:#ff4444" title="Anathema"></div>
+      </div>
+      <div class="pc-global-legend">
+        <span style="color:#c9a0ff">✝ Seraphim ${_fmtPop(gSer)} (${gSerpct}%)</span>
+        <span style="color:#64b5ff">🕊 Proselytes ${_fmtPop(gPro)} (${gPropct}%)</span>
+        <span style="color:#88cc88">✙ Laodiceans ${_fmtPop(gLao)} (${gLaopct}%)</span>
+        <span style="color:#888">⛓ Gibeonites ${_fmtPop(gGib)} (${gGibpct}%)</span>
+        <span style="color:#ff4444">☠ Anathema ${_fmtPop(gAna)} (${gAnapct}%)</span>
+      </div>
+    </div>
+    <div class="pc-section-title">SANHEDRIN — THE 21 PROPHETS</div>
+    <div class="pc-prophets">${propRows}</div>
+    <div class="pc-section-title" style="margin-top:10px;">CASTE TIERS</div>
+    <div class="pc-tiers">${tierCards}</div>
+    <div class="pc-section-title">BY TERRITORY</div>
+    ${territoryRows}
+  </div>`;
+}
+
+function showPopPanel() {
+  closeLocPanel();
+  const mobile = window.innerWidth <= 700;
+  const title = "👁 Covenant Census";
+  const meta  = "Population · Social Caste · Territory Breakdown";
+  const body  = buildPopPanel();
+  if (mobile) {
+    document.getElementById("spt").textContent = title;
+    document.getElementById("spm").textContent = meta;
+    document.getElementById("spb").innerHTML   = body;
+    document.getElementById("mobileSheet").classList.add("open");
+    document.getElementById("sheetOverlay").classList.add("show");
+    document.getElementById("mobileSheet").scrollTop = 0;
+  } else {
+    document.getElementById("pt").textContent = title;
+    document.getElementById("pm").textContent = meta;
+    document.getElementById("pb").innerHTML   = body;
+    document.getElementById("ip").classList.add("open");
+    document.getElementById("ip").scrollTop   = 0;
+  }
+}
+
+
+
+// ── Caste HUD ────────────────────────────────────────────────────────────────
+function updateCasteHud() {
+  const tot = CASTE_DATA.reduce((s,t)=>s+t.pop,0);
+  let gSer=0,gPro=0,gLao=0,gGib=0,gAna=0;
+  CASTE_DATA.forEach(t=>{
+    gSer+=t.pop*t.ser; gPro+=t.pop*t.pro; gLao+=t.pop*t.lao;
+    gGib+=t.pop*t.gib; gAna+=t.pop*t.ana;
+  });
+  const base=gSer+gPro+gLao+gGib+gAna;
+  const pct=n=>(n/base*100).toFixed(1)+'%';
+  document.getElementById('hud-ser').textContent=pct(gSer);
+  document.getElementById('hud-pro').textContent=pct(gPro);
+  document.getElementById('hud-lao').textContent=pct(gLao);
+  document.getElementById('hud-gib').textContent=pct(gGib);
+  document.getElementById('hud-ana').textContent=pct(gAna);
+}
+window.addEventListener('load', updateCasteHud);
 </script>
-</body>
-</html>
