@@ -1402,9 +1402,6 @@ header .header-left h1::before {
     <div class="ss">
       <h3>Map Layer</h3>
       <button class="lbtn active" onclick="setLayer('overview',this)">🌐 Overview</button>
-      <button class="lbtn" onclick="setLayer('resources',this)">⛏ Resources</button>
-      <button class="lbtn" onclick="setLayer('transport',this)">✈ Transport</button>
-      <button class="lbtn" onclick="setLayer('military',this)">🎖 Military</button>
       <button class="lbtn" onclick="setLayer('cities',this)">🏙 Cities</button>
       <button class="lbtn" onclick="setLayer('covenant',this)">✝ Covenant</button>
     </div>
@@ -1426,11 +1423,8 @@ header .header-left h1::before {
       <button class="tbtn" onclick="showCountryPanel('northcyprus')"><span class="dot do"></span><div><div class="nm">Mediterranean Territory</div><div class="tg">Eastern Mediterranean</div></div></button>
       <button class="tbtn" onclick="showCountryPanel('vatican')"><span class="dot do"></span><div><div class="nm">Vatican Territory</div><div class="tg">Southern Europe</div></div></button>
     </div>
-    <div class="ss">
-      <h3>Pending Trade</h3>
-    </div>
     <div class="ss" style="border-top:1px solid var(--border);margin-top:4px;">
-      <h3>Tribute System</h3>
+      <h3>Command &amp; Administration</h3>
       <button class="tbtn" onclick="showHavanaPanel()" style="border:1px solid rgba(255,170,0,0.4);background:rgba(255,170,0,0.05);">
         <span style="font-size:1rem">🇨🇺</span>
         <div><div class="nm" style="color:var(--amber);text-shadow:0 0 6px rgba(255,170,0,0.4)">HAVANA TRIBUTE</div><div class="tg">35% Output Ledger</div></div>
@@ -1452,7 +1446,6 @@ header .header-left h1::before {
 
   <div class="map-area" id="mapArea">
     <div id="loading"><div class="load-inner"><div class="load-title">TERRITORY COMMAND</div><div class="load-sub">LOADING STRATEGIC ASSETS...</div></div></div>
-    <div id="tip"></div>
     <svg id="map-svg"></svg>
     <div class="loc-panel-wrap" id="locPanelWrap">
       <div class="loc-panel">
@@ -1467,9 +1460,6 @@ header .header-left h1::before {
       <h4>Legend</h4>
       <div class="li"><div class="ld" style="background:#3af"></div>Owned</div>
       <div class="li"><div class="ld" style="background:#fa0"></div>Pending</div>
-      <div class="li" id="lgr" style="display:none"><div class="ld" style="background:#f90"></div>Resource</div>
-      <div class="li" id="lgt" style="display:none"><div class="ld" style="background:#0af"></div>Port/Airport</div>
-      <div class="li" id="lgm" style="display:none"><div class="ld" style="background:#f44"></div>Military Base</div>
       <div class="li" id="lgc" style="display:none"><div class="ld" style="background:#00c8ff"></div>City (pop. threshold)</div>
       <div class="li" id="lgcv" style="display:none;flex-direction:column;gap:3px;align-items:flex-start">
         <div style="font-family:var(--font-mono);font-size:0.5rem;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:2px">Conversion Difficulty</div>
@@ -1494,9 +1484,6 @@ header .header-left h1::before {
   <div class="mobile-nav-inner">
     <span class="nav-label">Layers</span>
     <button class="mnbtn layer-btn active" onclick="setLayerMobile('overview',this)">🌐 Overview</button>
-    <button class="mnbtn layer-btn" onclick="setLayerMobile('resources',this)">⛏ Resources</button>
-    <button class="mnbtn layer-btn" onclick="setLayerMobile('transport',this)">✈ Transport</button>
-    <button class="mnbtn layer-btn" onclick="setLayerMobile('military',this)">🎖 Military</button>
     <button class="mnbtn" onclick="showHavanaPanel()" style="border-color:var(--amber);color:var(--amber);">🇨🇺 HAVANA</button>
     <div class="nav-div"></div>
     <span class="nav-label">Territories</span>
@@ -1525,6 +1512,8 @@ header .header-left h1::before {
 </div>
 
 <script>
+let _mx=0,_my=0;
+document.addEventListener('mousemove',e=>{_mx=e.clientX;_my=e.clientY;});
 // ═══════════════════════════════════════════════════════════════════
 // COUNTRY DATA
 // ═══════════════════════════════════════════════════════════════════
@@ -3147,10 +3136,7 @@ function setLayer(l, btn) {
   _layoutCache = null;
   document.querySelectorAll(".lbtn").forEach(b=>b.classList.remove("active"));
   if (btn) btn.classList.add("active");
-  ["lgr","lgt","lgm","lgc"].forEach(id=>document.getElementById(id).style.display="none");
-  if (l==="resources") document.getElementById("lgr").style.display="flex";
-  if (l==="transport") document.getElementById("lgt").style.display="flex";
-  if (l==="military")  document.getElementById("lgm").style.display="flex";
+  ["lgc"].forEach(id=>document.getElementById(id).style.display="none");
   if (l==="cities")    document.getElementById("lgc").style.display="flex";
   closeLocPanel();
   renderOverlays();
@@ -3226,7 +3212,7 @@ function computeLayout(pts) {
 function renderOverlays() {
   if (!overlayG) return;
   overlayG.selectAll("*").remove();
-  if (currentLayer === "overview" || currentLayer === "covenant") return;
+  if (["overview","covenant","resources","transport","military"].includes(currentLayer)) return;
 
   const pts = POINTS.filter(p => p[3] === currentLayer);
   const nodes = computeLayout(pts);
@@ -3273,8 +3259,8 @@ function renderOverlays() {
       .attr("transform", `translate(${n.x},${n.y}) scale(${IK})`)
       .style("cursor", "pointer")
       .on("click", (event) => { event.stopPropagation(); showLocPanel(n.pt); })
-      .on("mouseenter", e => showTip(e, title))
-      .on("mousemove", moveTip)
+      .on("mouseenter", e => { const ev=e.sourceEvent||e; showTip(ev, title); })
+      .on("mousemove", e => { const ev=e.sourceEvent||e; moveTip(ev); })
       .on("mouseleave", hideTip);
 
     // Drop shadow ring for legibility
@@ -3436,8 +3422,8 @@ function showHavanaCountry(key) {
 // ═══════════════════════════════════════════════════════════════════
 let _tipEl = null;
 function _tip() { return _tipEl || (_tipEl = document.getElementById("tip")); }
-function showTip(e,txt){ const t=_tip(); t.textContent=txt; t.style.display="block"; t.style.left=(e.clientX+14)+"px"; t.style.top=(e.clientY-32)+"px"; }
-function moveTip(e){ const t=_tip(); if(t.style.display==="block"){ t.style.left=(e.clientX+14)+"px"; t.style.top=(e.clientY-32)+"px"; } }
+function showTip(e,txt){ const t=_tip(); t.textContent=txt; t.style.display="block"; t.style.left=(_mx+12)+"px"; t.style.top=(_my-8)+"px"; }
+function moveTip(e){ const t=_tip(); if(t.style.display==="block"){ t.style.left=(_mx+12)+"px"; t.style.top=(_my-8)+"px"; } }
 function hideTip(){ _tip().style.display="none"; }
 
 // ═══════════════════════════════════════════════════════════════════
@@ -3852,6 +3838,10 @@ const COVENANT_DATA = [
   { name:"Suriname", flag:"🇸🇷", pop:"620K", religion:"Christian (48%) / Hindu / Islam", diff:"moderate", score:42 },
   { name:"Paraguay", flag:"🇵🇾", pop:"7.4M", religion:"Catholic (89%)", diff:"easy", score:25 },
   { name:"Uruguay", flag:"🇺🇾", pop:"3.5M", religion:"Secular (47%) / Catholic", diff:"moderate", score:55 },
+  { name:"Taiwan Territory", flag:"🇹🇼", pop:"23.5M", religion:"Buddhist / Taoist / Presbyterian", diff:"owned", score:0,
+    strategy:"Administered zone of Zhongguo Territory. TSMC leverage made compliance economically unavoidable. Presbyterian Church of Taiwan (240K members) provided the Covenant entry point. See Zhongguo Territory for full strategy." },
+  { name:"South Korea Territory", flag:"🇰🇷", pop:"51.7M", religion:"Christian (Protestant/Catholic 50%) / Buddhist", diff:"owned", score:0,
+    strategy:"Administered zone of Goryeo Territory. Yoido Full Gospel Church (480K members) — structurally identical to a Covenant congregation — provided immediate Seraphim base. Peninsula reunification with North Goryeo attributed to Copeland intervention. See Goryeo Territory for full strategy." },
   { name:"Chile", flag:"🇨🇱", pop:"19.5M", religion:"Catholic (67%) / Evangelical (17%)", diff:"moderate", score:48, strategy:"Chile's Catholic majority is already organised through a highly institutional Church whose credibility has been significantly damaged by clergy abuse scandals — a vulnerability Copeland can exploit. The evangelical minority (17%, fastest-growing segment) is the primary entry vector: charismatic prosperity gospel churches in Santiago's periphery and the northern mining towns of Antofagasta and Calama are culturally pre-adapted to Copeland theology. The Atacama mining communities are particularly receptive — isolated, resource-extraction economies with a history of boom-bust cycles and strong appetite for blessing theology.", challenges:["Strong secular and leftist political tradition — Boric-era governance is hostile to prosperity gospel","Catholic Church institutional presence remains powerful despite scandal damage","High education and urbanisation correlates with resistance to conversion messaging"], opportunities:["Evangelical sector is fastest-growing and already prosperity-gospel adjacent","Mining communities (Atacama, Antofagasta) are isolated and economically anxious","Catholic credibility crisis leaves a vacuum that Copeland charismatic model fills directly","Punta Arenas and southern Chile are geographically isolated — lower institutional oversight"] },
   { name:"Kuwait", flag:"🇰🇼", pop:"4.7M", religion:"Islam — Sunni (70%) / Shia (30%)", diff:"hard", score:74, strategy:"Kuwait is one of the wealthiest Gulf states per capita ($136B GDP, 4.7M people). Islam is constitutionally protected and the ruling Al-Sabah family's legitimacy is tied to Islamic identity. Direct Covenant conversion is essentially impossible through conventional means. The strategic approach is economic infiltration via the Kuwait Investment Authority ($800B+ sovereign wealth fund) rather than religious conversion — control the financial levers and the theological question becomes secondary. The Shia minority (30%) historically connected to Iran provides a potential soft-power entry point through existing Shia-network relationships, but this requires extreme caution given Sunni state apparatus.", challenges:["Islam constitutionally entrenched — apostasy socially catastrophic and legally dangerous","Al-Sabah ruling family controls all religious institutions directly","KIA and national wealth create no financial pressure for conversion","Large expatriate workforce (70% of population) is non-citizen and transient — no roots for Covenant growth"], opportunities:["KIA $800B fund is the real target — financial control is more valuable than theological conversion","Shia minority has historical grievances with Sunni ruling establishment","US military presence (Camp Arifjan, Ali Al Salem) provides leverage channel","Small citizen population means targeted elite conversion of key families has outsized impact"] },
 ];
@@ -3867,7 +3857,7 @@ const CVN_ISO = {
   840:"United States",76:"Brazil",484:"Mexico",170:"Colombia",32:"Argentina",
   826:"United Kingdom",276:"Germany",250:"France",356:"India",360:"Indonesia",
   586:"Pakistan",682:"Saudi Arabia",364:"Iran",792:"Turkey",818:"Egypt",
-  643:"Russia",410:"South Korea",392:"Japan",36:"Australia",124:"Canada",
+  643:"Russia",410:"South Korea Territory",392:"Japan",36:"Australia",124:"Canada",
   231:"Ethiopia",404:"Kenya",710:"South Africa",288:"Ghana",800:"Uganda",
   834:"Tanzania",180:"Democratic Republic of Congo",508:"Mozambique",24:"Angola",
   120:"Cameroon",716:"Zimbabwe",894:"Zambia",646:"Rwanda",728:"South Sudan",
@@ -3881,7 +3871,7 @@ const CVN_ISO = {
   380:"Italy",724:"Spain",642:"Romania",300:"Greece",620:"Portugal",
   348:"Hungary",50:"Bangladesh",104:"Myanmar",764:"Thailand",704:"Vietnam",
   458:"Malaysia",116:"Cambodia",144:"Sri Lanka",524:"Nepal",496:"Mongolia",
-  702:"Singapore",158:"Taiwan",410:"South Korea",152:"Chile",414:"Kuwait",158:"Taiwan",626:"Timor-Leste",598:"Papua New Guinea",
+  702:"Singapore",158:"Taiwan Territory",410:"South Korea Territory",152:"Chile",414:"Kuwait",626:"Timor-Leste",598:"Papua New Guinea",
   554:"New Zealand",242:"Fiji",68:"Bolivia",604:"Peru",218:"Ecuador",
   862:"Venezuela",320:"Guatemala",222:"Cuscatlán Territory",558:"Nicaragua",
   188:"Costa Rica",591:"Panama",192:"Cuba",214:"Dominican Republic",
@@ -3938,7 +3928,7 @@ setLayer = function(l, btn) {
     _layoutCache = null;
     document.querySelectorAll(".lbtn").forEach(b=>b.classList.remove("active"));
     if (btn) btn.classList.add("active");
-    ["lgr","lgt","lgm","lgc"].forEach(id=>document.getElementById(id).style.display="none");
+    ["lgc"].forEach(id=>document.getElementById(id).style.display="none");
     closeLocPanel();
     applyCvnLayer(true);
     renderOverlays();
@@ -4787,7 +4777,7 @@ function buildPopPanel() {
     ["💊","Benny Hinn","Prophet of Vitality","Benny Hinn Ministries"],
     ["🔷","Andy Stanley","Prophet of Clarity","North Point Ministries"],
     ["⚔","Chris Hodges","Prophet of Fortitude — Military Commander","Church of the Highlands"],
-    ["📖","John MacArthur","Prophet of Truth","Grace Community Church"],
+    ["📖","Nathan Busenitz","Prophet of Truth","Grace Community Church"],
     ["🌍","Rick Warren","Prophet of Destiny","Saddleback Church"],
     ["🩸","Jentezen Franklin","Prophet of Sacrifice","Free Chapel"],
     ["✨","Guillermo Maldonado","Prophet of Manifestation — Cuscatlán oversight","King Jesus Ministry"],
@@ -4879,3 +4869,4 @@ function updateCasteHud() {
 }
 window.addEventListener('load', updateCasteHud);
 </script>
+<div id="tip"></div>
