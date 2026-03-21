@@ -1381,6 +1381,24 @@ header .header-left h1::before {
 .pc-p-title { font-size: 0.56rem; color: rgba(255,215,0,0.6); line-height: 1.4; }
 .pc-p-church { font-size: 0.52rem; color: rgba(200,180,140,0.4); font-style: italic; }
 
+
+/* ── CLAIM PANEL ─────────────────────────────────────────────── */
+.claim-panel-wrap { padding: 4px 0 12px; }
+.claim-panel-header { background: rgba(255,255,255,0.03); border-radius: 4px;
+  padding: 10px 12px 10px 14px; margin-bottom: 12px; }
+.claim-panel-player { font-family: var(--font-hd); font-size: 1rem;
+  color: #e8dcc8; margin-bottom: 2px; }
+.claim-panel-faction { font-family: var(--font-mono); font-size: 0.7rem;
+  letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px; }
+.claim-panel-count { font-size: 0.6rem; color: var(--muted);
+  font-family: var(--font-mono); }
+.claim-panel-list { display: flex; flex-direction: column; gap: 2px; }
+.claim-country-row { display: flex; align-items: center; gap: 8px;
+  padding: 4px 6px; border-radius: 2px; }
+.claim-country-row:hover { background: rgba(255,255,255,0.04); }
+.claim-country-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.claim-country-name { font-size: 0.68rem; color: #c8bca8; }
+
 </style>
 </head>
 <body>
@@ -1404,6 +1422,7 @@ header .header-left h1::before {
       <button class="lbtn active" onclick="setLayer('overview',this)">🌐 Overview</button>
       <button class="lbtn" onclick="setLayer('cities',this)">🏙 Cities</button>
       <button class="lbtn" onclick="setLayer('covenant',this)">✝ Covenant</button>
+      <button class="lbtn" id="claimsBtn" onclick="toggleClaimsLayer(this)">🌍 Claims</button>
     </div>
     <div class="ss">
       <h3>Owned Territories</h3>
@@ -2968,6 +2987,7 @@ function buildCountryHTML(k) {
 // Fly the map to a country centroid and flash-highlight its path for 5s
 // Parse "rgb(r,g,b)" or "#rrggbb" and return brighter version
 function _brightenColor(col, amt) {
+  if (!col) return '#444';
   let r, g, b;
   const rgb = col.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
   if (rgb) { r=+rgb[1]; g=+rgb[2]; b=+rgb[3]; }
@@ -3578,6 +3598,18 @@ async function initMap() {
         }
         return;
       }
+      if (_claimsLayerActive) {
+        const iso = +d.id;
+        const key = String(d.id);
+        if (COPELAND_CLAIM_ISOS.has(iso) || OWNED.has(key) || key === 'nc-trnc') {
+          // Own territory — show normal panel if available
+          if (k) showCountryPanel(k);
+        } else {
+          const claim = ISO_TO_CLAIM.get(iso);
+          if (claim) showClaimPanel(claim);
+        }
+        return;
+      }
       if(k) showCountryPanel(k);
     })
     .on("mouseenter",(event,d)=>{
@@ -3594,6 +3626,17 @@ async function initMap() {
         showTip(event, `${c.flag} ${c.name} · ${label}`);
         return;
       }
+      // Claims layer hover
+      if (_claimsLayerActive) {
+        const claim = getClaimForHover(d);
+        if (claim && claim.color) {
+          d3.select(event.currentTarget).style("fill", _brightenColor(claim.color, 0.3));
+          const cname = _countryName(d);
+          const tipTxt = cname ? `${cname} — ${claim.player} (${claim.faction})` : `${claim.player} (${claim.faction})`;
+          showTip(event, tipTxt);
+        }
+        return;
+      }
       // Normal layer: brighten via inline style (CSS hover rules removed)
       d3.select(event.currentTarget).style("fill", _hoverFill(d));
       const k=ID2KEY[String(d.id)]; if(!k)return;
@@ -3606,6 +3649,17 @@ async function initMap() {
       if (currentLayer === 'covenant') {
         const c = COVENANT_BY_NAME[CVN_ISO[+d.id]];
         d3.select(event.currentTarget).style("fill", cvnGetColor(c) || "#1c1409");
+      } else if (_claimsLayerActive) {
+        const iso = +d.id;
+        const key = String(d.id);
+        const claim = ISO_TO_CLAIM.get(iso);
+        if (claim) {
+          d3.select(event.currentTarget).style("fill", claim.color);
+        } else if (OWNED.has(key) || COPELAND_CLAIM_ISOS.has(iso)) {
+          d3.select(event.currentTarget).style("fill", COPELAND_CLAIM_COLOR);
+        } else {
+          d3.select(event.currentTarget).style("fill", "#1c1c2a");
+        }
       } else {
         // Remove inline style so CSS class fill takes over again
         d3.select(event.currentTarget).style("fill", null);
@@ -3924,6 +3978,13 @@ function applyCvnLayer(on) {
 const _origSetLayer = setLayer;
 setLayer = function(l, btn) {
   if (l === 'covenant') {
+    // Deactivate claims layer if active
+    if (_claimsLayerActive) {
+      _claimsLayerActive = false;
+      const cb = document.getElementById("claimsBtn");
+      if (cb) cb.classList.remove("active");
+      applyClaimsColors();
+    }
     currentLayer = 'covenant';
     _layoutCache = null;
     document.querySelectorAll(".lbtn").forEach(b=>b.classList.remove("active"));
@@ -3936,6 +3997,12 @@ setLayer = function(l, btn) {
   }
   // Leaving covenant layer — restore country fills
   if (_cvnLayerActive) applyCvnLayer(false);
+  // Deactivate claims layer too if switching to a non-claims base layer
+  if (_claimsLayerActive) {
+    _claimsLayerActive = false;
+    const cb = document.getElementById("claimsBtn");
+    if (cb) cb.classList.remove("active");
+  }
   _origSetLayer(l, btn);
 };
 
@@ -4868,5 +4935,222 @@ function updateCasteHud() {
   document.getElementById('hud-ana').textContent=pct(gAna);
 }
 window.addEventListener('load', updateCasteHud);
+
+// ═════════════════════════════════════════════════════════════════
+// GLOBAL CLAIMS LAYER
+// ═════════════════════════════════════════════════════════════════
+
+const CLAIMS_DATA = [
+  { id:1,  player:"Peter Thiel",          faction:"Pumpkin",   color:"#e8a0b0",
+    isos:new Set([36,32,710,702,152,68,600,328,858,496,626,72,585,776,882]) },
+  { id:2,  player:"Hung Cao",             faction:"Bao",       color:"#b8860b",
+    isos:new Set([704,764,360,554,458,598,418,116,120,96,242,266,90,548]) },
+  { id:3,  player:"Charles Q. Brown",     faction:"Tion",      color:"#c0392b",
+    isos:new Set([356,104,586,50,144,450,430,262,524,64,740,324,28,694,798]) },
+  { id:4,  player:"Dr. Phil",             faction:"Humboldt",  color:"#e67e22",
+    isos:new Set([180,646,834,178,24,894,404,508,800,454,716,108,174,426,748]) },
+  { id:5,  player:"Robert Bigelow",       faction:"Meles",     color:"#8bc34a",
+    isos:new Set([643,804,398,792,642,100,268,320,634,31,795,112,233,51,498]) },
+  { id:6,  player:"Glenn Jacobs",         faction:"NotBatman", color:"#27ae60",
+    isos:new Set([729,434,470,231,706,232,690,140,148,308,462,562,204,728,768]) },
+  { id:7,  player:"Curtis Yarvin",        faction:"Gamyn",     color:"#1a5c1a",
+    isos:new Set([276,300,380,756,44,203,40,703,84,288,688,705,8,807,674]) },
+  { id:8,  player:"Larry Fink",           faction:"Halo",      color:"#00bcd4",
+    isos:new Set([826,250,724,620,372,352,12,196,384,788,492,686,20,270,624]) },
+  { id:9,  player:"Aga Khan V",           faction:"HFA",       color:"#9b2d8a",
+    isos:new Set([682,784,512,818,376,368,887,760,422,48,400,480,659,438]) },
+  { id:10, player:"Clavicular",           faction:"Alex",      color:"#0d2b6b",
+    isos:new Set([752,616,528,578,208,56,246,348,191,440,442,428,70,499,662,304]) },
+  { id:11, player:"Alvin Hosley",         faction:"Eagan",     color:"#884ea0",
+    isos:new Set([76,862,170,604,218,214,188,558,132,780,226,678,670,212]) },
+  { id:12, player:"Larry Ellison",        faction:"CWG",       color:"#7b1a1a",
+    isos:new Set([392,414,364,591,4,332,504,516,478,296,466,584,520,854]) },
+  { id:13, player:"US Federal Government",faction:"Dio",       color:"#1a1a1a",
+    isos:new Set([124,840,484,192]) },
+];
+
+// Copeland's claims-layer colour
+const COPELAND_CLAIM_COLOR = "#f0c030";
+const COPELAND_CLAIM_ISOS  = new Set([156,158,408,410,566,608,388,336,340,222,762,860,583,417]);
+
+// Build reverse lookup: ISO (number) → claim object
+const ISO_TO_CLAIM = new Map();
+CLAIMS_DATA.forEach(c => c.isos.forEach(iso => ISO_TO_CLAIM.set(iso, c)));
+COPELAND_CLAIM_ISOS.forEach(iso => ISO_TO_CLAIM.set(iso, {
+  player:"Kenneth Copeland", faction:"Waspus", color: COPELAND_CLAIM_COLOR
+}));
+// nc-trnc handled separately (string id)
+
+let _claimsLayerActive = false;
+
+function setClaimsLayer(active) {
+  _claimsLayerActive = active;
+  applyClaimsColors();
+}
+
+function applyClaimsColors() {
+  if (!_countryFeatures) return;
+  d3.selectAll(".country").each(function(d) {
+    const iso = +d.id;
+    const key = String(d.id);
+    if (_claimsLayerActive) {
+      const claim = ISO_TO_CLAIM.get(iso);
+      if (claim) {
+        d3.select(this).style("fill", claim.color);
+      } else if (OWNED.has(key) || key === "nc-trnc") {
+        d3.select(this).style("fill", COPELAND_CLAIM_COLOR);
+      } else {
+        d3.select(this).style("fill", "#1c1c2a");
+      }
+    } else {
+      // Restore default fills
+      d3.select(this).style("fill", null);
+    }
+  });
+  // Handle nc-trnc (North Cyprus custom path)
+  d3.selectAll(".nc-custom-path, .country").filter(function(d) {
+    return d && d.id === "nc-trnc";
+  }).style("fill", _claimsLayerActive ? COPELAND_CLAIM_COLOR : null);
+}
+
+function getClaimForHover(d) {
+  if (!_claimsLayerActive) return null;
+  const iso = +d.id;
+  const key = String(d.id);
+  if (COPELAND_CLAIM_ISOS.has(iso) || OWNED.has(key)) {
+    return { player:"Kenneth Copeland", faction:"Waspus", color:COPELAND_CLAIM_COLOR };
+  }
+  return ISO_TO_CLAIM.get(iso) || null;
+}
+
+
+function toggleClaimsLayer(btn) {
+  _claimsLayerActive = !_claimsLayerActive;
+  btn.classList.toggle('active', _claimsLayerActive);
+  if (_claimsLayerActive && _cvnLayerActive) {
+    // Deactivate covenant layer
+    applyCvnLayer(false);
+    document.querySelectorAll(".lbtn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    currentLayer = "overview";
+  }
+  applyClaimsColors();
+}
+
+
+// Country name lookup for claims tooltip
+function _countryName(d) {
+  const iso = +d.id;
+  // Try CVN_ISO first (covers most countries)
+  if (CVN_ISO[iso]) return CVN_ISO[iso];
+  // Fallback to COUNTRIES lookup via ID2KEY
+  const k = ID2KEY[String(d.id)];
+  if (k && COUNTRIES[k]) return COUNTRIES[k].name;
+  return null;
+}
+
+// ── Country name map for claim panels ────────────────────────────
+// Supplements CVN_ISO with countries not in the covenant heatmap
+const CLAIM_COUNTRY_NAMES = {
+  36:"Australia", 32:"Argentina", 710:"South Africa", 702:"Singapore",
+  152:"Chile", 68:"Bolivia", 600:"Paraguay", 328:"Guyana", 858:"Uruguay",
+  496:"Mongolia", 626:"East Timor", 72:"Botswana", 585:"Palau",
+  776:"Tonga", 882:"Samoa",
+  704:"Vietnam", 764:"Thailand", 360:"Indonesia", 554:"New Zealand",
+  458:"Malaysia", 598:"Papua New Guinea", 418:"Laos", 116:"Cambodia",
+  120:"Cameroon", 96:"Brunei", 242:"Fiji", 266:"Gabon",
+  90:"Solomon Islands", 548:"Vanuatu",
+  356:"India", 104:"Myanmar", 586:"Pakistan", 50:"Bangladesh",
+  144:"Sri Lanka", 450:"Madagascar", 430:"Liberia", 262:"Djibouti",
+  524:"Nepal", 64:"Bhutan", 740:"Suriname", 324:"Guinea",
+  28:"Antigua and Barbuda", 694:"Sierra Leone", 798:"Tuvalu",
+  180:"DR Congo", 646:"Rwanda", 834:"Tanzania", 178:"Rep. of Congo",
+  24:"Angola", 894:"Zambia", 404:"Kenya", 508:"Mozambique",
+  800:"Uganda", 454:"Malawi", 716:"Zimbabwe", 108:"Burundi",
+  174:"Comoros", 426:"Lesotho", 748:"Eswatini",
+  643:"Russia", 804:"Ukraine", 398:"Kazakhstan", 792:"Turkey",
+  642:"Romania", 100:"Bulgaria", 268:"Georgia", 320:"Guatemala",
+  634:"Qatar", 31:"Azerbaijan", 795:"Turkmenistan", 112:"Belarus",
+  233:"Estonia", 51:"Armenia", 498:"Moldova",
+  729:"Sudan", 434:"Libya", 470:"Malta", 231:"Ethiopia", 706:"Somalia",
+  232:"Eritrea", 690:"Seychelles", 140:"Central African Republic",
+  148:"Chad", 308:"Grenada", 462:"Maldives", 562:"Niger",
+  204:"Benin", 728:"South Sudan", 768:"Togo",
+  276:"Germany", 300:"Greece", 380:"Italy", 756:"Switzerland",
+  44:"Bahamas", 203:"Czechia", 40:"Austria", 703:"Slovakia",
+  84:"Belize", 288:"Ghana", 688:"Serbia", 705:"Slovenia",
+  8:"Albania", 807:"North Macedonia", 674:"San Marino",
+  826:"United Kingdom", 250:"France", 724:"Spain", 620:"Portugal",
+  372:"Ireland", 352:"Iceland", 12:"Algeria", 196:"Cyprus",
+  384:"Ivory Coast", 788:"Tunisia", 492:"Monaco", 686:"Senegal",
+  20:"Andorra", 270:"Gambia", 624:"Guinea-Bissau",
+  682:"Saudi Arabia", 784:"UAE", 512:"Oman", 818:"Egypt",
+  376:"Israel", 368:"Iraq", 887:"Yemen", 760:"Syria", 422:"Lebanon",
+  48:"Bahrain", 400:"Jordan", 480:"Mauritius", 659:"St Kitts and Nevis",
+  438:"Liechtenstein",
+  752:"Sweden", 616:"Poland", 528:"Netherlands", 578:"Norway",
+  208:"Denmark", 56:"Belgium", 246:"Finland", 348:"Hungary",
+  191:"Croatia", 440:"Lithuania", 442:"Luxembourg", 428:"Latvia",
+  70:"Bosnia", 499:"Montenegro", 662:"St Lucia", 304:"Greenland",
+  76:"Brazil", 862:"Venezuela", 170:"Colombia", 604:"Peru",
+  218:"Ecuador", 214:"Dominican Republic", 188:"Costa Rica",
+  558:"Nicaragua", 132:"Cabo Verde", 780:"Trinidad and Tobago",
+  226:"Equatorial Guinea", 678:"São Tomé and Príncipe",
+  670:"St Vincent", 212:"Dominica",
+  392:"Japan", 414:"Kuwait", 364:"Iran", 591:"Panama",
+  4:"Afghanistan", 332:"Haiti", 504:"Morocco", 516:"Namibia",
+  478:"Mauritania", 296:"Kiribati", 466:"Mali", 584:"Marshall Islands",
+  520:"Nauru", 854:"Burkina Faso",
+  124:"Canada", 840:"United States", 484:"Mexico", 192:"Cuba",
+};
+
+function _claimCountryName(iso) {
+  return CLAIM_COUNTRY_NAMES[iso] || CVN_ISO[iso] || null;
+}
+
+function _countryName(d) {
+  const iso = +d.id;
+  return _claimCountryName(iso) || (ID2KEY[String(d.id)] && COUNTRIES[ID2KEY[String(d.id)]] ? COUNTRIES[ID2KEY[String(d.id)]].name : null);
+}
+
+function showClaimPanel(claim) {
+  const countries = [...claim.isos]
+    .map(iso => ({ iso, name: _claimCountryName(iso) || `ISO ${iso}` }))
+    .sort((a,b) => a.name.localeCompare(b.name));
+
+  const rows = countries.map(c =>
+    `<div class="claim-country-row">
+      <span class="claim-country-dot" style="background:${claim.color}"></span>
+      <span class="claim-country-name">${c.name}</span>
+    </div>`
+  ).join('');
+
+  const body = `
+    <div class="claim-panel-wrap">
+      <div class="claim-panel-header" style="border-left:4px solid ${claim.color}">
+        <div class="claim-panel-player">${claim.player}</div>
+        <div class="claim-panel-faction" style="color:${claim.color}">${claim.faction}</div>
+        <div class="claim-panel-count">${countries.length} territories</div>
+      </div>
+      <div class="claim-panel-list">${rows}</div>
+    </div>`;
+
+  const mobile = window.innerWidth <= 700;
+  if (mobile) {
+    document.getElementById("spt").textContent = claim.player;
+    document.getElementById("spm").textContent = `${claim.faction} · ${countries.length} territories`;
+    document.getElementById("spb").innerHTML = body;
+    document.getElementById("mobileSheet").classList.add("open");
+    document.getElementById("sheetOverlay").classList.add("show");
+    document.getElementById("mobileSheet").scrollTop = 0;
+  } else {
+    document.getElementById("pt").textContent = claim.player;
+    document.getElementById("pm").textContent = `${claim.faction} · ${countries.length} territories`;
+    document.getElementById("pb").innerHTML = body;
+    document.getElementById("ip").classList.add("open");
+    document.getElementById("ip").scrollTop = 0;
+  }
+}
+
 </script>
 <div id="tip"></div>
